@@ -25,7 +25,6 @@ namespace MyGame.Creatures.Hostile
             baseStats[Level] = 1;
             baseStats[AttackSpeed] = 30;
             healthBar = new ProgresBar(Color.Red, Color.DarkGreen, new Rectangle(bounds.X, bounds.Y - 32, 32, 8));
-            InitMenu();
         }
     }
 }

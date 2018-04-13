@@ -14,9 +14,10 @@ namespace MyGame.GridElements
     {
         public ITile[,] map;
         int gridSizeX, gridSizeY;
-
+        Texture2D grass;
         public Grid(ContentManager content, int gridSizeX, int gridSizeY)
         {
+            grass = content.Load<Texture2D>("grass");
             map = new ITile[gridSizeY, gridSizeX];
             this.gridSizeX = gridSizeX;
             this.gridSizeY = gridSizeY;
@@ -24,7 +25,7 @@ namespace MyGame.GridElements
             {
                 for(int y = 0; y < gridSizeY; y++)
                 {
-                    map[x, y] = new Grass(content.Load<Texture2D>("grass"), x, y);
+                    map[x, y] = new Grass(grass, x, y);
                 }
             }
         }

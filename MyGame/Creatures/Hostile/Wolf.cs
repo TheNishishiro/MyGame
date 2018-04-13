@@ -24,7 +24,6 @@ namespace MyGame.Creatures.Hostile
             baseStats[Exp] = 10;
             baseStats[Level] = 1;
             healthBar = new ProgresBar(Color.Red, Color.DarkGreen, new Rectangle(bounds.X, bounds.Y - 32, 32, 8));
-            InitMenu();
         }
 
     }

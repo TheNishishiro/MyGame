@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MyGame.UI;
+using MyGame.UI.Controls;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,34 @@ namespace MyGame.GridElements
         protected float layerDepth = Settings.tileAdditionTopLayer;
         public bool Walkable { get; set; }
         public bool IsClickable = false;
+        protected int? cooldown = null;
+        protected List<FadingLabel> FL;
+        protected string resource = null;
+        protected int? amount = null;
+        protected int? hp = null;
 
         public virtual void Draw(ref SpriteBatch sb)
         {
             NDrawing.Draw(ref sb, texture, Position, color, layerDepth);
             if(IsClickable)
-                Update(ref sb);
+                Update(ref sb, resource, amount);
         }
 
-        public virtual void Update(ref SpriteBatch sb)
+        public virtual void Update(ref SpriteBatch sb, string resource, int? amount)
         {
+            menuManagment(ref sb);
+            if (fighting && hp > 0 && NAction.Get_Distance_Between_Points(Position, Settings._player.GetPosition()) < Settings.GridSize * 2)
+            {
+                cooldown--;
+                if (cooldown <= 0)
+                {
+                    hp--;
+                    cooldown = 60;
+                    FL.Add(new FadingLabel($"+{amount} {resource}", Position, Color.White));
+                }
+            }
+
+            MenuControls.FadingLabelManager(ref sb, FL);
         }
     }
 }

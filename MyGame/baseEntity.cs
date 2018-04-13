@@ -12,16 +12,7 @@ namespace MyGame
 {
     class baseEntity
     {
-        public const string
-            HP = "HP",
-            HP_max = "HP_MAX",
-            Damage = "Damage",
-            Level = "Level",
-            Exp = "Exp",
-            Exp_max = "EXP_MAX",
-            AttackSpeed = "Attack Speed";
-
-        protected Dictionary<string,int> baseStats = new Dictionary<string, int>();
+        
         public Vector2 Position;
         protected Rectangle bounds;
         protected Color color = Color.White;
@@ -33,7 +24,13 @@ namespace MyGame
         protected void menuManagment(ref SpriteBatch sb)
         {
             if (menuOpened == false)
+            {
                 menuOpened = MenuControls.MouseOver(bounds);
+                DPL = new UI.DropDownList();
+
+                DPL.AddButton("Engage", () => FightToggle());
+                DPL.AddButton("Quit", () => quitMenu());
+            }
             if (menuOpened)
             {
                 DPL.Update(Position);
@@ -50,6 +47,7 @@ namespace MyGame
         protected void quitMenu()
         {
             menuOpened = false;
+            DPL = null;
         }
 
         protected bool isWalkable(float x, float y)

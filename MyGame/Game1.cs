@@ -16,14 +16,19 @@ namespace MyGame
     {
         public static GraphicsDevice _GraphicsDevice;
         public static ContentManager _Content;
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
         
         List<ICreature> creatures;
         List<FightingManager> fights = new List<FightingManager>();
-        
-        
+
+        public static Texture2D RockTexture;
+        public static Texture2D TreeTexture;
+        public static Texture2D Tree2Texture;
+        public static Texture2D GrassBatchTexture;
+        public static Texture2D BloodStainTexture;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -32,7 +37,6 @@ namespace MyGame
 
         protected override void Initialize()
         {
-            
             base.Initialize();
         }
 
@@ -41,18 +45,35 @@ namespace MyGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             _Content = Content;
             _GraphicsDevice = GraphicsDevice;
+
+            cursor = new Cursor(Content.Load<Texture2D>("Light_Blue"));
+            RockTexture = Content.Load<Texture2D>("rock");
+            TreeTexture = Content.Load<Texture2D>("tree");
+            Tree2Texture = Content.Load<Texture2D>("tree2");
+            GrassBatchTexture = Content.Load<Texture2D>("grassBatch");
+            BloodStainTexture = Content.Load<Texture2D>("BloodStain");
+            Texture2D wolf =  Content.Load<Texture2D>("wolf");
+            Texture2D rat =  Content.Load<Texture2D>("rat");
+
             font = Content.Load<SpriteFont>("font");
             grid = new Grid(Content, Settings.WorldSizeBlocks, Settings.WorldSizeBlocks);
 
             _player = new Player(32 * 5, 32 * 5, Content.Load<Texture2D>("player"));
-            cursor = new Cursor(Content.Load<Texture2D>("Light_Blue"));
             
-            creatures = new List<ICreature>()
+
+            creatures = new List<ICreature>();
+            for (int i = 0; i < 10; i++)
             {
-                new Wolf(32 * 8, 32 * 5, Content.Load<Texture2D>("wolf")),
-                new Rat(32 * 8, 32 * 5, Content.Load<Texture2D>("rat")),
-                new Wolf(32 * 6, 32 * 5, Content.Load<Texture2D>("wolf"))
-            };
+                switch(rnd.Next(2))
+                {
+                    case 0:
+                        creatures.Add(new Wolf(GridSize * rnd.Next(WorldSizeBlocks), GridSize * rnd.Next(WorldSizeBlocks), wolf));
+                        break;
+                    case 1:
+                        creatures.Add(new Rat(GridSize * rnd.Next(WorldSizeBlocks), GridSize * rnd.Next(WorldSizeBlocks), rat));
+                        break;
+                }
+            }
             
             NCamera.Camera_CreateViewport(GraphicsDevice.Viewport, 800, 600);
         }
@@ -122,8 +143,13 @@ namespace MyGame
 
             spriteBatch.Begin();
 
+            
             _player._UI.Draw(ref spriteBatch);
             NDrawing.FPS_Draw(new Vector2(5, 200), Color.Red, gameTime, Settings.font, ref spriteBatch);
+            spriteBatch.DrawString(font, $"" +
+                $"X:{(Mouse.GetState().X - graphics.PreferredBackBufferWidth / 2) + _player.Position.X}\n" +
+                $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight/ 2) + _player.Position.Y}",
+                new Vector2(5, 100), Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);

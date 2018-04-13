@@ -35,13 +35,13 @@ namespace MyGame.GridElements
             {
                 int rnd = Settings.rnd.Next(4);
                 if (rnd == 0)
-                    AddAddition(new Rock(Game1._Content.Load<Texture2D>("rock"), (int)position.X, (int)position.Y));
+                    AddAddition(new Rock(Game1.RockTexture, (int)position.X, (int)position.Y));
                 else if (rnd == 1)
-                    AddAddition(new Tree(Game1._Content.Load<Texture2D>("tree"), (int)position.X, (int)position.Y));
+                    AddAddition(new Tree(Game1.TreeTexture, (int)position.X, (int)position.Y));
                 else if (rnd == 2)
-                    AddAddition(new Tree2(Game1._Content.Load<Texture2D>("tree2"), (int)position.X, (int)position.Y));
+                    AddAddition(new Tree2(Game1.Tree2Texture, (int)position.X, (int)position.Y));
                 else if (rnd == 3)
-                    AddAddition(new GrassBatch(Game1._Content.Load<Texture2D>("grassBatch"), (int)position.X, (int)position.Y));
+                    AddAddition(new GrassBatch(Game1.GrassBatchTexture, (int)position.X, (int)position.Y));
                 Walkable = addition.Walkable;
                 
             }

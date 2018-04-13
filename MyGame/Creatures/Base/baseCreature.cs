@@ -15,7 +15,16 @@ namespace MyGame.Creatures
 {
     class baseCreature : baseEntity, ICreature
     {
-        
+        public const string
+            HP = "HP",
+            HP_max = "HP_MAX",
+            Damage = "Damage",
+            Level = "Level",
+            Exp = "Exp",
+            Exp_max = "EXP_MAX",
+            AttackSpeed = "Attack Speed";
+
+        protected Dictionary<string,int> baseStats;
 
         protected Texture2D texture;
         public Vector2 moveToPosition;
@@ -23,16 +32,9 @@ namespace MyGame.Creatures
         private int decision;
         protected List<FadingLabel> FL = new List<FadingLabel>();
 
-        public virtual void InitMenu()
-        {
-            DPL = new UI.DropDownList();
-
-            DPL.AddButton("Engage", () => FightToggle());
-            DPL.AddButton("Quit", () => quitMenu());
-        }
-
         public virtual void Init()
         {
+            baseStats = new Dictionary<string, int>();
             baseStats.Add(HP, 0);
             baseStats.Add(HP_max, 0);
             baseStats.Add(Damage, 0);
@@ -93,7 +95,7 @@ namespace MyGame.Creatures
         {
             SetWalkable(true);
             player.AddExp(baseStats[Exp]);
-            Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(new BloodStain(Game1._Content.Load<Texture2D>("BloodStain"), (int)(Position.X), (int)(Position.Y)));
+            Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(new BloodStain(Game1.BloodStainTexture, (int)(Position.X), (int)(Position.Y)));
         }
 
         protected void AlignToGrid()
