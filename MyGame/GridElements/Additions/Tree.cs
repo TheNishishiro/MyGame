@@ -23,9 +23,6 @@ namespace MyGame.GridElements.Additions
             bounds = new Microsoft.Xna.Framework.Rectangle(posX, posY, texture.Width, texture.Height);
             Walkable = false;
             IsClickable = true;
-            //DPL = new UI.DropDownList();
-            //DPL.AddButton("Cut down", () => FightToggle());
-            //DPL.AddButton("Quit", () => quitMenu());
             FL = new List<FadingLabel>();
             cooldown = 60;
             resource = "wood";
