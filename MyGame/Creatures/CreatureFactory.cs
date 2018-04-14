@@ -1,4 +1,5 @@
-﻿using MyGame.Creatures.Hostile;
+﻿using Microsoft.Xna.Framework;
+using MyGame.Creatures.Hostile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,15 +34,18 @@ namespace MyGame.Creatures
                 posY = 0;
             else if (posY > WorldSizePixels)
                 posY = WorldSizePixels;
-
-            switch (rnd.Next(2))
+            if (!TestRenderBounds(new Vector2(posX, posY), _player.GetPosition(), RenderDistance)
+                && grid.map[(int)(posX/GridSize), (int)(posY/GridSize)].Walkable)
             {
-                case 0:
-                    creatures.Add(new Wolf(posX, posY, Textures.WolfTexture));
-                    break;
-                case 1:
-                    creatures.Add(new Rat(posX, posY, Textures.RatTexture));
-                    break;
+                switch (rnd.Next(2))
+                {
+                    case 0:
+                        creatures.Add(new Wolf(posX, posY, Textures.WolfTexture));
+                        break;
+                    case 1:
+                        creatures.Add(new Rat(posX, posY, Textures.RatTexture));
+                        break;
+                }
             }
         }
 

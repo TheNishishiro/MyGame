@@ -20,6 +20,8 @@ namespace MyGame
         bool GetFightingState();
         int GetHealth();
         int GetMaxHealth();
+        int GetMana();
+        int GetMaxMana();
         int GetDamage();
         void HealUp(int amount);
         int GetLevel();

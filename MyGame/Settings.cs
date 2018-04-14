@@ -16,8 +16,12 @@ namespace MyGame
             entityLayer = 0.5f,
             tileLayer = 0.05f,
             UILayer = 0.9f,
+            MainUILayer = 0.95f,
             tileAdditionTopLayer = 0.65f,
             tileAdditionBottomLayer = 0.4f;
+
+        public const int VirtualHeight = 624;
+        public const int VirtualWidth = 1040;
 
         public const int GridSize = 32;
         public static int CreatureLimit = 100;
@@ -55,6 +59,15 @@ namespace MyGame
         public static Texture2D RatTexture;
         public static Texture2D Button;
 
+
+        public static Texture2D UIAvatarRingTexture;
+        public static Texture2D UIBarBackgroundTexture;
+        public static Texture2D UIBarBorderTexture;
+        public static Texture2D UIBarTexture;
+        public static Texture2D UITopCornerTexture;
+
+        public static Texture2D Avatar;
+
         public static void LoadTextures()
         {
             RockTexture = Game1._Content.Load<Texture2D>("rock");
@@ -65,6 +78,12 @@ namespace MyGame
             WolfTexture = Game1._Content.Load<Texture2D>("wolf");
             RatTexture = Game1._Content.Load<Texture2D>("rat");
             Button = Game1._Content.Load<Texture2D>("button");
+            UIAvatarRingTexture = Game1._Content.Load<Texture2D>("UI/AvatarRing");
+            UIBarBackgroundTexture = Game1._Content.Load<Texture2D>("UI/Bar_background");
+            UIBarBorderTexture = Game1._Content.Load<Texture2D>("UI/Bar_border");
+            UIBarTexture = Game1._Content.Load<Texture2D>("UI/HP_bar");
+            UITopCornerTexture = Game1._Content.Load<Texture2D>("UI/TopCorner");
+            Avatar = Game1._Content.Load<Texture2D>("UI/Avatars/Avatar1");
         }
     }
 }

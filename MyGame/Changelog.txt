@@ -6,6 +6,9 @@
  * Added memory allocation display
  * Fixed small memory leak caused by creating drop down list when it wasn't needed and not removing it
  * Added ability to rename elements of drop down list
+ * Made enemies not spawn inside of your vision
+ * Made enemies not spawn on top of unwalkable objects
+ * Added UI health, mana and exp bar and layed foundation for main game UI
 
 4/13/2018
 

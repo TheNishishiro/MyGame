@@ -74,13 +74,12 @@ namespace MyGame
                 CreatureFactory.AddCreature(creatures);
             }
 
-            graphics.PreferredBackBufferWidth = 1184;
-            graphics.PreferredBackBufferHeight = 608;
+            graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth * 1.3);
+            graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight * 1.3);
+            
             graphics.HardwareModeSwitch = false;
-            graphics.ToggleFullScreen();
+         //   graphics.ToggleFullScreen();
             graphics.ApplyChanges();
-            
-            
             NCamera.Camera_CreateViewport(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height + 120);
         }
 
@@ -166,24 +165,25 @@ namespace MyGame
             
             grid.DrawAdditions(ref spriteBatch, _player.Position, Settings.RenderDistance);
             cursor.Draw(ref spriteBatch);
+            _player._UI.Draw(ref spriteBatch);
             spriteBatch.End();
 
             spriteBatch.Begin();
 
             
-            _player._UI.Draw(ref spriteBatch);
-            NDrawing.FPS_Draw(new Vector2(5, 70), Color.Red, gameTime, Settings.font, ref spriteBatch);
-            spriteBatch.DrawString(font, $"" +
-                $"X:{(Mouse.GetState().X - graphics.PreferredBackBufferWidth / 2) + _player.Position.X}\n" +
-                $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight/ 2) + _player.Position.Y}\n" +
-                $"Width: {GraphicsDevice.Viewport.Width}\n" +
-                $"Heigth: {GraphicsDevice.Viewport.Height}\n" +
-                $"Creatures: {creatures.Count}\n" +
-                $"Tiles: {grid.map.Length}\n" +
-                $"Memory usage before full GC {((float)System.GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString("0.00")} MB\n" +
-                $"Memory usage after full GC: {((float)CurrentMemoryUsage/1024.0/1024.0).ToString("0.00")} MB\n" +
-                $"Memory usage change: {MemoryUsageDifference} bytes",
-                new Vector2(5, 100), Color.White);
+            
+            NDrawing.FPS_Draw(new Vector2(0, 0), Color.Red, gameTime, Settings.font, ref spriteBatch);
+            //spriteBatch.DrawString(font, $"" +
+            //    $"X:{(Mouse.GetState().X - graphics.PreferredBackBufferWidth / 2) + _player.Position.X}\n" +
+            //    $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight / 2) + _player.Position.Y}\n" +
+            //    $"Width: {GraphicsDevice.Viewport.Width}\n" +
+            //    $"Heigth: {GraphicsDevice.Viewport.Height}\n" +
+            //    $"Creatures: {creatures.Count}\n" +
+            //    $"Tiles: {grid.map.Length}\n" +
+            //    $"Memory usage before full GC {((float)System.GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString("0.00")} MB\n" +
+            //    $"Memory usage after full GC: {((float)CurrentMemoryUsage / 1024.0 / 1024.0).ToString("0.00")} MB\n" +
+            //    $"Memory usage change: {MemoryUsageDifference} bytes",
+            //    new Vector2(5, 100), Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);

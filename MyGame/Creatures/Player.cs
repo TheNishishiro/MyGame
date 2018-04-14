@@ -27,6 +27,7 @@ namespace MyGame
             Init();
             baseStats[Damage] = 20;
             baseStats[HP] = baseStats[HP_max] = 100;
+            baseStats[Mana] = baseStats[Mana_max] = 100;
             baseStats[Exp_max] = 100;
             baseStats[Level] = 1;
             

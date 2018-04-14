@@ -9,6 +9,6 @@ namespace MyGame.UI
 {
     interface IUserInterface
     {
-        void Draw(ref SpriteBatch sb);
+        void Draw(ref SpriteBatch sb, float layer);
     }
 }

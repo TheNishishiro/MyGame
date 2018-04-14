@@ -24,11 +24,11 @@ namespace MyGame.UI.Controls
             this.speed = speed;
         }
 
-        public void Draw(ref SpriteBatch sb)
+        public void Draw(ref SpriteBatch sb, float layer = Settings.UILayer)
         {
             if (color.A > 0)
             {
-                sb.DrawString(Settings.font, text, position, color, 0, new Vector2(0,0), 1, SpriteEffects.None, Settings.UILayer);
+                sb.DrawString(Settings.font, text, position, color, 0, new Vector2(0,0), 1, SpriteEffects.None, layer);
                 position.Y-=0.5f;
                 color.A--;
             }

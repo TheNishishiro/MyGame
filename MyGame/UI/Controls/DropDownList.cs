@@ -23,9 +23,14 @@ namespace MyGame.UI
         public void AddButton(string name, Action action)
         {
             Buttons.Add(new Button(name, action, ids));
+            SetButtonSize(name);
+            ids++;
+        }
+
+        private void SetButtonSize(string name)
+        {
             if (name.Length > longestTextSize)
                 longestTextSize = name.Length;
-            ids++;
         }
 
         public void RenameElement(int ElementID, string newText)
@@ -33,8 +38,7 @@ namespace MyGame.UI
             if (ElementID < Buttons.Count)
             {
                 Buttons[ElementID].Rename(newText);
-                if (newText.Length > longestTextSize)
-                    longestTextSize = newText.Length;
+                SetButtonSize(newText);
             }
         }
 
@@ -43,7 +47,7 @@ namespace MyGame.UI
             this.refPosition = refPosition;
         }
 
-        public void Draw(ref SpriteBatch sb)
+        public void Draw(ref SpriteBatch sb, float layer = 0)
         {
             foreach(Button button in Buttons)
             {

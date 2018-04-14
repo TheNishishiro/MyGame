@@ -35,7 +35,7 @@ namespace MyGame
         public void Draw(ref SpriteBatch sb)
         {
             //   sb.Draw(texture, textureRec, Color.White);
-            NDrawing.Draw(ref sb, texture, textureRec, Color.White, Settings.UILayer + 0.001f);
+            NDrawing.Draw(ref sb, texture, textureRec, Color.White, 1);
         }
     }
 }

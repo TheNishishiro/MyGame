@@ -21,7 +21,7 @@ namespace MyGame.UI.Controls
             this.color = color;
         }
 
-        public void Draw(ref SpriteBatch sb)
+        public void Draw(ref SpriteBatch sb, float layer = 0)
         {
             sb.DrawString(Settings.font, text, position, color);
         }

@@ -22,6 +22,8 @@ namespace MyGame.Creatures
             Level = "Level",
             Exp = "Exp",
             Exp_max = "EXP_MAX",
+            Mana = "Mana",
+            Mana_max = "Mana_Max",
             AttackSpeed = "Attack Speed",
             Regeneration = "Regeneration";
 
@@ -42,6 +44,8 @@ namespace MyGame.Creatures
             baseStats.Add(Level, 0);
             baseStats.Add(Exp, 0);
             baseStats.Add(Exp_max, 0);
+            baseStats.Add(Mana, 0);
+            baseStats.Add(Mana_max, 0);
             baseStats.Add(AttackSpeed, 60);
             baseStats.Add(Regeneration, 1);
             SetWalkable(false);
@@ -132,6 +136,14 @@ namespace MyGame.Creatures
         public int GetMaxHealth()
         {
             return baseStats[HP_max];
+        }
+        public int GetMana()
+        {
+            return baseStats[Mana];
+        }
+        public int GetMaxMana()
+        {
+            return baseStats[Mana_max];
         }
         public int GetExp()
         {

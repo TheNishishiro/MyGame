@@ -77,7 +77,7 @@
     <Compile Include="UI\Controls\DropDownList.cs" />
     <Compile Include="UI\Controls\FadingLabel.cs" />
     <Compile Include="UI\Controls\Label.cs" />
-    <Compile Include="UI\Controls\MainUI.cs" />
+    <Compile Include="UI\MainUI.cs" />
     <Compile Include="UI\Controls\ProgresBar.cs" />
     <Compile Include="UI\Controls\UIinterface.cs" />
     <Compile Include="UI\MenuControls.cs" />

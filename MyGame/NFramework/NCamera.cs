@@ -28,7 +28,7 @@ namespace NFramework
 
             public void Update(Rectangle RectangleToFollow)
             {
-                centre = new Vector2(RectangleToFollow.X + (RectangleToFollow.Width / 2) - (RoomWidth / 2), RectangleToFollow.Y + (RectangleToFollow.Height / 2) - (RoomHeight / 2));
+                centre = new Vector2(RectangleToFollow.X + (RectangleToFollow.Width / 2) - (RoomWidth / 2), RectangleToFollow.Y+64 + (RectangleToFollow.Height / 2) - (RoomHeight / 2));
                 transform = Matrix.CreateScale(new Vector3(1, 1, 0)) *
                     Matrix.CreateTranslation(new Vector3(-centre.X, -centre.Y, 0));
             }
