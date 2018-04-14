@@ -54,6 +54,9 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GridElements\Additions\BloodStain.cs" />
     <Compile Include="GridElements\Additions\GrassBatch.cs" />
+    <Compile Include="GridElements\Additions\Rock.cs" />
+    <Compile Include="GridElements\Additions\Tree.cs" />
+    <Compile Include="GridElements\Additions\Tree2.cs" />
     <Compile Include="GridElements\baseAddition.cs" />
     <Compile Include="GridElements\Grid.cs" />
     <Compile Include="GridElements\baseTile.cs" />
