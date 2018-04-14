@@ -5,13 +5,17 @@ using Microsoft.Xna.Framework.Input;
 using MyGame.Creatures;
 using MyGame.Creatures.Hostile;
 using MyGame.GridElements;
+using MyGame.UI;
 using NFramework;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using static MyGame.Settings;
 
 namespace MyGame
 {
+    
     public class Game1 : Game
     {
         public static GraphicsDevice _GraphicsDevice;
@@ -19,15 +23,23 @@ namespace MyGame
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
-        
         List<ICreature> creatures;
         List<FightingManager> fights = new List<FightingManager>();
+        bool GotFirstGC = false;
+        long MemoryUsageAtStart = 0, MemoryUsageDifference = 0, CurrentMemoryUsage = 0;
 
-        public static Texture2D RockTexture;
-        public static Texture2D TreeTexture;
-        public static Texture2D Tree2Texture;
-        public static Texture2D GrassBatchTexture;
-        public static Texture2D BloodStainTexture;
+        Thread GCInfo;
+
+
+        private void GetGCInfo()
+        {
+            while (true)
+            {
+                CurrentMemoryUsage = System.GC.GetTotalMemory(true);
+                MemoryUsageDifference = CurrentMemoryUsage - MemoryUsageAtStart;
+                Thread.Sleep(2000);
+            }
+        }
 
         public Game1()
         {
@@ -38,6 +50,7 @@ namespace MyGame
         protected override void Initialize()
         {
             base.Initialize();
+
         }
 
         protected override void LoadContent()
@@ -47,40 +60,33 @@ namespace MyGame
             _GraphicsDevice = GraphicsDevice;
 
             cursor = new Cursor(Content.Load<Texture2D>("Light_Blue"));
-            RockTexture = Content.Load<Texture2D>("rock");
-            TreeTexture = Content.Load<Texture2D>("tree");
-            Tree2Texture = Content.Load<Texture2D>("tree2");
-            GrassBatchTexture = Content.Load<Texture2D>("grassBatch");
-            BloodStainTexture = Content.Load<Texture2D>("BloodStain");
-            Texture2D wolf =  Content.Load<Texture2D>("wolf");
-            Texture2D rat =  Content.Load<Texture2D>("rat");
+            Textures.LoadTextures();
 
             font = Content.Load<SpriteFont>("font");
             grid = new Grid(Content, Settings.WorldSizeBlocks, Settings.WorldSizeBlocks);
 
-            _player = new Player(32 * 5, 32 * 5, Content.Load<Texture2D>("player"));
+            _player = new Player(WorldSizePixels/2, WorldSizePixels / 2, Content.Load<Texture2D>("player"));
             
 
             creatures = new List<ICreature>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < CreatureLimit; i++)
             {
-                switch(rnd.Next(2))
-                {
-                    case 0:
-                        creatures.Add(new Wolf(GridSize * rnd.Next(WorldSizeBlocks), GridSize * rnd.Next(WorldSizeBlocks), wolf));
-                        break;
-                    case 1:
-                        creatures.Add(new Rat(GridSize * rnd.Next(WorldSizeBlocks), GridSize * rnd.Next(WorldSizeBlocks), rat));
-                        break;
-                }
+                CreatureFactory.AddCreature(creatures);
             }
+
+            graphics.PreferredBackBufferWidth = 1184;
+            graphics.PreferredBackBufferHeight = 608;
+            graphics.HardwareModeSwitch = false;
+            graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
             
-            NCamera.Camera_CreateViewport(GraphicsDevice.Viewport, 800, 600);
+            
+            NCamera.Camera_CreateViewport(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height + 120);
         }
 
         protected override void UnloadContent()
         {
-
+            //GCInfo.Abort();
         }
 
 
@@ -98,10 +104,30 @@ namespace MyGame
                     fights[i].Evaluate();
                 }
             }
+            if(creatures.Count < CreatureLimit)
+            {
+                CreatureFactory.AddCreature(creatures);
+            }
+            CreatureFactory.ClearCreaturesOutsideBounds(creatures);
 
             _player.Update();
             cursor.Update();
             NCamera.Camera_Bound(_player.GetBounds());
+
+            if(!GotFirstGC)
+            {
+                MemoryUsageAtStart = System.GC.GetTotalMemory(true);
+                GotFirstGC = true;
+                //GCInfo = new Thread(GetGCInfo);
+                //GCInfo.Start();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
+
             base.Update(gameTime);
         }
 
@@ -109,7 +135,8 @@ namespace MyGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            NCamera.Camera_Use(ref spriteBatch);
+
+            NCamera.Camera_Use(ref spriteBatch, SpriteSortMode.FrontToBack);
             grid.Draw(ref spriteBatch, _player.Position, Settings.RenderDistance);
 
             _player.Draw(ref spriteBatch);
@@ -145,10 +172,17 @@ namespace MyGame
 
             
             _player._UI.Draw(ref spriteBatch);
-            NDrawing.FPS_Draw(new Vector2(5, 200), Color.Red, gameTime, Settings.font, ref spriteBatch);
+            NDrawing.FPS_Draw(new Vector2(5, 70), Color.Red, gameTime, Settings.font, ref spriteBatch);
             spriteBatch.DrawString(font, $"" +
                 $"X:{(Mouse.GetState().X - graphics.PreferredBackBufferWidth / 2) + _player.Position.X}\n" +
-                $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight/ 2) + _player.Position.Y}",
+                $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight/ 2) + _player.Position.Y}\n" +
+                $"Width: {GraphicsDevice.Viewport.Width}\n" +
+                $"Heigth: {GraphicsDevice.Viewport.Height}\n" +
+                $"Creatures: {creatures.Count}\n" +
+                $"Tiles: {grid.map.Length}\n" +
+                $"Memory usage before full GC {((float)System.GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString("0.00")} MB\n" +
+                $"Memory usage after full GC: {((float)CurrentMemoryUsage/1024.0/1024.0).ToString("0.00")} MB\n" +
+                $"Memory usage change: {MemoryUsageDifference} bytes",
                 new Vector2(5, 100), Color.White);
 
             spriteBatch.End();

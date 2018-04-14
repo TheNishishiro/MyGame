@@ -18,14 +18,11 @@ namespace MyGame.GridElements.Additions
         public Tree2(Texture2D texture, int posX, int posY)
         {
             hp = 15;
-            Position = new Microsoft.Xna.Framework.Vector2(posX, posY);
+            Position = new Vector2(posX, posY);
             this.texture = texture;
-            bounds = new Microsoft.Xna.Framework.Rectangle(posX, posY, texture.Width, texture.Height);
+            bounds = new Rectangle(posX, posY, texture.Width, texture.Height);
             Walkable = false;
             IsClickable = true;
-            //DPL = new UI.DropDownList();
-            //DPL.AddButton("Cut down", () => FightToggle());
-            //DPL.AddButton("Quit", () => quitMenu());
             FL = new List<FadingLabel>();
             cooldown = 60;
         }
@@ -35,6 +32,12 @@ namespace MyGame.GridElements.Additions
             NDrawing.Draw(ref sb, texture, new Vector2(Position.X, Position.Y-32), Color.White, layerDepth + 0.001f);
             if (IsClickable)
                 base.Update(ref sb, "wood", 1);
+        }
+
+        protected override void SetButtons()
+        {
+            base.SetButtons();
+            DPL.RenameElement(0, "Cut down");
         }
 
     }

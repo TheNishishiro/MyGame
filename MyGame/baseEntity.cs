@@ -5,6 +5,7 @@ using MyGame.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,23 +20,31 @@ namespace MyGame
         protected bool menuOpened = false;
         protected bool fighting = false;
         protected ProgresBar healthBar;
-        protected DropDownList DPL;
+        protected DropDownList DPL = null;
 
         protected void menuManagment(ref SpriteBatch sb)
         {
-            if (menuOpened == false)
+            if (menuOpened == false && DPL == null)
             {
                 menuOpened = MenuControls.MouseOver(bounds);
-                DPL = new UI.DropDownList();
+                if (menuOpened)
+                {
+                    DPL = new UI.DropDownList();
 
-                DPL.AddButton("Engage", () => FightToggle());
-                DPL.AddButton("Quit", () => quitMenu());
+                    SetButtons();
+                }
             }
             if (menuOpened)
             {
                 DPL.Update(Position);
                 DPL.Draw(ref sb);
             }
+        }
+
+        protected virtual void SetButtons()
+        {
+            DPL.AddButton("Engage", () => FightToggle());
+            DPL.AddButton("Quit", () => quitMenu());
         }
 
         protected void FightToggle()

@@ -21,6 +21,7 @@ namespace MyGame
         int GetHealth();
         int GetMaxHealth();
         int GetDamage();
+        void HealUp(int amount);
         int GetLevel();
         int GetExp();
         int GetExpMax();

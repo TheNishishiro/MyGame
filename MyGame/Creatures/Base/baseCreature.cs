@@ -22,7 +22,8 @@ namespace MyGame.Creatures
             Level = "Level",
             Exp = "Exp",
             Exp_max = "EXP_MAX",
-            AttackSpeed = "Attack Speed";
+            AttackSpeed = "Attack Speed",
+            Regeneration = "Regeneration";
 
         protected Dictionary<string,int> baseStats;
 
@@ -42,6 +43,7 @@ namespace MyGame.Creatures
             baseStats.Add(Exp, 0);
             baseStats.Add(Exp_max, 0);
             baseStats.Add(AttackSpeed, 60);
+            baseStats.Add(Regeneration, 1);
             SetWalkable(false);
         }
 
@@ -95,7 +97,7 @@ namespace MyGame.Creatures
         {
             SetWalkable(true);
             player.AddExp(baseStats[Exp]);
-            Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(new BloodStain(Game1.BloodStainTexture, (int)(Position.X), (int)(Position.Y)));
+            Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(new BloodStain(Textures.BloodStainTexture, (int)(Position.X), (int)(Position.Y)));
         }
 
         protected void AlignToGrid()
@@ -151,11 +153,17 @@ namespace MyGame.Creatures
         {
             return fighting;
         }
-
+        public void HealUp(int amount)
+        {
+            baseStats[HP] += amount;
+            if (baseStats[HP] > baseStats[HP_max])
+                baseStats[HP] = baseStats[HP_max];
+        }
         public void DealDamage(int _damage)
         {
             int dmg = Settings.rnd.Next(_damage);
-            FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.2f));
+            if(dmg > 0)
+                FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.2f));
             baseStats[HP] -= dmg;
         }
         public void LevelUp()

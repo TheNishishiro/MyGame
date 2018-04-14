@@ -43,6 +43,11 @@ namespace MyGame.GridElements
                     FL.Add(new FadingLabel($"+{amount} {resource}", Position, Color.White));
                 }
             }
+            if(hp <= 0)
+            {
+                Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].Walkable = true;
+                Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(null);
+            }
 
             MenuControls.FadingLabelManager(ref sb, FL);
         }

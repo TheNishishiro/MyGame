@@ -1,0 +1,23 @@
+﻿ 
+4/14/2018
+
+ * Added advanced camera implementation with zoom and rotation to framework
+ * Toggled fullscreen and changed default resolution
+ * Added memory allocation display
+ * Fixed small memory leak caused by creating drop down list when it wasn't needed and not removing it
+ * Added ability to rename elements of drop down list
+
+4/13/2018
+
+ * Fixed pointer being stuck and not following mouse correctly
+ * Cut down memory consumption by drop down lists
+ * Added ability to attack environmental objects and destory them
+ * Moved textures into Settings and created function to load them up
+ * Implemented attack speed
+ * Added texture to buttons
+ * Added text labels
+ * Added fading text labels
+ * Added hp regeneration
+ * Made enemies spawn only in a location around player and despawn once they leave the location
+  number of enemies is now constante
+

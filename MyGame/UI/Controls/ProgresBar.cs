@@ -24,14 +24,12 @@ namespace MyGame.UI
 
         public void Update(float current, float max, Vector2 position)
         {
-            Size1 = new Rectangle((int)position.X, (int)position.Y, Size.Width, Size.Height);
-            Size2 = new Rectangle((int)position.X, (int)position.Y, (int)(Size.Width * (current / max)), Size.Height);
+            Size1 = new Rectangle((int)position.X, (int)position.Y-16, Size.Width, Size.Height);
+            Size2 = new Rectangle((int)position.X, (int)position.Y-16, (int)(Size.Width * (current / max)), Size.Height);
         }
 
         public void Draw(ref SpriteBatch sb)
         {
-            //  sb.Draw(background, Size1, Color.White);
-            //  sb.Draw(foreground, Size2, Color.White);
             NDrawing.Draw(ref sb, background, Size1, Color.White, Settings.UILayer - 0.001f);
             NDrawing.Draw(ref sb, foreground, Size2, Color.White, Settings.UILayer);
         }

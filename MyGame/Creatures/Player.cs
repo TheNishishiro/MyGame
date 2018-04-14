@@ -15,6 +15,7 @@ namespace MyGame
     class Player : baseCreature
     {
         public MainUI _UI;
+        int RegenTimer = 0;
 
         public Player(float posX, float posY, Texture2D texture)
         {
@@ -54,6 +55,13 @@ namespace MyGame
             healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
             if (baseStats[Exp] >= baseStats[Exp_max])
                 LevelUp();
+            if (baseStats[HP] < baseStats[HP_max] && RegenTimer <= 0)
+            {
+                HealUp(baseStats[Regeneration]);
+                RegenTimer = 120;
+            }
+            if(RegenTimer > 0)
+                RegenTimer--;
         }
 
         public override void Draw(ref SpriteBatch sb)

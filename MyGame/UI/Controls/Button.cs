@@ -27,9 +27,15 @@ namespace MyGame.UI
             color = Color.White;
         }
 
+        public void Rename(string name)
+        {
+            this.name = name;
+        }
+
         public void Draw(ref SpriteBatch sb)
         {
-           sb.DrawString(Settings.font, name, new Vector2(position.X, position.Y), color, 0, new Vector2(0,0), 1, SpriteEffects.None, Settings.UILayer);
+            NDrawing.Draw(ref sb, Textures.Button, position, Color.White, Settings.UILayer);
+           sb.DrawString(Settings.font, name, new Vector2(position.X, position.Y-2), color, 0, new Vector2(0,0), 1, SpriteEffects.None, Settings.UILayer+0.001f);
             if (Settings.cursor.bounds.Intersects(position))
                 color = Color.Yellow;
             else
@@ -43,9 +49,11 @@ namespace MyGame.UI
                 ButtonClickMainAction();
         }
 
-        public void Update(Vector2 refPosition)
+        public void Update(Vector2 refPosition, int width)
         {
+
             testForClick();
+            position.Width = width;
             position.X = (int)refPosition.X + 32;
             position.Y = (int)refPosition.Y + (16 * id);
         }

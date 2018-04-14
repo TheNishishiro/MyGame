@@ -10,19 +10,32 @@ namespace MyGame.UI
 {
     class DropDownList : IUserInterface
     {
-        public Dictionary<string, Button> Buttons;
+        public List<Button> Buttons;
         Vector2 refPosition;
         private int ids = 0;
+        int longestTextSize = 0;
 
         public DropDownList()
         {
-            Buttons = new Dictionary<string, Button>();
+            Buttons = new List<Button>();
         }
         
         public void AddButton(string name, Action action)
         {
-            Buttons.Add(name, new Button(name, action, ids));
+            Buttons.Add(new Button(name, action, ids));
+            if (name.Length > longestTextSize)
+                longestTextSize = name.Length;
             ids++;
+        }
+
+        public void RenameElement(int ElementID, string newText)
+        {
+            if (ElementID < Buttons.Count)
+            {
+                Buttons[ElementID].Rename(newText);
+                if (newText.Length > longestTextSize)
+                    longestTextSize = newText.Length;
+            }
         }
 
         public void Update(Vector2 refPosition)
@@ -32,10 +45,10 @@ namespace MyGame.UI
 
         public void Draw(ref SpriteBatch sb)
         {
-            foreach(KeyValuePair<string, Button> entry in Buttons)
+            foreach(Button button in Buttons)
             {
-                Buttons[entry.Key].Draw(ref sb);
-                Buttons[entry.Key].Update(refPosition);
+                button.Draw(ref sb);
+                button.Update(refPosition, longestTextSize*Settings.TextButtonScaling);
             }
         }
     }

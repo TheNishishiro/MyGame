@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C9E76F54-E701-4AF8-8D63-18417C4D9C9C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyGame</RootNamespace>
     <AssemblyName>MyGame</AssemblyName>
@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="baseEntity.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
+    <Compile Include="Creatures\CreatureFactory.cs" />
     <Compile Include="Creatures\Hostile\Rat.cs" />
     <Compile Include="Creatures\Hostile\Wolf.cs" />
     <Compile Include="Cursor.cs" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="Changelog.txt" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
