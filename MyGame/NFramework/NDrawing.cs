@@ -18,11 +18,6 @@ namespace NFramework
         private static int frameRate = 0;
         private static int frameCounter = 0;
 
-        internal static void Draw(ref SpriteBatch sb, object texture, Vector2 vector2, object white, object layerDepth)
-        {
-            throw new NotImplementedException();
-        }
-
         private static TimeSpan elapsedTime = TimeSpan.Zero;
 
         public static void SetFramework(SpriteBatch spriteBatch, ContentManager Content)

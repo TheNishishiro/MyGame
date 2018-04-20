@@ -1,4 +1,60 @@
-﻿ 
+﻿4/20/2018
+ * Made textures load from xml files located in "Data" folder
+ * Made enemies load from xml files located int "Data\Enemies" folder
+ * Made Additions load from xml files located in "Data\Additions\" folders
+ * Made Additions and Enemies preload into templates instead of loading during runtime
+ * Added debug console information about startup time
+ * Made enemies spawnable loot apply new loading system 
+ * Added little quotes for enemies in combat
+ * Made fonts for everything look the same (lul)
+ * Re-adjusted text on buttons
+ * Made enemies able to regenerate health over time
+ * Made Items load from xml file located in "Data\Items" folder
+ * Added loot definition for enemies
+
+4/19/2018
+ * Improved UI:
+	- Added whole UI panel
+	- Moved HP, mana and exp bar
+	- Created proper inventory
+ * Added magic level
+ * Added ability to right click your own character
+
+4/18/2018
+ * Added item frames
+ * Added inventory display on the right side
+ * Fixed big tree click box
+ * Implemented item removing
+ * Changed big tree clickbox to be 32x32 as every other object on grid instead of being full texture
+ * Fixed clicking through UI elements 
+ * Fixed clicking through Buttons
+ * Adjusted mouse position (again)
+ * Adjusted size of HP, Mana and Exp bars
+
+ Known bug: Window shrinks each time you toggle windowed mode and move game window around (Game1.cs, line: 80)
+
+4/17/2018
+ * Removed sub Enemy classes and moved logic into single Enemy class
+ * Added border to HP bars of enemies
+ * Excluded Bag class from Addition class
+ * Made Bag execute PickUpItem function properly
+ * Added display of names of enemies
+ * Added list of materials for player
+ * Added display of materials in inventory
+
+4/16/2018
+ * Added 'canMove' property for creatures
+ * Removed sub 'Additon' classes and moved logic into single Addition class
+
+4/15/2018
+ * Added red rectangle showing which entities are in a "fighting" state
+ * Removed fighting color indicator
+ * Added full screen toggle button under 'P'
+ * Added debug text toggle button under 'L'
+ * Added option to change default action of a button
+ * Added item bag drop from enemy
+ * Made bloodstains disappear over time
+
 4/14/2018
 
  * Added advanced camera implementation with zoom and rotation to framework

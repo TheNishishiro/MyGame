@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C9E76F54-E701-4AF8-8D63-18417C4D9C9C}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyGame</RootNamespace>
     <AssemblyName>MyGame</AssemblyName>
@@ -44,26 +44,28 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="baseClickable.cs" />
     <Compile Include="baseEntity.cs" />
+    <Compile Include="Creatures\baseEnemy.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
     <Compile Include="Creatures\CreatureFactory.cs" />
-    <Compile Include="Creatures\Hostile\Rat.cs" />
-    <Compile Include="Creatures\Hostile\Wolf.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="FightingManager.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="GridElements\Additions\BloodStain.cs" />
-    <Compile Include="GridElements\Additions\GrassBatch.cs" />
-    <Compile Include="GridElements\Additions\Rock.cs" />
-    <Compile Include="GridElements\Additions\Tree.cs" />
-    <Compile Include="GridElements\Additions\Tree2.cs" />
-    <Compile Include="GridElements\baseAddition.cs" />
+    <Compile Include="GridElements\Addition.cs" />
+    <Compile Include="GridElements\AdditionFactory.cs" />
     <Compile Include="GridElements\Grid.cs" />
     <Compile Include="GridElements\baseTile.cs" />
+    <Compile Include="GridElements\Specials\Bag.cs" />
     <Compile Include="GridElements\TileInterfaces.cs" />
     <Compile Include="GridElements\TileTypes\Grass.cs" />
     <Compile Include="Creatures\Base\CreatureInterfaces.cs" />
     <Compile Include="Creatures\Player.cs" />
+    <Compile Include="Items\baseItems.cs" />
+    <Compile Include="Items\IItems.cs" />
+    <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Items\ItemTypes\Armor.cs" />
+    <Compile Include="Items\ItemTypes\Weapon.cs" />
     <Compile Include="NFramework\NCamera.cs" />
     <Compile Include="NFramework\NAction.cs" />
     <Compile Include="NFramework\NControls.cs" />

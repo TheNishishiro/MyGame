@@ -29,7 +29,7 @@ namespace MyGame.UI.Controls
             if (color.A > 0)
             {
                 sb.DrawString(Settings.font, text, position, color, 0, new Vector2(0,0), 1, SpriteEffects.None, layer);
-                position.Y-=0.5f;
+                position.Y-=speed;
                 color.A--;
             }
         }

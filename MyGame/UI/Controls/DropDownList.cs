@@ -42,6 +42,14 @@ namespace MyGame.UI
             }
         }
 
+        public void EditButtonAction(int ElementID, Action action)
+        {
+            if (ElementID < Buttons.Count)
+            {
+                Buttons[ElementID].EditAction(action);
+            }
+        }
+
         public void Update(Vector2 refPosition)
         {
             this.refPosition = refPosition;

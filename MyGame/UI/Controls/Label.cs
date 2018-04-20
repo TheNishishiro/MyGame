@@ -21,9 +21,19 @@ namespace MyGame.UI.Controls
             this.color = color;
         }
 
+        public void UpdatePosition(Vector2 position)
+        {
+            this.position = position;
+        }
+
+        public void UpdateText(string text)
+        {
+            this.text = text;
+        }
+
         public void Draw(ref SpriteBatch sb, float layer = 0)
         {
-            sb.DrawString(Settings.font, text, position, color);
+            sb.DrawString(Settings.font2, text, position, color, 0, new Vector2(0,0), 1, SpriteEffects.None, layer);
         }
     }
 }

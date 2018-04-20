@@ -25,8 +25,8 @@ namespace MyGame
 
         public void Update()
         {
-            bounds.X = (Mouse.GetState().X - Game1.graphics.PreferredBackBufferWidth / 2) + (int)Settings._player.Position.X + 16;
-            bounds.Y = (Mouse.GetState().Y - Game1.graphics.PreferredBackBufferHeight / 2) + (int)Settings._player.Position.Y - 48;
+            bounds.X = (Mouse.GetState().X - Game1.graphics.PreferredBackBufferWidth / 2) + (int)Settings._player.Position.X + 16 + NCamera.CameraXOffset;
+            bounds.Y = (Mouse.GetState().Y - Game1.graphics.PreferredBackBufferHeight / 2) + (int)Settings._player.Position.Y + 16 + NCamera.CameraYOffset;
             textureRec.X = bounds.X;
             textureRec.Y = bounds.Y;
            

@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using MyGame.Creatures.Hostile;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,15 +38,7 @@ namespace MyGame.Creatures
             if (!TestRenderBounds(new Vector2(posX, posY), _player.GetPosition(), RenderDistance)
                 && grid.map[(int)(posX/GridSize), (int)(posY/GridSize)].Walkable)
             {
-                switch (rnd.Next(2))
-                {
-                    case 0:
-                        creatures.Add(new Wolf(posX, posY, Textures.WolfTexture));
-                        break;
-                    case 1:
-                        creatures.Add(new Rat(posX, posY, Textures.RatTexture));
-                        break;
-                }
+                creatures.Add(Textures.EnemyTemplates[Settings.rnd.Next(Textures.EnemyTemplates.Count)].CreateCopy(new Vector2(posX, posY)));
             }
         }
 
@@ -61,6 +54,55 @@ namespace MyGame.Creatures
                     creatures.RemoveAt(i);
                     i--;
                 }
+            }
+        }
+
+        public static void LoadCreatureTemplate(List<ICreature> list)
+        {
+            Console.WriteLine("Loading creature objects...");
+            try
+            {
+                string[] EnemyFiles = Directory.GetFiles(".\\Data\\Enemies\\");
+                foreach (string file in EnemyFiles)
+                {
+                    String[] lines = File.ReadAllLines(file);
+                    Texture2D texture = null;
+                    string name = "";
+                    Dictionary<string, int> stats = new Dictionary<string, int>();
+                    List<string> dialogs = new List<string>();
+                    List<string> loot = new List<string>();
+                    foreach (string line in lines)
+                    {
+                        string[] property = line.Split(':');
+                        string _property = property[0].ToLower().Trim();
+                        string convertedProperty = property[1].Trim().Replace("\"", String.Empty);
+
+                        if (_property == "textureid")
+                            texture = Textures.EnemyTextures[convertedProperty];
+                        else if (_property == "name")
+                            name = convertedProperty;
+                        else if (_property == "dialog")
+                            dialogs.Add(convertedProperty);
+                        else if(_property == "loot")
+                        {
+                            loot.Add(convertedProperty);
+                        }
+                        else
+                        {
+                            if (!stats.ContainsKey(_property))
+                            {
+                                stats.Add(_property, int.Parse(convertedProperty));
+                            }
+                        }
+                    }
+                    list.Add(new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot));
+                    Console.WriteLine("\tLoaded: " + file);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

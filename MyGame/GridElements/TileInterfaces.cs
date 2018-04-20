@@ -13,11 +13,13 @@ namespace MyGame.GridElements
         void Draw(ref SpriteBatch sb);
         void DrawAddition(ref SpriteBatch sb);
         void AddAddition(ITileAddition addition);
+        void RemoveAddition(ITileAddition addition);
     }
 
     interface ITileAddition
     {
         bool Walkable { get; set; }
         void Draw(ref SpriteBatch sb);
+        void RemoveAdditionFromGrid();
     }
 }

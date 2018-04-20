@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MyGame.GridElements.Additions;
 using MyGame.UI;
+using NFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,54 +9,19 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
+// Class containing functions used by both Enemies, Player and Objects on map
+
 namespace MyGame
 {
-    class baseEntity
+    class baseEntity : baseClickable
     {
-        
-        public Vector2 Position;
-        protected Rectangle bounds;
         protected Color color = Color.White;
-        protected bool menuOpened = false;
-        protected bool fighting = false;
         protected ProgresBar healthBar;
-        protected DropDownList DPL = null;
 
-        protected void menuManagment(ref SpriteBatch sb)
+        protected void DrawAggroRectangle(ref SpriteBatch sb)
         {
-            if (menuOpened == false && DPL == null)
-            {
-                menuOpened = MenuControls.MouseOver(bounds);
-                if (menuOpened)
-                {
-                    DPL = new UI.DropDownList();
-
-                    SetButtons();
-                }
-            }
-            if (menuOpened)
-            {
-                DPL.Update(Position);
-                DPL.Draw(ref sb);
-            }
-        }
-
-        protected virtual void SetButtons()
-        {
-            DPL.AddButton("Engage", () => FightToggle());
-            DPL.AddButton("Quit", () => quitMenu());
-        }
-
-        protected void FightToggle()
-        {
-            fighting = !fighting;
-            quitMenu();
-        }
-
-        protected void quitMenu()
-        {
-            menuOpened = false;
-            DPL = null;
+            if (fighting)
+                NDrawing.Draw(ref sb, Textures.UITargetTexture, Position, Color.White, Settings.tileLayer + 0.1f);
         }
 
         protected bool isWalkable(float x, float y)

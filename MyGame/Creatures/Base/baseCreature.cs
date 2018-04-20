@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MyGame.GridElements.Additions;
+using MyGame.GridElements;
+using MyGame.GridElements.Specials;
+using MyGame.Items;
+using MyGame.Items.ItemTypes;
 using MyGame.UI;
 using MyGame.UI.Controls;
 using NFramework;
@@ -11,29 +14,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Class containing functions used only by Creatures
+
 namespace MyGame.Creatures
 {
     class baseCreature : baseEntity, ICreature
     {
         public const string
-            HP = "HP",
-            HP_max = "HP_MAX",
-            Damage = "Damage",
-            Level = "Level",
-            Exp = "Exp",
-            Exp_max = "EXP_MAX",
-            Mana = "Mana",
-            Mana_max = "Mana_Max",
-            AttackSpeed = "Attack Speed",
-            Regeneration = "Regeneration";
+            HP = "health",
+            HP_max = "hp_max",
+            Damage = "damage",
+            Level = "level",
+            Exp = "experience",
+            Exp_max = "experience_max",
+            Mana = "mana",
+            Mana_max = "mana_xax",
+            Magic_Level = ",agic_level",
+            Magic_Level_points = "magic_level_points",
+            Magic_Level_max_points = "magic_level_max_points",
+            AttackSpeed = "attackspeed",
+            Regeneration = "regeneration";
 
         protected Dictionary<string,int> baseStats;
 
         protected Texture2D texture;
         public Vector2 moveToPosition;
         protected bool moving = false;
+        protected bool canMove = true;
         private int decision;
+        protected int RegenTimer = 0, RegenTimerReset = 120;
         protected List<FadingLabel> FL = new List<FadingLabel>();
+        protected List<string> Dialogs = new List<string>();
+        protected List<string> Loot = new List<string>();
+        protected Label nameLabel;
 
         public virtual void Init()
         {
@@ -48,7 +61,8 @@ namespace MyGame.Creatures
             baseStats.Add(Mana_max, 0);
             baseStats.Add(AttackSpeed, 60);
             baseStats.Add(Regeneration, 1);
-            SetWalkable(false);
+            if(Settings.grid!=null)
+                SetWalkable(false);
         }
 
         public virtual void Move()
@@ -69,25 +83,34 @@ namespace MyGame.Creatures
                 AlignToGrid();
         }
 
+        public ICreature CreateCopy(Vector2 position)
+        {
+            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot);
+        }
+
         public virtual void Update()
         {
+            RegenerateHP();
+
+            if (Settings.rnd.Next(5000) > 4990 && Dialogs.Count > 0 && fighting)
+                FL.Add(new FadingLabel(Dialogs[Settings.rnd.Next(Dialogs.Count)], Position, Color.White, 0.2f));
+
             UpdateBounds();
-            Move();
+            if(canMove)
+                Move();
             healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
         }
 
         public virtual void Draw(ref SpriteBatch sb)
         {
-            if (fighting == true)
-                color = Color.Yellow;
-            else
-                color = Color.White;
-            NDrawing.Draw(ref sb, texture, Position, color, Settings.entityLayer);
+            NDrawing.Draw(ref sb, texture, Position, color, layerDepth);
             
             healthBar.Update(GetHealth(), GetMaxHealth(), Position);
             healthBar.Draw(ref sb);
+            nameLabel.UpdatePosition(new Vector2(Position.X, Position.Y - 32));
+            nameLabel.Draw(ref sb, Settings.UILayer);
             menuManagment(ref sb);
-
+            DrawAggroRectangle(ref sb);
             MenuControls.FadingLabelManager(ref sb, FL);
         }
 
@@ -100,8 +123,42 @@ namespace MyGame.Creatures
         public void Die(ICreature player)
         {
             SetWalkable(true);
+            bool looted = false;
             player.AddExp(baseStats[Exp]);
-            Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(new BloodStain(Textures.BloodStainTexture, (int)(Position.X), (int)(Position.Y)));
+            if (Settings.rnd.Next(2) == 0)
+            {
+                foreach(string l in Loot)
+                {
+                    string[] properties = l.Split(',');
+                    string itemID = properties[0].Trim();
+                    int Chance = int.Parse(properties[1].Trim());
+
+                    if(Settings.rnd.Next(10000) <= Chance)
+                    {
+                        looted = true;
+                        Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(
+                            new Bag(
+                            Textures.ItemTemplates[itemID].CreateCopy()
+                            , new Vector2(Position.X, Position.Y)
+                            ));
+                    }
+                }
+
+                
+            }
+            if(!looted)
+                Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[Settings.rnd.Next(Textures.SpawnableAdditionTemplates.Count)].CreateCopy(new Vector2(Position.X, Position.Y)));
+        }
+
+        protected void RegenerateHP()
+        {
+            if (baseStats[HP] < baseStats[HP_max] && RegenTimer <= 0)
+            {
+                HealUp(baseStats[Regeneration]);
+                RegenTimer = RegenTimerReset;
+            }
+            if (RegenTimer > 0)
+                RegenTimer--;
         }
 
         protected void AlignToGrid()
@@ -175,13 +232,14 @@ namespace MyGame.Creatures
         {
             int dmg = Settings.rnd.Next(_damage);
             if(dmg > 0)
-                FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.2f));
+                FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.5f));
             baseStats[HP] -= dmg;
         }
         public void LevelUp()
         {
             baseStats[Level]++;
-            baseStats[Exp_max] = (int)(baseStats[Exp_max] * 1.5);
+            baseStats[Exp_max] = (int)(baseStats[Exp_max] * 1.25);
+            baseStats[Exp] = 0;
         }
         public Vector2 GetPosition()
         {
@@ -194,6 +252,18 @@ namespace MyGame.Creatures
         public float GetAttackSpeed()
         {
             return baseStats[AttackSpeed];
+        }
+        public int GetMagicLevel()
+        {
+            return baseStats[Magic_Level];
+        }
+        public int GetMagicLevelPoints()
+        {
+            return baseStats[Magic_Level_points];
+        }
+        public int GetMaxMagicLevelPoints()
+        {
+            return baseStats[Magic_Level_max_points];
         }
     }
 }

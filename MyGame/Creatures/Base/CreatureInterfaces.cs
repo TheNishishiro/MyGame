@@ -10,7 +10,7 @@ namespace MyGame
 {
     interface ICreature
     {
-
+        ICreature CreateCopy(Vector2 position);
 
         void Update();
         void Move();
@@ -27,6 +27,9 @@ namespace MyGame
         int GetLevel();
         int GetExp();
         int GetExpMax();
+        int GetMagicLevel();
+        int GetMagicLevelPoints();
+        int GetMaxMagicLevelPoints();
         float GetAttackSpeed();
         Rectangle GetBounds();
         void LevelUp();

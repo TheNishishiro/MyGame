@@ -13,6 +13,8 @@ namespace NFramework
     {
         static Camera _camera;
         static AdvencedCamera _AdvencedCamera;
+        public static int CameraXOffset = -150;
+        public static int CameraYOffset = 0;
 
         public class Camera
         {
@@ -28,7 +30,7 @@ namespace NFramework
 
             public void Update(Rectangle RectangleToFollow)
             {
-                centre = new Vector2(RectangleToFollow.X + (RectangleToFollow.Width / 2) - (RoomWidth / 2), RectangleToFollow.Y+64 + (RectangleToFollow.Height / 2) - (RoomHeight / 2));
+                centre = new Vector2(RectangleToFollow.X + (RectangleToFollow.Width / 2) - (RoomWidth / 2) + CameraXOffset, RectangleToFollow.Y+64 + (RectangleToFollow.Height / 2) - (RoomHeight / 2) + CameraYOffset);
                 transform = Matrix.CreateScale(new Vector3(1, 1, 0)) *
                     Matrix.CreateTranslation(new Vector3(-centre.X, -centre.Y, 0));
             }

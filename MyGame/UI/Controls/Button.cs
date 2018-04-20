@@ -17,6 +17,7 @@ namespace MyGame.UI
         Action action;
         private int id;
         Color color;
+        float layerDepth = Settings.MainUILayer;
 
         public Button(string name, Action buttonAction, int id)
         {
@@ -32,10 +33,17 @@ namespace MyGame.UI
             this.name = name;
         }
 
+        public void EditAction(Action action)
+        {
+            this.action = action;
+        }
+
         public void Draw(ref SpriteBatch sb)
         {
-            NDrawing.Draw(ref sb, Textures.Button, position, Color.White, Settings.UILayer);
-           sb.DrawString(Settings.font, name, new Vector2(position.X, position.Y-2), color, 0, new Vector2(0,0), 1, SpriteEffects.None, Settings.UILayer+0.001f);
+            if (MenuControls.MouseOver(position))
+                MenuControls.SetMouseLayer(layerDepth + 0.02f);
+            NDrawing.Draw(ref sb, Textures.Button, position, Color.White, layerDepth + 0.019f);
+           sb.DrawString(Settings.font, name, new Vector2(position.X, position.Y), color, 0, new Vector2(0,0), 1, SpriteEffects.None, layerDepth + 0.02f);
             if (Settings.cursor.bounds.Intersects(position))
                 color = Color.Yellow;
             else
