@@ -13,12 +13,41 @@ namespace MyGame.GridElements
     {
         public static Addition CreateAddition(Vector2 position)
         {
-            Addition addition =Textures.GeneratorAdditionTemplates[Settings.rnd.Next(Textures.GeneratorAdditionTemplates.Count)].CreateCopy(position);
+            string[] keys = Textures.GeneratorAdditionTemplates.Keys.ToArray();
+            Addition addition =Textures.GeneratorAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(position);
             addition.Position = position;
             return addition;
         }
 
-        public static void CreateAdditionTemplate(List<Addition> list, string type)
+        public static void SpawnAddition(Vector2 position, string type = "g", string ID = "")
+        {
+            if (type == "g")
+            {
+                if (ID == "")
+                {
+                    string[] keys = Textures.GeneratorAdditionTemplates.Keys.ToArray();
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.GeneratorAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+                else
+                {
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.GeneratorAdditionTemplates[ID].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+            }
+            else if(type == "s")
+            {
+                if (ID == "")
+                {
+                    string[] keys = Textures.SpawnableAdditionTemplates.Keys.ToArray();
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+                else
+                {
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[ID].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+            }
+        }
+
+        public static void CreateAdditionTemplate(Dictionary<string, Addition> list, string type)
         {
             Console.WriteLine("Loading Additions...");
             try
@@ -28,6 +57,7 @@ namespace MyGame.GridElements
                 {
                     String[] lines = File.ReadAllLines(file);
                     Texture2D texture = null;
+                    string ID = "";
                     bool walkable = false; bool clickable = false; bool CreatesFloatingText = false; bool IsTimeLimited = false; bool IsOnTop = false;
                     string ButtonRename = null; int? HP = null; int? UseCooldown = null; string resource = null; int? amount = null;
                     foreach (string line in lines)
@@ -42,6 +72,9 @@ namespace MyGame.GridElements
                             {
                                 case "textureid":
                                     texture = Textures.AdditionTextures[convertedProperty];
+                                    break;
+                                case "id":
+                                    ID = convertedProperty;
                                     break;
                                 case "iswalkable":
                                     walkable = bool.Parse(convertedProperty);
@@ -78,7 +111,7 @@ namespace MyGame.GridElements
                     }
 
 
-                    list.Add(new Addition(texture, new Vector2(0, 0), walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
+                    list.Add(ID, new Addition(texture, new Vector2(0, 0), walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
                     Console.WriteLine("\tLoaded: " + file);
                 }
             }

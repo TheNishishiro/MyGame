@@ -15,7 +15,7 @@ namespace MyGame.GridElements.Specials
     {
         IItems item;
 
-        public Bag(IItems item, Vector2 Position) : base(null,new Vector2(0,0),true,true,false,false, false, "Pick up", null, null, null, null, null)
+        public Bag(IItems item, Vector2 Position) : base(Textures.UITargetTexture,new Vector2(0,0),true,true,false,false, false, "Pick up", null, null, null, null, null)
         {
             this.item = item;
             this.texture = item.GetTexture();

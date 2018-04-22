@@ -12,7 +12,7 @@ namespace MyGame.Creatures
     class baseEnemy : baseCreature
     {
         public baseEnemy(Texture2D texture, Vector2 Position, string name,
-            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot)
+            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot, string Desc)
         {
             layerDepth = Settings.entityLayer;
             this.name = name;
@@ -30,6 +30,20 @@ namespace MyGame.Creatures
             this.baseStats[Exp] = baseStats[Exp];
             this.baseStats[Level] = baseStats[Level];
             this.baseStats[AttackSpeed] = baseStats[AttackSpeed];
+            Description = Desc;
+        }
+
+        protected override void SetButtons()
+        {
+            DPL.AddButton("Engage", () => FightToggle());
+            DPL.AddButton("Information", () => ShowInfo());
+            DPL.AddButton("Quit", () => quitMenu());
+        }
+
+        private void ShowInfo()
+        {
+            Settings._player._UI.container = new UI.Controls.Container(name, Description);
+            quitMenu();
         }
     }
 }

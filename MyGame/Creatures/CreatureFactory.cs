@@ -13,32 +13,44 @@ namespace MyGame.Creatures
     class CreatureFactory
     {
         static float posXRange, posYRange;
-        public static void AddCreature(List<ICreature> creatures)
+        public static void AddCreature(List<ICreature> creatures, float posX = -1, float posY = -1, string ID = "")
         {
-            
-            posXRange = 50 * GridSize;
-            posYRange = 50 * GridSize;
-
-            float posX, posY;
-
-            posX = rnd.Next((int)(_player.GetPosition().X - posXRange), (int)(_player.GetPosition().X + posXRange));
-            posY = rnd.Next((int)(_player.GetPosition().Y - posYRange), (int)(_player.GetPosition().Y + posYRange));
-
-            posX = GridSize * (posX / GridSize) - (posX % GridSize);
-            posY = GridSize * (posY / GridSize) - (posY % GridSize);
-
-            if (posX < 0)
-                posX = 0;
-            else if (posX > WorldSizePixels)
-                posX = WorldSizePixels;
-            if (posY < 0)
-                posY = 0;
-            else if (posY > WorldSizePixels)
-                posY = WorldSizePixels;
-            if (!TestRenderBounds(new Vector2(posX, posY), _player.GetPosition(), RenderDistance)
-                && grid.map[(int)(posX/GridSize), (int)(posY/GridSize)].Walkable)
+            if (posX == -1 && posY == -1)
             {
-                creatures.Add(Textures.EnemyTemplates[Settings.rnd.Next(Textures.EnemyTemplates.Count)].CreateCopy(new Vector2(posX, posY)));
+                posXRange = 50 * GridSize;
+                posYRange = 50 * GridSize;
+
+                posX = rnd.Next((int)(_player.GetPosition().X - posXRange), (int)(_player.GetPosition().X + posXRange));
+                posY = rnd.Next((int)(_player.GetPosition().Y - posYRange), (int)(_player.GetPosition().Y + posYRange));
+
+                posX = GridSize * (posX / GridSize) - (posX % GridSize);
+                posY = GridSize * (posY / GridSize) - (posY % GridSize);
+
+                if (posX < 0)
+                    posX = 0;
+                else if (posX > WorldSizePixels)
+                    posX = WorldSizePixels;
+                if (posY < 0)
+                    posY = 0;
+                else if (posY > WorldSizePixels)
+                    posY = WorldSizePixels;
+            
+                if (!TestRenderBounds(new Vector2(posX, posY), _player.GetPosition(), RenderDistance)
+                    && grid.map[(int)(posX/GridSize), (int)(posY/GridSize)].Walkable)
+                {
+                    string[] keys = Textures.EnemyTemplates.Keys.ToArray();
+                    creatures.Add(Textures.EnemyTemplates[keys[rnd.Next(keys.Length)]].CreateCopy(new Vector2(posX, posY)));
+                }
+            }
+            else
+            {
+                if (ID == "")
+                {
+                    string[] keys = Textures.EnemyTemplates.Keys.ToArray();
+                    creatures.Add(Textures.EnemyTemplates[keys[rnd.Next(keys.Length)]].CreateCopy(new Vector2(posX, posY)));
+                }
+                else
+                    creatures.Add(Textures.EnemyTemplates[ID].CreateCopy(new Vector2(posX, posY)));
             }
         }
 
@@ -57,7 +69,7 @@ namespace MyGame.Creatures
             }
         }
 
-        public static void LoadCreatureTemplate(List<ICreature> list)
+        public static void LoadCreatureTemplate(Dictionary<string, ICreature> list)
         {
             Console.WriteLine("Loading creature objects...");
             try
@@ -67,7 +79,7 @@ namespace MyGame.Creatures
                 {
                     String[] lines = File.ReadAllLines(file);
                     Texture2D texture = null;
-                    string name = "";
+                    string name = "", ID = "", Desc = "";
                     Dictionary<string, int> stats = new Dictionary<string, int>();
                     List<string> dialogs = new List<string>();
                     List<string> loot = new List<string>();
@@ -83,7 +95,11 @@ namespace MyGame.Creatures
                             name = convertedProperty;
                         else if (_property == "dialog")
                             dialogs.Add(convertedProperty);
-                        else if(_property == "loot")
+                        else if (_property == "id")
+                            ID = convertedProperty;
+                        else if (_property == "description")
+                            Desc = convertedProperty;
+                        else if (_property == "loot")
                         {
                             loot.Add(convertedProperty);
                         }
@@ -95,8 +111,14 @@ namespace MyGame.Creatures
                             }
                         }
                     }
-                    list.Add(new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot));
-                    Console.WriteLine("\tLoaded: " + file);
+                    if (!list.ContainsKey(ID))
+                    {
+                        list.Add(ID, new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot, Desc));
+                        Console.WriteLine("\tLoaded: " + file);
+                    }
+                    else
+                        Console.WriteLine("\tCouldn't load: " + file + " ID already assigned");
+
                 }
                 
             }

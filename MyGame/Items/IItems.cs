@@ -15,7 +15,10 @@ namespace MyGame.Items
         void Update();
         void Draw(ref SpriteBatch sb, Vector2 position);
         void Use();
+        void DecreaseDurability();
+        void Break();
         string GetName();
+        string GetSkill();
         Texture2D GetTexture();
     }
 }

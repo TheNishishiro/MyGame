@@ -26,12 +26,12 @@ namespace MyGame
             {
                 if (Turn1 <= 0)
                 {
-                    enemy1.DealDamage(enemy2.GetDamage());
+                    enemy1.TakeDamage(enemy2.DealDamage());
                     Turn1 = enemy2.GetAttackSpeed();
                 }
                 if (Turn2 <= 0)
                 {
-                    enemy2.DealDamage(enemy1.GetDamage());
+                    enemy2.TakeDamage(enemy1.DealDamage());
                     Turn2 = enemy1.GetAttackSpeed();
                 }
             }

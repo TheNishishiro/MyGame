@@ -27,6 +27,7 @@ namespace MyGame.Items
         protected string Element;
         protected string Type;
         protected string Description;
+        protected string SkillType;
         protected Dictionary<string, int> stats = new Dictionary<string, int>();
         protected Dictionary<string, int> defences = new Dictionary<string, int>();
         protected Texture2D texture = null;
@@ -46,7 +47,7 @@ namespace MyGame.Items
         public IItems CreateCopy()
         {
             if (Type == "Weapon")
-                return new Weapon(texture, name, Type, _damage, _durability, _elementalDamage, _upgrade, Description);
+                return new Weapon(texture, name, Type, _damage, _durability, _elementalDamage, _upgrade, Description, SkillType);
             return null;
         }
 
@@ -57,8 +58,8 @@ namespace MyGame.Items
 
         public virtual void Draw(ref SpriteBatch sb, Vector2 position)
         {
-            NDrawing.Draw(ref sb, texture, position, Color.White, layerDepth + 0.01f);
-            bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            NDrawing.Draw(ref sb, texture, new Rectangle((int)position.X, (int)position.Y, 32, 32), Color.White, layerDepth + 0.01f);
+            bounds = new Rectangle((int)position.X, (int)position.Y, 32, 32);
             Position = position;
             menuManagment(ref sb);
         }
@@ -68,6 +69,12 @@ namespace MyGame.Items
 
         }
 
+        public void ShowInfo()
+        {
+            Settings._player._UI.container = new UI.Controls.Container(name + ", type: " + SkillType, Description);
+            quitMenu();
+        }
+
         public virtual void Drop()
         {
             Settings._player.Inventory.Remove(this);
@@ -75,7 +82,7 @@ namespace MyGame.Items
 
         public virtual string GetName()
         {
-            return "";
+            return name;
         }
 
         public Texture2D GetTexture()
@@ -85,7 +92,24 @@ namespace MyGame.Items
 
         public virtual int GetStat()
         {
-            return 0;
+            throw new NotImplementedException();
+        }
+
+        public void DecreaseDurability()
+        {
+            stats[Durability]--;
+            if (stats[Durability] <= 0)
+                Break();
+        }
+
+        public virtual void Break()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSkill()
+        {
+            return SkillType;
         }
     }
 }

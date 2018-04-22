@@ -18,6 +18,7 @@ namespace MyGame.UI
         private int id;
         Color color;
         float layerDepth = Settings.MainUILayer;
+        Texture2D background;
 
         public Button(string name, Action buttonAction, int id)
         {
@@ -26,6 +27,17 @@ namespace MyGame.UI
             this.name = name;
             this.id = id;
             color = Color.White;
+            background = Textures.Button;
+        }
+
+        public Button(Texture2D background, Action buttonAction)
+        {
+            action = buttonAction;
+            position = new Rectangle(0, 0, background.Width, background.Height);
+            name = "";
+            id = 0;
+            color = Color.White;
+            this.background = background;
         }
 
         public void Rename(string name)
@@ -38,12 +50,21 @@ namespace MyGame.UI
             this.action = action;
         }
 
-        public void Draw(ref SpriteBatch sb)
+        public void Draw(ref SpriteBatch sb, bool TextCenter = false)
         {
             if (MenuControls.MouseOver(position))
                 MenuControls.SetMouseLayer(layerDepth + 0.02f);
-            NDrawing.Draw(ref sb, Textures.Button, position, Color.White, layerDepth + 0.019f);
-           sb.DrawString(Settings.font, name, new Vector2(position.X, position.Y), color, 0, new Vector2(0,0), 1, SpriteEffects.None, layerDepth + 0.02f);
+            
+
+            NDrawing.Draw(ref sb, background, position, Color.White, layerDepth + 0.019f);
+            Vector2 textPosition;
+            if (TextCenter)
+                textPosition = new Vector2(position.X + position.Width/2 - 
+                    name.Length/2 * Settings.TextButtonScaling, position.Y);
+            else
+                textPosition = new Vector2(position.X, position.Y);
+
+            sb.DrawString(Settings.font, name, textPosition, color, 0, new Vector2(0, 0), 1, SpriteEffects.None, layerDepth + 0.02f);
             if (Settings.cursor.bounds.Intersects(position))
                 color = Color.Yellow;
             else
@@ -51,10 +72,18 @@ namespace MyGame.UI
             
         }
 
+        bool pressed = false;
         private void testForClick()
         {
-            if (Settings.cursor.bounds.Intersects(position) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Settings.cursor.bounds.Intersects(position) && Mouse.GetState().LeftButton == ButtonState.Pressed && pressed == false)
+            {
                 ButtonClickMainAction();
+                pressed = true;
+            }
+            else if(Mouse.GetState().LeftButton == ButtonState.Released && pressed == true)
+            {
+                pressed = false;
+            }
         }
 
         public void Update(Vector2 refPosition, int width)
@@ -62,6 +91,14 @@ namespace MyGame.UI
 
             testForClick();
             position.Width = width;
+            position.X = (int)refPosition.X + 32;
+            position.Y = (int)refPosition.Y + (16 * id);
+        }
+
+        public void Update(Vector2 refPosition)
+        {
+
+            testForClick();
             position.X = (int)refPosition.X + 32;
             position.Y = (int)refPosition.Y + (16 * id);
         }

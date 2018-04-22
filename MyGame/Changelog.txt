@@ -1,4 +1,40 @@
-﻿4/20/2018
+﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
+TODO: Make health, mana, exp and magic level bars scale with variable instead of hardcoded
+note to self: I'm retarded
+
+
+5/22/2018
+ * Fixed repeating mouse button clicks
+ * Made weapons display skill type that they will level up
+ * Added button to switch between inventory view and skill view
+ * Made attacking enemies increase skill level with certain weapon type
+ * Made skills affect damage outcome
+ * Made skill points earning scale with damage dealt 
+ * Added missing skill bars and made Mining level up
+ * Merged parts of code in ItemFactory
+ * Fixed certain item having too big of a clickbox
+ * Added information for incorrect skill type value
+ * Made items lose durability points when attacking
+ * Made items break and return player to fist only state
+ * Split UI draw method into submethods
+ * Added player stats display
+ * Added buttons to modify stats when level points are avaible
+ * Made mouse clickbox 1x1 to make it nearly impossible to click two buttons at the same time
+
+4/21/2018
+ * Fixed player using default regeneration setting
+ * Made it possible to equip weapon and increase your damage
+ * Added debug console for various commands
+	- Adding random or certain item to inventory
+	- Teleporting player
+	- Toggling cheat menu
+	- Modifying stats
+	- Spawn enemy/object
+	- Reload objects and textures
+ * Changed objects and enemies storing from lists to dictionaries
+ * Added information window and enemy/item description
+
+4/20/2018
  * Made textures load from xml files located in "Data" folder
  * Made enemies load from xml files located int "Data\Enemies" folder
  * Made Additions load from xml files located in "Data\Additions\" folders

@@ -28,7 +28,22 @@ namespace MyGame
             Material_Stone = "Stone",
             Material_Gold = "Gold";
 
+        public const string
+            Sword = "Sword",
+            Fist = "Fisting",
+            Axe = "Axe",
+            Mace = "Mace",
+            Defence = "Armor",
+            Mining = "Mining",
+            SkillLevel = "level",
+            SkillLevelPoints = "levelpoints",
+            SkillLevelPointsNeeded = "levelpointsneeded";
 
+        public const string
+            Strength = "Strength",
+            Inteligence = "Inteligence",
+            Dexterity = "Dexterity",
+            Vitality = "Vitality";
 
         public const int VirtualHeight = 624;
         public const int VirtualWidth = 1040;
@@ -69,14 +84,14 @@ namespace MyGame
 
         public static List<Texture2D> Swords;
 
-        public static Dictionary<string, Texture2D> EnemyTextures = new Dictionary<string, Texture2D>();
-        public static Dictionary<string, Texture2D> AdditionTextures = new Dictionary<string, Texture2D>();
-        public static Dictionary<string, Texture2D> ItemTextures = new Dictionary<string, Texture2D>();
+        public static Dictionary<string, Texture2D> EnemyTextures;
+        public static Dictionary<string, Texture2D> AdditionTextures;
+        public static Dictionary<string, Texture2D> ItemTextures;
 
-        public static List<ICreature> EnemyTemplates = new List<ICreature>();
-        public static Dictionary<string, IItems> ItemTemplates = new Dictionary<string, IItems>();
-        public static List<Addition> GeneratorAdditionTemplates = new List<Addition>();
-        public static List<Addition> SpawnableAdditionTemplates = new List<Addition>();
+        public static Dictionary<string, ICreature> EnemyTemplates;
+        public static Dictionary<string, IItems> ItemTemplates;
+        public static Dictionary<string, Addition> GeneratorAdditionTemplates;
+        public static Dictionary<string, Addition> SpawnableAdditionTemplates;
 
         public static Texture2D UITargetTexture;
         public static Texture2D UIAvatarRingTexture;
@@ -85,14 +100,26 @@ namespace MyGame
         public static Texture2D UIBarTexture;
         public static Texture2D UITopCornerTexture;
         public static Texture2D UIMainSideBar;
-
+        public static Texture2D UIEqIcons;
+        public static Texture2D UIPlusIcon;
+             
         public static Texture2D Avatar;
 
         public static void LoadTextures()
         {
+            EnemyTextures = new Dictionary<string, Texture2D>();
+            AdditionTextures = new Dictionary<string, Texture2D>();
+            ItemTextures = new Dictionary<string, Texture2D>();
+
+            EnemyTemplates = new Dictionary<string, ICreature>();
+            ItemTemplates = new Dictionary<string, IItems>();
+            GeneratorAdditionTemplates = new Dictionary<string, Addition>();
+            SpawnableAdditionTemplates = new Dictionary<string, Addition>();
             EnemyTextures = LoadTexturesFromFile(".\\Data\\EnemyTextures.xml");
             AdditionTextures = LoadTexturesFromFile(".\\Data\\GridAdditionTextures.xml");
             ItemTextures = LoadTexturesFromFile(".\\Data\\ItemTextures.xml");
+            LoadObjectTemplates();
+
 
             Button = Game1._Content.Load<Texture2D>("button");
 
@@ -105,6 +132,8 @@ namespace MyGame
             Avatar = Game1._Content.Load<Texture2D>("UI/Avatars/Avatar1");
             UITargetTexture = Game1._Content.Load<Texture2D>("UI/Target");
             UIMainSideBar = Game1._Content.Load<Texture2D>("UI/mainSideBar");
+            UIEqIcons = Game1._Content.Load<Texture2D>("UI/EqIcons");
+            UIPlusIcon = Game1._Content.Load<Texture2D>("UI/plusButton");
 
             ItemBackground = Game1._Content.Load<Texture2D>("UI/item_background");
             ItemBorder = Game1._Content.Load<Texture2D>("UI/item_border");

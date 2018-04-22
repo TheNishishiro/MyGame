@@ -15,7 +15,8 @@ namespace MyGame
         void Update();
         void Move();
         Vector2 GetPosition();
-        void DealDamage(int damage);
+        void TakeDamage(int damage);
+        int DealDamage(); 
         void Die(ICreature player);
         bool GetFightingState();
         int GetHealth();
@@ -30,7 +31,10 @@ namespace MyGame
         int GetMagicLevel();
         int GetMagicLevelPoints();
         int GetMaxMagicLevelPoints();
+        int GetLevelPoints();
         float GetAttackSpeed();
+        string GetDescription();
+        string GetName();
         Rectangle GetBounds();
         void LevelUp();
         void AddExp(int amount);

@@ -56,8 +56,15 @@ namespace MyGame.GridElements
             }
             this.IsTimeLimited = IsTimeLimited;
 
-            if (texture.Height > Settings.GridSize || texture.Width > Settings.GridSize)
-                layerDepth += 0.001f;
+            try
+            {
+                if (texture.Height > Settings.GridSize || texture.Width > Settings.GridSize)
+                    layerDepth += 0.001f;
+            }
+            catch(NullReferenceException)
+            {
+                Console.WriteLine("Couldn't load addtion texture");
+            }
         }
 
         public Addition CreateCopy(Vector2 position)
@@ -122,6 +129,7 @@ namespace MyGame.GridElements
                     hp--;
                     cooldown = 60;
                     FL.Add(new FadingLabel($"+{amount} {resource}", Position, Color.White));
+                    Settings._player.Stats[Settings.Mining + Settings.SkillLevelPoints] += 1;
                     if(amount!=null)
                         Settings._player.Materials[resource] += (int)amount;
                 }

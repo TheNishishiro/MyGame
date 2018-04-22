@@ -19,7 +19,7 @@ namespace MyGame
         public Cursor(Texture2D texture)
         {
             this.texture = texture;
-            bounds = new Rectangle(0, 0, 5, 5);
+            bounds = new Rectangle(0, 0, 1, 1);
             textureRec = new Rectangle(0, 0, texture.Width, texture.Height); 
         }
 

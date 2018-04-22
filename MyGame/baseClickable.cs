@@ -19,6 +19,7 @@ namespace MyGame
         protected Rectangle bounds;
         public Vector2 Position;
         protected float layerDepth;
+
         protected void menuManagment(ref SpriteBatch sb)
         {
             if (MenuControls.MouseOver(bounds))

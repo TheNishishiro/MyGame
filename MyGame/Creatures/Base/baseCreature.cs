@@ -22,20 +22,21 @@ namespace MyGame.Creatures
     {
         public const string
             HP = "health",
-            HP_max = "hp_max",
+            HP_max = "health_max",
             Damage = "damage",
             Level = "level",
             Exp = "experience",
             Exp_max = "experience_max",
             Mana = "mana",
             Mana_max = "mana_xax",
-            Magic_Level = ",agic_level",
+            Magic_Level = "magic_level",
             Magic_Level_points = "magic_level_points",
             Magic_Level_max_points = "magic_level_max_points",
             AttackSpeed = "attackspeed",
-            Regeneration = "regeneration";
+            Regeneration = "regeneration",
+            Points = "levelpoints";
 
-        protected Dictionary<string,int> baseStats;
+        public Dictionary<string,int> baseStats;
 
         protected Texture2D texture;
         public Vector2 moveToPosition;
@@ -47,6 +48,7 @@ namespace MyGame.Creatures
         protected List<string> Dialogs = new List<string>();
         protected List<string> Loot = new List<string>();
         protected Label nameLabel;
+        protected string Description;
 
         public virtual void Init()
         {
@@ -60,7 +62,7 @@ namespace MyGame.Creatures
             baseStats.Add(Mana, 0);
             baseStats.Add(Mana_max, 0);
             baseStats.Add(AttackSpeed, 60);
-            baseStats.Add(Regeneration, 1);
+            baseStats.Add(Regeneration, 0);
             if(Settings.grid!=null)
                 SetWalkable(false);
         }
@@ -85,7 +87,7 @@ namespace MyGame.Creatures
 
         public ICreature CreateCopy(Vector2 position)
         {
-            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot);
+            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description);
         }
 
         public virtual void Update()
@@ -146,8 +148,11 @@ namespace MyGame.Creatures
 
                 
             }
-            if(!looted)
-                Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[Settings.rnd.Next(Textures.SpawnableAdditionTemplates.Count)].CreateCopy(new Vector2(Position.X, Position.Y)));
+            if (!looted)
+            {
+                string[] keys = Textures.SpawnableAdditionTemplates.Keys.ToArray();
+                Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(new Vector2(Position.X, Position.Y)));
+            }
         }
 
         protected void RegenerateHP()
@@ -182,7 +187,7 @@ namespace MyGame.Creatures
             }
         }
 
-        public int GetDamage()
+        public virtual int GetDamage()
         {
             return baseStats[Damage];
         }
@@ -228,18 +233,22 @@ namespace MyGame.Creatures
             if (baseStats[HP] > baseStats[HP_max])
                 baseStats[HP] = baseStats[HP_max];
         }
-        public void DealDamage(int _damage)
+
+        public virtual int DealDamage()
         {
-            int dmg = Settings.rnd.Next(_damage);
+            return GetDamage();
+        }
+
+        public virtual void TakeDamage(int _damage)
+        {
+            int dmg = Settings.rnd.Next((int)_damage);
             if(dmg > 0)
                 FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.5f));
             baseStats[HP] -= dmg;
         }
-        public void LevelUp()
+        public virtual void LevelUp()
         {
-            baseStats[Level]++;
-            baseStats[Exp_max] = (int)(baseStats[Exp_max] * 1.25);
-            baseStats[Exp] = 0;
+            
         }
         public Vector2 GetPosition()
         {
@@ -264,6 +273,22 @@ namespace MyGame.Creatures
         public int GetMaxMagicLevelPoints()
         {
             return baseStats[Magic_Level_max_points];
+        }
+        public void SetDamage(int amount)
+        {
+            baseStats[Damage] += amount;
+        }
+        public int GetLevelPoints()
+        {
+            return baseStats[Points];
+        }
+        public string GetDescription()
+        {
+            return Description;
+        }
+        public string GetName()
+        {
+            return name;
         }
     }
 }

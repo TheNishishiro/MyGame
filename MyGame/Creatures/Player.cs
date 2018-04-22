@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using static MyGame.Settings;
+
 namespace MyGame
 {
     class Player : baseCreature
@@ -19,6 +21,11 @@ namespace MyGame
         public Dictionary<string, int> Stats = new Dictionary<string, int>();
         public List<IItems> Inventory = new List<IItems>();
         public Dictionary<string, int> Materials = new Dictionary<string, int>();
+        public Dictionary<string, IItems> Equiped = new Dictionary<string, IItems>();
+
+        public bool ShowCheatMenu = false;
+
+        
 
         public Player(float posX, float posY, Texture2D texture)
         {
@@ -33,16 +40,44 @@ namespace MyGame
             Materials.Add(Settings.Material_Stone, 0);
             Materials.Add(Settings.Material_Gold, 0);
 
-            baseStats[Damage] = 20;
+            Equiped.Add("Necklace", null);
+            Equiped.Add("Shield", null);
+            Equiped.Add("Weapon", null);
+            Equiped.Add("Armor", null);
+            Equiped.Add("Ring", null);
+
+            baseStats[Points] = 0;
+
+            baseStats[Damage] = 10;
             baseStats[HP] = baseStats[HP_max] = 100;
-            baseStats[Mana] = baseStats[Mana_max] = 100;
+            baseStats[Mana] = baseStats[Mana_max] = 70;
             baseStats[Exp_max] = 100;
             baseStats[Magic_Level] = 1;
             baseStats[Magic_Level_points] = 0;
             baseStats[Magic_Level_max_points] = 100;
             baseStats[Level] = 1;
-            
+            baseStats[Regeneration] = 1;
+
+            SetUpSkill(Fist);
+            SetUpSkill(Sword);
+            SetUpSkill(Axe);
+            SetUpSkill(Mace);
+            SetUpSkill(Mining);
+            SetUpSkill(Defence);
+
+            Stats.Add(Strength, 1);
+            Stats.Add(Inteligence, 1);
+            Stats.Add(Dexterity, 1);
+            Stats.Add(Vitality, 1);
+
             _UI = new MainUI(this);
+        }
+
+        private void SetUpSkill(string name)
+        {
+            Stats.Add(name + SkillLevel, 1);
+            Stats.Add(name + SkillLevelPoints, 0);
+            Stats.Add(name + SkillLevelPointsNeeded, 50);
         }
 
         public override void Move()
@@ -73,6 +108,7 @@ namespace MyGame
             if (baseStats[Exp] >= baseStats[Exp_max])
                 LevelUp();
             RegenerateHP();
+            UpdateSkills();
         }
 
         public override void Draw(ref SpriteBatch sb)
@@ -86,8 +122,92 @@ namespace MyGame
 
         protected override void SetButtons()
         {
-            base.SetButtons();
-            DPL.RenameElement(0, "Suicide");
+            if (ShowCheatMenu)
+            {
+                DPL.AddButton("Level Up", () => LevelUp());
+                DPL.AddButton("Add item", () => AddItem());
+            }
+            DPL.AddButton("Quit", () => quitMenu());
+        }
+
+        public void AddItem()
+        {
+            Inventory.Add(ItemFactory.CreateItem());
+        }
+
+        public override void LevelUp()
+        {
+            base.LevelUp();
+            baseStats[Level]++;
+            baseStats[Points]++;
+            baseStats[Exp_max] = (baseStats[Exp_max] + 100 * baseStats[Level]);
+            baseStats[Exp] = 0;
+            baseStats[HP] = baseStats[HP_max] = (baseStats[HP_max] + 50);
+            baseStats[Mana] = baseStats[Mana_max] = (baseStats[Mana_max] + 20);
+        }
+
+        private void UpdateSkills()
+        {
+            if (baseStats[Exp] >= baseStats[Exp_max])
+                LevelUp();
+
+            CheckSkillLevel(Sword);
+            CheckSkillLevel(Fist);
+            CheckSkillLevel(Axe);
+            CheckSkillLevel(Mace);
+            CheckSkillLevel(Mining);
+            CheckSkillLevel(Defence);
+
+        }
+
+        private void CheckSkillLevel(string name)
+        {
+            if (Stats[name + SkillLevelPoints] >= Stats[name + SkillLevelPointsNeeded])
+            {
+                Stats[name + SkillLevel]++;
+                Stats[name + SkillLevelPoints] = 0;
+                Stats[name + SkillLevelPointsNeeded] += 50;
+            }
+        }
+
+        public override int DealDamage()
+        {
+            int _damage = baseStats[Damage];
+            string damageModifier = "";
+            int levelModifier = 1 + _damage/10;
+            try
+            {
+                if (Equiped["Weapon"] != null)
+                {
+                    Stats[Equiped["Weapon"].GetSkill() + SkillLevelPoints] += levelModifier;
+                    damageModifier = Equiped["Weapon"].GetSkill() + SkillLevel;
+                    Equiped["Weapon"].DecreaseDurability();
+                }
+                else
+                {
+                    Stats[Fist + SkillLevelPoints] += levelModifier;
+                    damageModifier = Fist + SkillLevel;
+                }
+
+                _damage = _damage + (_damage * Stats[damageModifier] / 10); // Possibly change to simply (_damage + skilllevel)
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine($"Couldn't add skill points to {Equiped["Weapon"].GetSkill()} as it coulnd't be verified as a valid skill");
+            }
+            return _damage;
+        }
+
+        public override void TakeDamage(int _damage)
+        {
+            
+            base.TakeDamage(_damage);
+        }
+
+        public void IncreaseStat(string name)
+        {
+            Stats[name]++;
+            baseStats[Points]--;
         }
     }
 }

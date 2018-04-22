@@ -30,7 +30,7 @@ namespace MyGame
         long MemoryUsageAtStart = 0, MemoryUsageDifference = 0, CurrentMemoryUsage = 0;
 
 
-        Thread GCInfo;
+        Thread GCInfo, DebugConsole;
 
 
         private void GetGCInfo()
@@ -43,10 +43,67 @@ namespace MyGame
             }
         }
 
+        private void Debug()
+        {
+            while (true)
+            {
+                string command = "";
+                Console.Write("> ");
+                command = Console.ReadLine();
+                string[] options = command.Split(' ');
+                try
+                {
+                    switch (options[0].ToLower())
+                    {
+                        case "tp":
+                            _player.Position = new Vector2(float.Parse(options[1]) * GridSize, float.Parse(options[2]) * GridSize);
+                            break;
+                        case "setbase":
+                            _player.baseStats[options[1]] = int.Parse(options[2]);
+                            break;
+                        case "togglecheatmenu":
+                            _player.ShowCheatMenu = !_player.ShowCheatMenu;
+                            break;
+                        case "giveitem":
+                            try
+                            {
+                                if (options.Length <= 1)
+                                    _player.AddItem();
+                                else
+                                    _player.Inventory.Add(Textures.ItemTemplates[options[1]].CreateCopy());
+                            }
+                            catch (Exception ex) { Console.WriteLine(ex.Message); }
+                            break;
+                        case "reload":
+                            Textures.LoadTextures();
+                            Console.WriteLine("reloading done.");
+                            break;
+                        case "spawnenemy":
+                            if (options.Length == 1)
+                                CreatureFactory.AddCreature(creatures, _player.Position.X, _player.Position.Y);
+                            else
+                                CreatureFactory.AddCreature(creatures, _player.Position.X, _player.Position.Y, options[1]);
+                            break;
+                        case "spawnobject":
+                            if (options.Length == 1)
+                                AdditionFactory.SpawnAddition(_player.Position);
+                            else if (options.Length == 2)
+                                AdditionFactory.SpawnAddition(_player.Position, options[1]);
+                            else
+                                AdditionFactory.SpawnAddition(_player.Position, options[1], options[2]);
+                            break;
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+            }
+        }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            DebugConsole = new Thread(Debug);
+            DebugConsole.Start();
         }
 
         protected override void Initialize()
@@ -70,7 +127,6 @@ namespace MyGame
             sw2.Start();
             cursor = new Cursor(Content.Load<Texture2D>("Light_Blue"));
             Textures.LoadTextures();
-            Textures.LoadObjectTemplates();
 
             font = Content.Load<SpriteFont>("font");
             font2 = Content.Load<SpriteFont>("font2");
@@ -104,12 +160,24 @@ namespace MyGame
 
         protected override void UnloadContent()
         {
+
             if (GCInfo != null)
             {
-                if (GCInfo.ThreadState == ThreadState.Suspended)
-                    GCInfo.Resume();
-                GCInfo.Abort();
+                try
+                {
+                    if (GCInfo.ThreadState == ThreadState.Suspended)
+                    {
+                        GCInfo.Resume();
+                        GCInfo.Abort();
+                    }
+                    else
+                    {
+                        GCInfo.Abort();
+                    }
+                }
+                catch { } // Useless catch
             }
+            DebugConsole.Abort();
         }
 
         protected override void Update(GameTime gameTime)
