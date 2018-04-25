@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MyGame.Creatures;
 using MyGame.Items;
 using MyGame.UI;
+using MyGame.UI.Controls;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,18 @@ namespace MyGame
     {
         public MainUI _UI;
         public Dictionary<string, int> Stats = new Dictionary<string, int>();
+        public Dictionary<string, int> Skills = new Dictionary<string, int>();
         public List<IItems> Inventory = new List<IItems>();
         public Dictionary<string, int> Materials = new Dictionary<string, int>();
         public Dictionary<string, IItems> Equiped = new Dictionary<string, IItems>();
 
         public bool ShowCheatMenu = false;
 
-        
+        int baseHealth = 100, healthPerLevel = 50;
+        int baseExp = 100;
+        int baseAS = 80;
+        int baseRegeneration = 1, baseRegenTimerReset = 180;
+
 
         public Player(float posX, float posY, Texture2D texture)
         {
@@ -36,15 +42,15 @@ namespace MyGame
             healthBar = new ProgresBar(Color.Red, Color.DarkGreen, new Rectangle(bounds.X, bounds.Y - 32, 32, 8), Textures.UIBarBorderTexture);
             Init();
 
-            Materials.Add(Settings.Material_Wood, 0);
-            Materials.Add(Settings.Material_Stone, 0);
-            Materials.Add(Settings.Material_Gold, 0);
+            Materials.Add(Names.Material_Wood, 0);
+            Materials.Add(Names.Material_Stone, 0);
+            Materials.Add(Names.Material_Gold, 0);
 
-            Equiped.Add("Necklace", null);
-            Equiped.Add("Shield", null);
-            Equiped.Add("Weapon", null);
-            Equiped.Add("Armor", null);
-            Equiped.Add("Ring", null);
+            Equiped.Add(Names.Necklace, null);
+            Equiped.Add(Names.Shield, null);
+            Equiped.Add(Names.Weapon, null);
+            Equiped.Add(Names.Armor, null);
+            Equiped.Add(Names.Ring, null);
 
             baseStats[Points] = 0;
 
@@ -58,26 +64,30 @@ namespace MyGame
             baseStats[Level] = 1;
             baseStats[Regeneration] = 1;
 
-            SetUpSkill(Fist);
-            SetUpSkill(Sword);
-            SetUpSkill(Axe);
-            SetUpSkill(Mace);
-            SetUpSkill(Mining);
-            SetUpSkill(Defence);
+            SetUpSkill(Names.Fist);
+            SetUpSkill(Names.Sword);
+            SetUpSkill(Names.Axe);
+            SetUpSkill(Names.Mace);
+            SetUpSkill(Names.Mining);
+            SetUpSkill(Names.Defence);
 
-            Stats.Add(Strength, 1);
-            Stats.Add(Inteligence, 1);
-            Stats.Add(Dexterity, 1);
-            Stats.Add(Vitality, 1);
-
-            _UI = new MainUI(this);
+            Stats.Add(Names.Strength, 1); // Implemented in TakeDamage() in baseCreature
+            Stats.Add(Names.Inteligence, 1);
+            Stats.Add(Names.Dexterity, 1); 
+            Stats.Add(Names.Vitality, 1);
+            Stats.Add(Names.Luck, 1); // Implemented in Die() in baseCreature
+            Stats.Add(Names.Greed, 1); // Effects not implemented
+            Stats.Add(Names.Survivability, 1); // Effects not implemented
+            Stats.Add(Names.Faith, 1); // Effects not implemented
+            Stats.Add(Names.Resistance, 1); // Implemented in TakeDamage()
+            Stats.Add(Names.Endurance, 1);
         }
 
         private void SetUpSkill(string name)
         {
-            Stats.Add(name + SkillLevel, 1);
-            Stats.Add(name + SkillLevelPoints, 0);
-            Stats.Add(name + SkillLevelPointsNeeded, 50);
+            Skills.Add(name + Names.SkillLevel, 1);
+            Skills.Add(name + Names.SkillLevelPoints, 0);
+            Skills.Add(name + Names.SkillLevelPointsNeeded, 50);
         }
 
         public override void Move()
@@ -101,6 +111,7 @@ namespace MyGame
             
             Move();
             UpdateBounds();
+            CalculateStatsBonuses();
             healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
             if (baseStats[HP] < 0)
                 baseStats[HP] = 0;
@@ -109,6 +120,18 @@ namespace MyGame
                 LevelUp();
             RegenerateHP();
             UpdateSkills();
+        }
+
+        private void CalculateStatsBonuses()
+        {
+
+            baseStats[HP_max] = (int)((baseHealth + (healthPerLevel * (baseStats[Level] - 1))) * (1.0 + ((double)Stats[Names.Endurance]-1)/20));
+            baseStats[Exp_max] = (int)((baseExp + (baseExp * (baseStats[Level] - 1))) * (1.0 - ((double)Stats[Names.Inteligence] - 1) / 20));
+            baseStats[Regeneration] = baseRegeneration + ((Stats[Names.Vitality] - 1) / 4);
+            RegenTimerReset = baseRegenTimerReset - ((Stats[Names.Vitality] - 1) * 2);
+            if (RegenTimerReset < 60)
+                RegenTimerReset = 60;
+            baseStats[AttackSpeed] = baseAS - (Stats[Names.Dexterity]-1);
         }
 
         public override void Draw(ref SpriteBatch sb)
@@ -140,10 +163,10 @@ namespace MyGame
             base.LevelUp();
             baseStats[Level]++;
             baseStats[Points]++;
-            baseStats[Exp_max] = (baseStats[Exp_max] + 100 * baseStats[Level]);
             baseStats[Exp] = 0;
-            baseStats[HP] = baseStats[HP_max] = (baseStats[HP_max] + 50);
+            baseStats[HP] = baseStats[HP_max];
             baseStats[Mana] = baseStats[Mana_max] = (baseStats[Mana_max] + 20);
+            
         }
 
         private void UpdateSkills()
@@ -151,57 +174,84 @@ namespace MyGame
             if (baseStats[Exp] >= baseStats[Exp_max])
                 LevelUp();
 
-            CheckSkillLevel(Sword);
-            CheckSkillLevel(Fist);
-            CheckSkillLevel(Axe);
-            CheckSkillLevel(Mace);
-            CheckSkillLevel(Mining);
-            CheckSkillLevel(Defence);
+            CheckSkillLevel(Names.Sword);
+            CheckSkillLevel(Names.Fist);
+            CheckSkillLevel(Names.Axe);
+            CheckSkillLevel(Names.Mace);
+            CheckSkillLevel(Names.Mining);
+            CheckSkillLevel(Names.Defence);
 
         }
 
         private void CheckSkillLevel(string name)
         {
-            if (Stats[name + SkillLevelPoints] >= Stats[name + SkillLevelPointsNeeded])
+            if (Skills[name + Names.SkillLevelPoints] >= Skills[name + Names.SkillLevelPointsNeeded])
             {
-                Stats[name + SkillLevel]++;
-                Stats[name + SkillLevelPoints] = 0;
-                Stats[name + SkillLevelPointsNeeded] += 50;
+                Skills[name + Names.SkillLevel]++;
+                Skills[name + Names.SkillLevelPoints] = 0;
+                Skills[name + Names.SkillLevelPointsNeeded] += 50;
             }
         }
 
-        public override int DealDamage()
+        public override Dictionary<string, int> DealDamage()
         {
-            int _damage = baseStats[Damage];
             string damageModifier = "";
-            int levelModifier = 1 + _damage/10;
+            int levelModifier = 0;
+            if (Equiped[Names.Weapon] != null)
+                foreach (KeyValuePair<string, int> entry in Equiped[Names.Weapon].GetDamage())
+                {
+                    levelModifier += (int)Math.Ceiling((float)entry.Value / 10);
+                }
+            else
+                levelModifier += damage["Physical"] / 10;
+
             try
             {
-                if (Equiped["Weapon"] != null)
+                if (Equiped[Names.Weapon] != null)
                 {
-                    Stats[Equiped["Weapon"].GetSkill() + SkillLevelPoints] += levelModifier;
-                    damageModifier = Equiped["Weapon"].GetSkill() + SkillLevel;
-                    Equiped["Weapon"].DecreaseDurability();
+                    Skills[Equiped[Names.Weapon].GetSkill() + Names.SkillLevelPoints] += levelModifier;
+                    damageModifier = Equiped[Names.Weapon].GetSkill() + Names.SkillLevel;
+                    Equiped[Names.Weapon].DecreaseDurability();
                 }
                 else
                 {
-                    Stats[Fist + SkillLevelPoints] += levelModifier;
-                    damageModifier = Fist + SkillLevel;
+                    Skills[Names.Fist + Names.SkillLevelPoints] += levelModifier;
+                    damageModifier = Names.Fist + Names.SkillLevel;
                 }
 
-                _damage = _damage + (_damage * Stats[damageModifier] / 10); // Possibly change to simply (_damage + skilllevel)
+               // _damage = _damage + (_damage * Stats[damageModifier] / 10); // Possibly change to simply (_damage + skilllevel)
             }
             catch (KeyNotFoundException)
             {
-                Console.WriteLine($"Couldn't add skill points to {Equiped["Weapon"].GetSkill()} as it coulnd't be verified as a valid skill");
+                Console.WriteLine($"Couldn't add skill points to {Equiped[Names.Weapon].GetSkill()} as it coulnd't be verified as a valid skill");
             }
-            return _damage;
+
+            if (Equiped[Names.Weapon] == null)
+                return damage;
+            else
+                return Equiped[Names.Weapon].GetDamage();
         }
 
-        public override void TakeDamage(int _damage)
+        public override void TakeDamage(Dictionary<string, int> _damage)
         {
-            
-            base.TakeDamage(_damage);
+            int dmg = 0;
+            float reduction = 0;
+            foreach (KeyValuePair<string, int> entry in _damage)
+            {
+                dmg += rnd.Next((entry.Value));
+                if (Equiped[Names.Armor] != null)
+                {
+                    reduction = (float)Math.Ceiling(dmg * (Equiped[Names.Armor].GetDefence(entry.Key) / 100));
+                }
+                reduction += (float)Math.Ceiling(dmg * ((float)(Stats[Names.Resistance]-1) / 100));
+                Skills[Names.Defence + Names.SkillLevelPoints] += (int)(reduction);
+                if (reduction > dmg)
+                    reduction = dmg;
+                dmg += (int)(-reduction);
+            }
+            if (dmg > 0)
+                FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.5f));
+            baseStats[HP] -= dmg;
         }
 
         public void IncreaseStat(string name)

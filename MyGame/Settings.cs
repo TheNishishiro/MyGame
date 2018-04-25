@@ -13,16 +13,8 @@ using System.Threading.Tasks;
 
 namespace MyGame
 {
-    class Settings
+    class Names
     {
-        public const float
-            entityLayer = 0.5f,
-            tileLayer = 0.05f,
-            UILayer = 0.9f,
-            MainUILayer = 0.95f,
-            tileAdditionTopLayer = 0.65f,
-            tileAdditionBottomLayer = 0.4f;
-
         public const string
             Material_Wood = "Wood",
             Material_Stone = "Stone",
@@ -39,11 +31,38 @@ namespace MyGame
             SkillLevelPoints = "levelpoints",
             SkillLevelPointsNeeded = "levelpointsneeded";
 
+
         public const string
             Strength = "Strength",
             Inteligence = "Inteligence",
             Dexterity = "Dexterity",
-            Vitality = "Vitality";
+            Vitality = "Vitality",
+            Luck = "Luck",
+            Greed = "Greed",
+            Survivability = "Survivability",
+            Faith = "Faith",
+            Resistance = "Resistance",
+            Endurance = "Endurance";
+
+        public const string
+            Necklace = "Necklace",
+            Shield = "Shield",
+            Weapon = "Weapon",
+            Armor = "Armor",
+            Ring = "Ring";
+    }
+
+    class Settings
+    {
+        public const float
+            entityLayer = 0.5f,
+            tileLayer = 0.05f,
+            UILayer = 0.9f,
+            MainUILayer = 0.95f,
+            tileAdditionTopLayer = 0.65f,
+            tileAdditionBottomLayer = 0.4f;
+
+        
 
         public const int VirtualHeight = 624;
         public const int VirtualWidth = 1040;
@@ -102,7 +121,9 @@ namespace MyGame
         public static Texture2D UIMainSideBar;
         public static Texture2D UIEqIcons;
         public static Texture2D UIPlusIcon;
-             
+        public static Texture2D UIMessageBoxTexture;
+        public static Texture2D UIArrowLeft, UIArrowRight, UIArrowUp, UIArrowDown;
+        public static List<Texture2D> UIButtons;
         public static Texture2D Avatar;
 
         public static void LoadTextures()
@@ -134,6 +155,16 @@ namespace MyGame
             UIMainSideBar = Game1._Content.Load<Texture2D>("UI/mainSideBar");
             UIEqIcons = Game1._Content.Load<Texture2D>("UI/EqIcons");
             UIPlusIcon = Game1._Content.Load<Texture2D>("UI/plusButton");
+            UIMessageBoxTexture = Game1._Content.Load<Texture2D>("UI/messageBox");
+            UIArrowLeft = Game1._Content.Load<Texture2D>("UI/UIArrowLeft");
+            UIArrowRight = Game1._Content.Load<Texture2D>("UI/UIArrowRight");
+            UIArrowUp = Game1._Content.Load<Texture2D>("UI/UIArrowUp");
+            UIArrowDown = Game1._Content.Load<Texture2D>("UI/UIArrowDown");
+
+            UIButtons = new List<Texture2D>();
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIBackpack"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UISkills"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIStats"));
 
             ItemBackground = Game1._Content.Load<Texture2D>("UI/item_background");
             ItemBorder = Game1._Content.Load<Texture2D>("UI/item_border");

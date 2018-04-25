@@ -65,6 +65,7 @@
     <Compile Include="Items\IItems.cs" />
     <Compile Include="Items\ItemFactory.cs" />
     <Compile Include="Items\ItemTypes\Armor.cs" />
+    <Compile Include="Items\ItemTypes\Necklace.cs" />
     <Compile Include="Items\ItemTypes\Weapon.cs" />
     <Compile Include="NFramework\NCamera.cs" />
     <Compile Include="NFramework\NAction.cs" />

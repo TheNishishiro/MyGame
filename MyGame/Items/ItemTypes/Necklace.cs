@@ -7,28 +7,19 @@ using System.Threading.Tasks;
 
 namespace MyGame.Items.ItemTypes
 {
-    class Armor : baseItems
+    class Necklace : baseItems
     {
-        public Armor(Texture2D texture, string name, string type, int durability, int upgrade, string description, string SkillType, Dictionary<string, int> Defences, Dictionary<string, int> Attribiutes)
+        public Necklace(Texture2D texture, string name, string type, int upgrade, string description, Dictionary<string, int> Attribiutes)
         {
             Init();
             this.Attribiutes = Attribiutes;
-            _durability = durability;
             _upgrade = upgrade;
             this.texture = texture;
             this.name = name;
-            this.SkillType = SkillType;
-            stats[Upgrade] = Settings.rnd.Next(upgrade / 2, (int)(upgrade * 1.5));
-            stats[Durability] = durability;
+            SkillType = type;
+            stats[Upgrade] = Settings.rnd.Next(upgrade/2, (int)(upgrade*1.5));
             Description = description;
             Type = type;
-            foreach(KeyValuePair<string, int> entry in Defences)
-            {
-                if (defences.ContainsKey(entry.Key))
-                    defences[entry.Key] = entry.Value;
-                else
-                    defences.Add(entry.Key, entry.Value);
-            }
 
         }
 

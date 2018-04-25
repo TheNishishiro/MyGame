@@ -1,9 +1,43 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
-TODO: Make health, mana, exp and magic level bars scale with variable instead of hardcoded
-note to self: I'm retarded
+TODO: Make damage increase according to skill level
+
+4/25/2018
+ * Seperated Skills from Stats of a player
+ * Changed Main UI
+ * Made Stats iterable making it easier to add new stats
+ * Created different scrollable tab for Stats
+ * Made Skill iterate in MainUI in prep for scrollable skills
+ * Made Skills scrollable
+ * Made it possible for items to modify player stats
+ * Made regeneration occur every 3 seconds instead of 2
+ * Made player attack every 1.3 sec instead of every 1 sec
+ * Made some stats affect gameplay
+	- Strength: Increases physical damage dealt
+	- Inteligence: Decresses experience needed for next level
+	- Vitality: Increases max health
+	- Resistance: Decresses damage taken
+	- Endurtance: Increases health regeneration and degresses time between heals
+	- Luck: Increases chance of item drops
+	- Dexterity: Increases attack speed
 
 
-5/22/2018
+4/24/2018
+ * Made it possible to have weapons with multiple elemental effects
+ * Made it possible for enemies to have multiple elemenal damages and defences against them
+	- These two took fucking forever tbh and might still be buggy (I HOPE NOT)
+ * Made defence level up depending on the amount of reduced incoming damage
+ * Made weapon skills level up depending on damage dealt again
+
+4/23/2018
+ * Moved function to set item buttons to baseItem
+ * Moved dictionary indexes to "Names" class in Settings.cs
+ * Created seperate class for Necklace item type
+ * Added giveallitems console command
+ * Added pages to inventory (switchable with 1 and 2 keys)
+ * Made health, mana, exp and magic level bars scale with variables instead of being hardcoded
+ * Implemented damage absorption
+
+4/22/2018
  * Fixed repeating mouse button clicks
  * Made weapons display skill type that they will level up
  * Added button to switch between inventory view and skill view

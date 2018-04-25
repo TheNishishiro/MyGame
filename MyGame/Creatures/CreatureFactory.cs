@@ -81,6 +81,8 @@ namespace MyGame.Creatures
                     Texture2D texture = null;
                     string name = "", ID = "", Desc = "";
                     Dictionary<string, int> stats = new Dictionary<string, int>();
+                    Dictionary<string, int> damage = new Dictionary<string, int>();
+                    Dictionary<string, int> defence = new Dictionary<string, int>();
                     List<string> dialogs = new List<string>();
                     List<string> loot = new List<string>();
                     foreach (string line in lines)
@@ -99,10 +101,12 @@ namespace MyGame.Creatures
                             ID = convertedProperty;
                         else if (_property == "description")
                             Desc = convertedProperty;
+                        else if (_property == "defence")
+                            defence.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
+                        else if (_property == "damage")
+                            damage.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                         else if (_property == "loot")
-                        {
                             loot.Add(convertedProperty);
-                        }
                         else
                         {
                             if (!stats.ContainsKey(_property))
@@ -113,7 +117,7 @@ namespace MyGame.Creatures
                     }
                     if (!list.ContainsKey(ID))
                     {
-                        list.Add(ID, new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot, Desc));
+                        list.Add(ID, new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot, Desc, damage, defence));
                         Console.WriteLine("\tLoaded: " + file);
                     }
                     else

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MyGame.Creatures;
 using MyGame.GridElements;
+using MyGame.Items;
 using MyGame.UI;
 using NFramework;
 using System;
@@ -92,6 +93,14 @@ namespace MyGame
                             else
                                 AdditionFactory.SpawnAddition(_player.Position, options[1], options[2]);
                             break;
+                        case "giveallitems":
+                            foreach(KeyValuePair<string, IItems> entry in Textures.ItemTemplates)
+                            {
+                                Console.Write($"Spawning {entry.Key}... ");
+                                _player.Inventory.Add(entry.Value.CreateCopy());
+                                Console.WriteLine("done");
+                            }
+                            break;
                     }
                 }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
@@ -140,7 +149,7 @@ namespace MyGame
             sw.Stop();
             Console.WriteLine($"World created in {sw.Elapsed.TotalSeconds} sec");
             _player = new Player(WorldSizePixels/2, WorldSizePixels / 2, Content.Load<Texture2D>("player"));
-            
+            _player._UI = new MainUI(_player);
             creatures = new List<ICreature>();
             for (int i = 0; i < CreatureLimit; i++)
             {
@@ -246,7 +255,6 @@ namespace MyGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             NCamera.Camera_Use(ref spriteBatch, SpriteSortMode.FrontToBack);
             _player.Draw(ref spriteBatch);
             _player._UI.Draw(ref spriteBatch);
@@ -273,19 +281,19 @@ namespace MyGame
             }
             grid.DrawAdditions(ref spriteBatch, _player.Position, Settings.RenderDistance);
             grid.Draw(ref spriteBatch, _player.Position, Settings.RenderDistance);
-            
+
             cursor.Draw(ref spriteBatch);
-            
-            
+
+
             spriteBatch.End();
 
             spriteBatch.Begin();
 
-            
-            
+
+
             NDrawing.FPS_Draw(new Vector2(0, 0), Color.Red, gameTime, Settings.font, ref spriteBatch);
 
-            if(debug)
+            if (debug)
                 spriteBatch.DrawString(font, $"" +
                     $"X:{(Mouse.GetState().X - graphics.PreferredBackBufferWidth / 2) + _player.Position.X}\n" +
                     $"Y:{(Mouse.GetState().Y - graphics.PreferredBackBufferHeight / 2) + _player.Position.Y}\n" +

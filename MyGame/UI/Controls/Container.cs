@@ -20,20 +20,23 @@ namespace MyGame.UI.Controls
 
         public Container(string title, string description)
         {
-            this.Size = Size;
             button = new Button("Exit", () => Close(), 0);
             this.title = title;
             Size = new Rectangle(0, 0, 650, 400);
             for (int i = 0, j = 0; i < description.Length; i++, j++)
             {
-                if(j >= Size.Width/8 && description[i-1] == ' ')
+                if (description[i] == '\n')
+                {
+                    j = 0;
+                }
+                if (j >= Size.Width/8 && description[i-1] == ' ')
                 {
                     description = description.Insert(i, "\n");
                     j = 0;
                 }
             }
             this.description = description;
-            background = NGraphics.Texture_CreatePixel(Game1._GraphicsDevice, Color.Gray);
+            background = Textures.UIMessageBoxTexture;
         }
 
         public void Update(Vector2 Position)
@@ -49,7 +52,7 @@ namespace MyGame.UI.Controls
             MenuControls.SetMouseLayer(layer);
             button.Draw(ref sb);
             NDrawing.Draw(ref sb, background, Size, Color.White, layer);
-            sb.DrawString(Settings.font3, title, new Vector2(Size.X + Size.Width/2 - title.Length * Settings.TextButtonScaling, Size.Y + 10), Color.White, 0, new Vector2(0,0), 1, SpriteEffects.None, layer += 0.001f);
+            sb.DrawString(Settings.font3, title, new Vector2(Size.X + 15, Size.Y + 15), Color.White, 0, new Vector2(0,0), 1, SpriteEffects.None, layer += 0.001f);
             sb.DrawString(Settings.font3, description, new Vector2(Size.X + 40, Size.Y + 50), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, layer += 0.005f);
         }
 

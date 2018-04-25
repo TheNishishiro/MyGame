@@ -10,7 +10,8 @@ namespace MyGame.Items
 {
     interface IItems
     {
-        int GetStat();
+        Dictionary<string, int> GetDamage();
+        Dictionary<string, int> GetAttribiutes();
         IItems CreateCopy();
         void Update();
         void Draw(ref SpriteBatch sb, Vector2 position);
@@ -19,6 +20,7 @@ namespace MyGame.Items
         void Break();
         string GetName();
         string GetSkill();
+        float GetDefence(string type);
         Texture2D GetTexture();
     }
 }

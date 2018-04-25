@@ -129,7 +129,7 @@ namespace MyGame.GridElements
                     hp--;
                     cooldown = 60;
                     FL.Add(new FadingLabel($"+{amount} {resource}", Position, Color.White));
-                    Settings._player.Stats[Settings.Mining + Settings.SkillLevelPoints] += 1;
+                    Settings._player.Skills[Names.Mining + Names.SkillLevelPoints] += 1;
                     if(amount!=null)
                         Settings._player.Materials[resource] += (int)amount;
                 }

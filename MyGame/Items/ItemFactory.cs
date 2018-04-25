@@ -60,7 +60,10 @@ namespace MyGame.Items
             Texture2D texture = null;
             ID = "";
             string skilltype = "";
-            string name=""; string type = ""; int damage=0; int durability=0; int elementalDamage=0; int upgrade=0; string description="";
+            Dictionary<string, int> damage = new Dictionary<string, int>();
+            Dictionary<string, int> DefenceTypes = new Dictionary<string, int>();
+            Dictionary<string, int> Attribiutes = new Dictionary<string, int>();
+            string name=""; string type = ""; int durability=0; int upgrade=0; string description="";
             foreach (string line in lines)
             {
                 if (line != "")
@@ -84,13 +87,10 @@ namespace MyGame.Items
                             type = convertedProperty;
                             break;
                         case "damage":
-                            damage = int.Parse(convertedProperty);
+                            damage.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                             break;
                         case "durability":
                             durability = int.Parse(convertedProperty);
-                            break;
-                        case "elementaldamage":
-                            elementalDamage = int.Parse(convertedProperty);
                             break;
                         case "upgrade":
                             upgrade = int.Parse(convertedProperty);
@@ -101,12 +101,24 @@ namespace MyGame.Items
                         case "skilltype":
                             skilltype = convertedProperty;
                             break;
+                        case "attribiute":
+                            Attribiutes.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
+                            break;
+                        case "defence":
+                            DefenceTypes.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
+                            break;
                     }
                 }
             }
 
-            if (type == "Weapon")
-                return new Weapon(texture, name, type, damage, durability, elementalDamage, upgrade, description, skilltype);
+            if (type == Names.Weapon)
+                return new Weapon(texture, name, type, durability, upgrade, description, skilltype, damage, Attribiutes);
+            if (type == Names.Necklace)
+                return new Necklace(texture, name, type,upgrade, description, Attribiutes);
+            if (type == Names.Armor)
+                return new Armor(texture, name,type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
+
+
             Console.WriteLine("\tLoaded: " + file);
             return null;
         }

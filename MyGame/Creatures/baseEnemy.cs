@@ -12,7 +12,7 @@ namespace MyGame.Creatures
     class baseEnemy : baseCreature
     {
         public baseEnemy(Texture2D texture, Vector2 Position, string name,
-            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot, string Desc)
+            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot, string Desc, Dictionary<string, int> damage, Dictionary<string, int> defence)
         {
             layerDepth = Settings.entityLayer;
             this.name = name;
@@ -22,10 +22,11 @@ namespace MyGame.Creatures
             color = Color.White;
             healthBar = new ProgresBar(Color.Red, Color.DarkGreen, new Rectangle(bounds.X, bounds.Y - 32, 32, 8), Textures.UIBarBorderTexture);
             Init();
+            this.defences = defence;
             nameLabel = new UI.Controls.Label(name, Position, Color.White);
             this.Dialogs = Dialogs;
             this.Loot = Loot;
-            this.baseStats[Damage] = baseStats[Damage];
+            this.damage = damage;
             this.baseStats[HP] = this.baseStats[HP_max] = baseStats[HP];
             this.baseStats[Exp] = baseStats[Exp];
             this.baseStats[Level] = baseStats[Level];

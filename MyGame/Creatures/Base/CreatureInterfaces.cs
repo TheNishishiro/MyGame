@@ -15,15 +15,14 @@ namespace MyGame
         void Update();
         void Move();
         Vector2 GetPosition();
-        void TakeDamage(int damage);
-        int DealDamage(); 
+        void TakeDamage(Dictionary<string, int> damage);
+        Dictionary<string, int> DealDamage(); 
         void Die(ICreature player);
         bool GetFightingState();
         int GetHealth();
         int GetMaxHealth();
         int GetMana();
         int GetMaxMana();
-        int GetDamage();
         void HealUp(int amount);
         int GetLevel();
         int GetExp();

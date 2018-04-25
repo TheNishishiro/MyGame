@@ -24,6 +24,7 @@ namespace MyGame.Creatures
             HP = "health",
             HP_max = "health_max",
             Damage = "damage",
+            DamageElemental = "elementaldamage",
             Level = "level",
             Exp = "experience",
             Exp_max = "experience_max",
@@ -43,19 +44,23 @@ namespace MyGame.Creatures
         protected bool moving = false;
         protected bool canMove = true;
         private int decision;
-        protected int RegenTimer = 0, RegenTimerReset = 120;
+        protected int RegenTimer = 0, RegenTimerReset = 180;
         protected List<FadingLabel> FL = new List<FadingLabel>();
         protected List<string> Dialogs = new List<string>();
         protected List<string> Loot = new List<string>();
+        protected Dictionary<string, int> damage = null;
+        protected Dictionary<string, int> defences = null;
         protected Label nameLabel;
         protected string Description;
 
         public virtual void Init()
         {
             baseStats = new Dictionary<string, int>();
+            damage = new Dictionary<string, int>();
+            damage.Add("Physical", 10);
+            defences = new Dictionary<string, int>();
             baseStats.Add(HP, 0);
             baseStats.Add(HP_max, 0);
-            baseStats.Add(Damage, 0);
             baseStats.Add(Level, 0);
             baseStats.Add(Exp, 0);
             baseStats.Add(Exp_max, 0);
@@ -87,7 +92,7 @@ namespace MyGame.Creatures
 
         public ICreature CreateCopy(Vector2 position)
         {
-            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description);
+            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description, damage, defences);
         }
 
         public virtual void Update()
@@ -135,7 +140,7 @@ namespace MyGame.Creatures
                     string itemID = properties[0].Trim();
                     int Chance = int.Parse(properties[1].Trim());
 
-                    if(Settings.rnd.Next(10000) <= Chance)
+                    if(Settings.rnd.Next(10000) <= Chance + (Settings._player.Stats[Names.Luck]-1)*10)
                     {
                         looted = true;
                         Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(
@@ -187,9 +192,9 @@ namespace MyGame.Creatures
             }
         }
 
-        public virtual int GetDamage()
+        public virtual Dictionary<string, int> GetDamage()
         {
-            return baseStats[Damage];
+            return damage;
         }
         public int GetHealth()
         {
@@ -234,14 +239,26 @@ namespace MyGame.Creatures
                 baseStats[HP] = baseStats[HP_max];
         }
 
-        public virtual int DealDamage()
+        public virtual Dictionary<string, int> DealDamage()
         {
             return GetDamage();
         }
 
-        public virtual void TakeDamage(int _damage)
+        public virtual void TakeDamage(Dictionary<string, int> damage)
         {
-            int dmg = Settings.rnd.Next((int)_damage);
+            int dmg = 0;
+            foreach(KeyValuePair<string, int > entry in damage)
+            {
+                float reduction = 0;
+                if(defences.ContainsKey(entry.Key))
+                {
+                    reduction = entry.Value * ((float)defences[entry.Key]/100);
+                }
+                dmg += Settings.rnd.Next((int)(entry.Value - reduction));
+
+                if (entry.Key == "Physical")
+                    dmg = (int)(dmg * (1.0 + ((float)(Settings._player.Stats[Names.Strength]-1) / 20)));
+            }
             if(dmg > 0)
                 FL.Add(new FadingLabel($"-{dmg}", Position, Color.Red, 0.5f));
             baseStats[HP] -= dmg;
@@ -273,10 +290,6 @@ namespace MyGame.Creatures
         public int GetMaxMagicLevelPoints()
         {
             return baseStats[Magic_Level_max_points];
-        }
-        public void SetDamage(int amount)
-        {
-            baseStats[Damage] += amount;
         }
         public int GetLevelPoints()
         {

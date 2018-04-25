@@ -14,40 +14,36 @@ namespace MyGame.Items
     class baseItems : baseClickable, IItems
     {
         public const string
-            Damage = "damage",
             Durability = "durability",
-            ElementalDamage = "elementaldamage",
             Upgrade = "upgrade";
 
-        public static string[] Elements = { "Chaos", "Lighting", "Poisonous", "Blessed", "Normal" };
-        public int ID;
-
-        protected int _damage, _durability, _elementalDamage, _upgrade; 
-
-        protected string Element;
+        protected int _durability, _upgrade;
+        protected bool Equiped = false;
         protected string Type;
         protected string Description;
         protected string SkillType;
+        protected Dictionary<string, int> damage = new Dictionary<string, int>();
         protected Dictionary<string, int> stats = new Dictionary<string, int>();
         protected Dictionary<string, int> defences = new Dictionary<string, int>();
+        protected Dictionary<string, int> Attribiutes = new Dictionary<string, int>();
         protected Texture2D texture = null;
 
         protected void Init()
         {
-            stats.Add(Damage, 0);
             stats.Add(Durability, 0);
-            stats.Add(ElementalDamage, 0);
             stats.Add(Upgrade, 0);
-            Element = Elements[Settings.rnd.Next(Elements.Length)];
-            foreach (string element in Elements)
-                defences.Add(element, 0);
             layerDepth = Settings.MainUILayer;
         }
 
         public IItems CreateCopy()
         {
-            if (Type == "Weapon")
-                return new Weapon(texture, name, Type, _damage, _durability, _elementalDamage, _upgrade, Description, SkillType);
+            if (Type == Names.Weapon)
+                return new Weapon(texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
+            if (Type == Names.Necklace)
+                return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
+            if (Type == Names.Armor)
+                return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
+
             return null;
         }
 
@@ -66,12 +62,71 @@ namespace MyGame.Items
 
         public virtual void Use()
         {
+            if (!Equiped)
+            {
+                Settings._player.Equiped[Type] = this;
+                Settings._player.Inventory.Remove(this);
+                foreach (KeyValuePair<string, int> entry in Attribiutes)
+                {
+                    if (Settings._player.Stats.ContainsKey(entry.Key))
+                    {
+                        Settings._player.Stats[entry.Key] += entry.Value;
+                    }
+                }
+            }
+            else
+            {
+                Settings._player.Inventory.Add(this);
+                Settings._player.Equiped[Type] = null;
+                foreach (KeyValuePair<string, int> entry in Attribiutes)
+                {
+                    if (Settings._player.Stats.ContainsKey(entry.Key))
+                    {
+                        Settings._player.Stats[entry.Key] -= entry.Value;
+                    }
+                }
+            }
+            Equiped = !Equiped;
+            quitMenu();
+        }
 
+        protected void SetEquipableButtons(bool Equiped)
+        {
+            if (!Equiped && Settings._player.Equiped[Type] == null)
+            {
+                DPL.AddButton("Equip", () => Use());
+                DPL.AddButton("Drop", () => Drop());
+            }
+            else if (Equiped)
+                DPL.AddButton("Unequip", () => Use());
+
+            DPL.AddButton("Information", () => ShowInfo());
+            DPL.AddButton("Quit", () => quitMenu());
         }
 
         public void ShowInfo()
         {
-            Settings._player._UI.container = new UI.Controls.Container(name + ", type: " + SkillType, Description);
+            string header = $"Type: {SkillType}\n";
+            if (Type == Names.Weapon)
+            {
+                header += "Damage type: ";
+                foreach (KeyValuePair<string, int> entry in damage)
+                {
+                    header += $", {entry.Key}";
+                }
+                header += $"\nDurability: { stats[Durability]}\n";
+            }
+            if(Type == Names.Armor)
+            {
+                header += "Defences: ";
+                foreach(KeyValuePair<string, int> entry in defences)
+                {
+                    header += $", {entry.Key}:{(entry.Value)}%";
+                }
+                header += $"\nDurability: {stats[Durability]}\n";
+            }
+
+            Settings._player._UI.container = new UI.Controls.Container(name, header + Description);
             quitMenu();
         }
 
@@ -90,9 +145,9 @@ namespace MyGame.Items
             return texture;
         }
 
-        public virtual int GetStat()
+        public virtual Dictionary<string, int> GetDamage()
         {
-            throw new NotImplementedException();
+            return damage;
         }
 
         public void DecreaseDurability()
@@ -110,6 +165,17 @@ namespace MyGame.Items
         public string GetSkill()
         {
             return SkillType;
+        }
+        public float GetDefence(string type)
+        {
+            if (defences.ContainsKey(type))
+                return defences[type];
+            else
+                return 0;
+        }
+        public Dictionary<string, int> GetAttribiutes()
+        {
+            return Attribiutes;
         }
     }
 }
