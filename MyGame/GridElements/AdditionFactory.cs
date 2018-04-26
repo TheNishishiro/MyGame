@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MyGame.GridElements.Specials;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,12 +12,19 @@ namespace MyGame.GridElements
 {
     class AdditionFactory
     {
-        public static Addition CreateAddition(Vector2 position)
+        public static ITileAddition CreateAddition(Vector2 position)
         {
-            string[] keys = Textures.GeneratorAdditionTemplates.Keys.ToArray();
-            Addition addition =Textures.GeneratorAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(position);
-            addition.Position = position;
-            return addition;
+            while (true)
+            {
+                string[] keys = Textures.GeneratorAdditionTemplates.Keys.ToArray();
+                ITileAddition addition =Textures.GeneratorAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(position);
+                if (addition.GetRarity() >= Settings.rnd.Next(1000))
+                {
+                    addition.SetPosition(position);
+                    return addition;
+                }
+            }
+            return null;
         }
 
         public static void SpawnAddition(Vector2 position, string type = "g", string ID = "")
@@ -47,7 +55,7 @@ namespace MyGame.GridElements
             }
         }
 
-        public static void CreateAdditionTemplate(Dictionary<string, Addition> list, string type)
+        public static void CreateAdditionTemplate(Dictionary<string, ITileAddition> list, string type)
         {
             Console.WriteLine("Loading Additions...");
             try
@@ -58,6 +66,9 @@ namespace MyGame.GridElements
                     String[] lines = File.ReadAllLines(file);
                     Texture2D texture = null;
                     string ID = "";
+                    int Rarity = 1000;
+                    string _type = "";
+                    Dictionary<string, int> dropChance = new Dictionary<string, int>();
                     bool walkable = false; bool clickable = false; bool CreatesFloatingText = false; bool IsTimeLimited = false; bool IsOnTop = false;
                     string ButtonRename = null; int? HP = null; int? UseCooldown = null; string resource = null; int? amount = null;
                     foreach (string line in lines)
@@ -106,12 +117,24 @@ namespace MyGame.GridElements
                                 case "amount":
                                     amount = int.Parse(convertedProperty);
                                     break;
+                                case "rarity":
+                                    Rarity = int.Parse(convertedProperty);
+                                    break;
+                                case "type":
+                                    _type = convertedProperty;
+                                    break;
+                                case "loot":
+                                    dropChance.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
+                                    break;
                             }
                         }
                     }
 
+                    if(_type == "")
+                        list.Add(ID, new AnyAddition(texture, new Vector2(0, 0), Rarity, walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
+                    else if(_type == "chest")
+                        list.Add(ID, new Chest(new Vector2(0, 0), texture, dropChance, ButtonRename, Rarity));
 
-                    list.Add(ID, new Addition(texture, new Vector2(0, 0), walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
                     Console.WriteLine("\tLoaded: " + file);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,8 @@ namespace MyGame.GridElements
         bool Walkable { get; set; }
         void Draw(ref SpriteBatch sb);
         void RemoveAdditionFromGrid();
+        int GetRarity();
+        ITileAddition CreateCopy(Vector2 position);
+        void SetPosition(Vector2 position);
     }
 }

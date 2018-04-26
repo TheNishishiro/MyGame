@@ -109,8 +109,8 @@ namespace MyGame
 
         public static Dictionary<string, ICreature> EnemyTemplates;
         public static Dictionary<string, IItems> ItemTemplates;
-        public static Dictionary<string, Addition> GeneratorAdditionTemplates;
-        public static Dictionary<string, Addition> SpawnableAdditionTemplates;
+        public static Dictionary<string, ITileAddition> GeneratorAdditionTemplates;
+        public static Dictionary<string, ITileAddition> SpawnableAdditionTemplates;
 
         public static Texture2D UITargetTexture;
         public static Texture2D UIAvatarRingTexture;
@@ -134,8 +134,8 @@ namespace MyGame
 
             EnemyTemplates = new Dictionary<string, ICreature>();
             ItemTemplates = new Dictionary<string, IItems>();
-            GeneratorAdditionTemplates = new Dictionary<string, Addition>();
-            SpawnableAdditionTemplates = new Dictionary<string, Addition>();
+            GeneratorAdditionTemplates = new Dictionary<string, ITileAddition>();
+            SpawnableAdditionTemplates = new Dictionary<string, ITileAddition>();
             EnemyTextures = LoadTexturesFromFile(".\\Data\\EnemyTextures.xml");
             AdditionTextures = LoadTexturesFromFile(".\\Data\\GridAdditionTextures.xml");
             ItemTextures = LoadTexturesFromFile(".\\Data\\ItemTextures.xml");

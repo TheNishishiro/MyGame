@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="baseClickable.cs" />
     <Compile Include="baseEntity.cs" />
+    <Compile Include="Changelog.cs" />
     <Compile Include="Creatures\baseEnemy.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
     <Compile Include="Creatures\CreatureFactory.cs" />
@@ -56,7 +57,9 @@
     <Compile Include="GridElements\AdditionFactory.cs" />
     <Compile Include="GridElements\Grid.cs" />
     <Compile Include="GridElements\baseTile.cs" />
+    <Compile Include="GridElements\Specials\AnyAddition.cs" />
     <Compile Include="GridElements\Specials\Bag.cs" />
+    <Compile Include="GridElements\Specials\Chest.cs" />
     <Compile Include="GridElements\TileInterfaces.cs" />
     <Compile Include="GridElements\TileTypes\Grass.cs" />
     <Compile Include="Creatures\Base\CreatureInterfaces.cs" />
@@ -66,6 +69,8 @@
     <Compile Include="Items\ItemFactory.cs" />
     <Compile Include="Items\ItemTypes\Armor.cs" />
     <Compile Include="Items\ItemTypes\Necklace.cs" />
+    <Compile Include="Items\ItemTypes\Ring.cs" />
+    <Compile Include="Items\ItemTypes\Shield.cs" />
     <Compile Include="Items\ItemTypes\Weapon.cs" />
     <Compile Include="NFramework\NCamera.cs" />
     <Compile Include="NFramework\NAction.cs" />

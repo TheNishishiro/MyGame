@@ -136,6 +136,7 @@ namespace MyGame
             sw2.Start();
             cursor = new Cursor(Content.Load<Texture2D>("Light_Blue"));
             Textures.LoadTextures();
+            Changelog.LoadChangelog();
 
             font = Content.Load<SpriteFont>("font");
             font2 = Content.Load<SpriteFont>("font2");
@@ -158,7 +159,7 @@ namespace MyGame
 
             graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth * 1.3);
             graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight * 1.3);
-            graphics.HardwareModeSwitch = false; // Causes window to shrink when fullscreened and windowed then moved
+            graphics.HardwareModeSwitch = false; 
 
             
             graphics.ApplyChanges();
@@ -184,7 +185,7 @@ namespace MyGame
                         GCInfo.Abort();
                     }
                 }
-                catch { } // Useless catch
+                catch { } 
             }
             DebugConsole.Abort();
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MyGame.GridElements.Specials;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,10 @@ namespace MyGame.GridElements
         {
             if (addition != null)
             {
+                if (addition.Count > 0 && addition[0] is Chest)
+                {
+                    int x = 5;
+                }
                 for (int i = 0; i < addition.Count; i++)
                 {
                     if (i < addition.Count)

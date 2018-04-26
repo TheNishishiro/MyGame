@@ -73,8 +73,20 @@ namespace MyGame.UI
         }
 
         bool pressed = false;
-        private void testForClick()
+        int holdTimer = 60, holdTimerInit = 60;
+        private void testForClick(bool holdable = false, int timer = 0)
         {
+            if (holdable && Settings.cursor.bounds.Intersects(position) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                if (holdTimer > 0)
+                    holdTimer--;
+                if (holdTimer <= 0)
+                {
+                    holdTimer = timer;
+                    pressed = false;
+                }
+            }
+
             if (Settings.cursor.bounds.Intersects(position) && Mouse.GetState().LeftButton == ButtonState.Pressed && pressed == false)
             {
                 ButtonClickMainAction();
@@ -83,6 +95,7 @@ namespace MyGame.UI
             else if(Mouse.GetState().LeftButton == ButtonState.Released && pressed == true)
             {
                 pressed = false;
+                holdTimer = holdTimerInit;
             }
         }
 
@@ -94,7 +107,13 @@ namespace MyGame.UI
             position.X = (int)refPosition.X + 32;
             position.Y = (int)refPosition.Y + (16 * id);
         }
+        public void Update(Vector2 refPosition, bool holdable, int timer)
+        {
+            testForClick(holdable, timer);
+            position.X = (int)refPosition.X + 32;
+            position.Y = (int)refPosition.Y + (16 * id);
 
+        }
         public void Update(Vector2 refPosition)
         {
 

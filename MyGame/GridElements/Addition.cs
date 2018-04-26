@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MyGame.GridElements.Specials;
 using MyGame.UI;
 using MyGame.UI.Controls;
 using NFramework;
@@ -26,62 +27,25 @@ namespace MyGame.GridElements
         protected Action action;
         protected int? amount = null;
         protected int? hp = null;
+        protected int Rarity = 0;
+        protected float layerDepth = Settings.tileAdditionTopLayer;
+        protected Dictionary<string, int> lootChances = null;
 
-        public Addition(Texture2D texture, Vector2 Position, 
-            bool walkable = false, bool clickable = false, bool CreatesFloatingText = false, bool IsTimeLimited = false, bool IsOnTop = false, 
-            string ButtonRename = null, int? HP = null, int? UseCooldown = null, string resource = null, int? amount = null, Action action = null)
-        {
-            this.texture = texture;
-            this.Position = new Vector2(Position.X, Position.Y);
-            bounds = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
-            Walkable = walkable;
-            IsClickable = clickable;
-            this.CreatesFloatingText = CreatesFloatingText;
-            this.IsOnTop = IsOnTop;
-            if (IsOnTop)
-                layerDepth = Settings.tileAdditionTopLayer;
-            else
-                layerDepth = Settings.tileAdditionBottomLayer;
-            if(CreatesFloatingText)
-                FL = new List<FadingLabel>();
-            hp = HP;
-            this.resource = resource;
-            this.amount = amount;
-            cooldown = UseCooldown;
-            this.ButtonRename = ButtonRename;
-            this.action = action;
-            if (action != null)
-            {
-                Console.WriteLine(action.Method.Module);
-            }
-            this.IsTimeLimited = IsTimeLimited;
-
-            try
-            {
-                if (texture.Height > Settings.GridSize || texture.Width > Settings.GridSize)
-                    layerDepth += 0.001f;
-            }
-            catch(NullReferenceException)
-            {
-                Console.WriteLine("Couldn't load addtion texture");
-            }
-        }
-
-        public Addition CreateCopy(Vector2 position)
+        public virtual ITileAddition CreateCopy(Vector2 position)
         {
             bounds = new Rectangle((int)position.X, (int)position.Y, 32, 32);
-            return new Addition(texture, new Vector2(position.X, position.Y), Walkable, IsClickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
+            return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, Walkable, IsClickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
         }
 
 
         protected override void SetButtons()
         {
             base.SetButtons();
-            if(ButtonRename!=null)
+            if (ButtonRename != null)
             {
                 DPL.RenameElement(0, ButtonRename);
             }
-            if(action != null)
+            if (action != null)
             {
                 DPL.EditButtonAction(0, action);
             }
@@ -91,7 +55,7 @@ namespace MyGame.GridElements
         public virtual void Draw(ref SpriteBatch sb)
         {
             NDrawing.Draw(ref sb, texture, new Vector2(Position.X + (Settings.GridSize - texture.Width), Position.Y + (Settings.GridSize - texture.Height)), color, layerDepth);
-            if(IsClickable)
+            if (IsClickable)
                 Update(ref sb, resource, amount);
             if (IsTimeLimited)
                 UpdateTime();
@@ -104,7 +68,7 @@ namespace MyGame.GridElements
                 menuManagment(ref sb);
                 DrawAggroRectangle(ref sb);
             }
-            if(CreatesFloatingText)
+            if (CreatesFloatingText)
                 CreateFloatingText(resource, amount);
             if (hp <= 0)
                 RemoveAdditionFromGrid();
@@ -130,7 +94,7 @@ namespace MyGame.GridElements
                     cooldown = 60;
                     FL.Add(new FadingLabel($"+{amount} {resource}", Position, Color.White));
                     Settings._player.Skills[Names.Mining + Names.SkillLevelPoints] += 1;
-                    if(amount!=null)
+                    if (amount != null)
                         Settings._player.Materials[resource] += (int)amount;
                 }
             }
@@ -140,5 +104,15 @@ namespace MyGame.GridElements
             Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].Walkable = true;
             Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].RemoveAddition(this);
         }
+
+        public int GetRarity()
+        {
+            return Rarity;
+        }
+        public void SetPosition(Vector2 position)
+        {
+            Position = position;
+        }
+
     }
 }

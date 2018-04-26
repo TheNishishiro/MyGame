@@ -1,5 +1,10 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
+4/26/2018
+ * Changed da wae inforamtion text is displayed
+ * Made notes scrollable
+ * Made it possible to hold down a button
+ * Added delay before hold scrolling kicks in
 
 4/25/2018
  * Seperated Skills from Stats of a player
@@ -19,6 +24,11 @@ TODO: Make damage increase according to skill level
 	- Endurtance: Increases health regeneration and degresses time between heals
 	- Luck: Increases chance of item drops
 	- Dexterity: Increases attack speed
+ * Implemented Shields and Rings 
+ * Fixed damage reduction stacking up for players if player wears no armor
+ * Moved addition constructor to AnyAddition class
+ * Added special addition types
+ * Added chests with specified loot
 
 
 4/24/2018

@@ -42,7 +42,7 @@ namespace MyGame.UI
 
         private static Dictionary<InfoState, Button> SwitchButtons = new Dictionary<InfoState, Button>();
 
-        public Container container = new Container("Welcome!", "This is my welcome message, feel free to ignore it for now tho. I might insert some daily news or other stuff in here in a near future, probably changes too!");
+        public Container container = new Container("Welcome!", Changelog.changelog);
 
         public MainUI(ICreature _player)
         {
@@ -251,12 +251,12 @@ namespace MyGame.UI
             }
             if (SkillsPage > 0)
             {
-                skillsPageUp.Update(new Vector2(position.X + 243, position.Y + 450));
+                skillsPageUp.Update(new Vector2(position.X + 243, position.Y + 450), true, 10);
                 skillsPageUp.Draw(ref sb);
             }
             if (SkillsPage + 8 < Settings._player.Skills.Count/3)
             {
-                skillsPageDown.Update(new Vector2(position.X + 243, position.Y + 450 + 19));
+                skillsPageDown.Update(new Vector2(position.X + 243, position.Y + 450 + 19), true, 10);
                 skillsPageDown.Draw(ref sb);
             }
         }
@@ -287,12 +287,12 @@ namespace MyGame.UI
 
             if (StatsPage > 0)
             {
-                statsPageUp.Update(new Vector2(position.X + 243, position.Y + 470));
+                statsPageUp.Update(new Vector2(position.X + 243, position.Y + 470), true, 10);
                 statsPageUp.Draw(ref sb);
             }
             if (StatsPage + 7 < Settings._player.Stats.Count)
             {
-                statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470+19));
+                statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470+19), true, 10);
                 statsPageDown.Draw(ref sb);
             }
         }

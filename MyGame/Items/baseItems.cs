@@ -39,9 +39,13 @@ namespace MyGame.Items
         {
             if (Type == Names.Weapon)
                 return new Weapon(texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
-            if (Type == Names.Necklace)
+            else if (Type == Names.Necklace)
                 return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
-            if (Type == Names.Armor)
+            else if (Type == Names.Ring)
+                return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
+            else if (Type == Names.Armor)
+                return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
+            else if (Type == Names.Shield)
                 return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
 
             return null;

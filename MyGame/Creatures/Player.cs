@@ -218,8 +218,6 @@ namespace MyGame
                     Skills[Names.Fist + Names.SkillLevelPoints] += levelModifier;
                     damageModifier = Names.Fist + Names.SkillLevel;
                 }
-
-               // _damage = _damage + (_damage * Stats[damageModifier] / 10); // Possibly change to simply (_damage + skilllevel)
             }
             catch (KeyNotFoundException)
             {
@@ -235,13 +233,17 @@ namespace MyGame
         public override void TakeDamage(Dictionary<string, int> _damage)
         {
             int dmg = 0;
-            float reduction = 0;
             foreach (KeyValuePair<string, int> entry in _damage)
             {
+                float reduction = 0;
                 dmg += rnd.Next((entry.Value));
                 if (Equiped[Names.Armor] != null)
                 {
                     reduction = (float)Math.Ceiling(dmg * (Equiped[Names.Armor].GetDefence(entry.Key) / 100));
+                }
+                if (Equiped[Names.Shield] != null)
+                {
+                    reduction += (float)Math.Ceiling(dmg * (Equiped[Names.Shield].GetDefence(entry.Key) / 100));
                 }
                 reduction += (float)Math.Ceiling(dmg * ((float)(Stats[Names.Resistance]-1) / 100));
                 Skills[Names.Defence + Names.SkillLevelPoints] += (int)(reduction);
