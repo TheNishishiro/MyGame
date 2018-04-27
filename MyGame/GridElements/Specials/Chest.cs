@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MyGame.Items;
 using MyGame.Items.ItemTypes;
 using MyGame.UI;
+using MyGame.UI.Controls;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,12 @@ namespace MyGame.GridElements.Specials
 {
     class Chest : Addition
     {
-        public Chest(Vector2 Position, Texture2D texture, Dictionary<string, int> lootChances, string buttonMessage, int Rarity)
+        int Gold;
+
+        public Chest(Vector2 Position, Texture2D texture, Dictionary<string, int> lootChances, string buttonMessage, int Rarity, int Gold)
         {
+            this.layerDepth = Settings.tileAdditionTopLayer;
+            this.Gold = Gold;
             this.Rarity = Rarity;
             this.Position = Position;
             this.lootChances = lootChances;
@@ -30,13 +35,16 @@ namespace MyGame.GridElements.Specials
         public override ITileAddition CreateCopy(Vector2 position)
         {
             bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
-            return new Chest(position, texture, lootChances, ButtonRename, Rarity);
+            return new Chest(position, texture, lootChances, ButtonRename, Rarity, Gold);
         }
 
         private void PickUpItem()
         {
             if (NAction.Get_Distance_Between_Points(Position, Settings._player.GetPosition()) < Settings.GridSize * 2)
             {
+
+                AddGold(Gold);
+
                 foreach (KeyValuePair<string, int> entry in lootChances)
                 {
                     if (Settings.rnd.Next(10000) <= entry.Value + (Settings._player.Stats[Names.Luck] - 1) * 10)
@@ -49,6 +57,11 @@ namespace MyGame.GridElements.Specials
                     }
                 }
                 RemoveAdditionFromGrid();
+            }
+            else
+            {
+                quitMenu();
+                MainUI.FL.Add(new FadingLabel("Too far.", Position, Color.Red));
             }
         }
     }

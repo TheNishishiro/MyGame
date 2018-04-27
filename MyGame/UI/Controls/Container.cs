@@ -16,35 +16,23 @@ namespace MyGame.UI.Controls
         Texture2D background;
         public bool destroy = false;
         string title;
-        static int lineNum = 0;
-        List<string> description = new List<string>();
-        private static Button LineDown = new Button(Textures.UIArrowDown, () => SwitchLine(1));
-        private static Button LineUp = new Button(Textures.UIArrowUp, () => SwitchLine(-1));
+        ScrollableText ST = null;
 
-        public Container(string title, string description)
+        public Container(string title)
         {
             button = new Button("Exit", () => Close(), 0);
             this.title = title;
             Size = new Rectangle(0, 0, 650, 400);
-            string line = "";
-            for (int i = 0, j = 0; i < description.Length; i++, j++)
-            {
-                line += description[i];
-                if (description[i] == '\n')
-                {
-                    this.description.Add(line);
-                    line = "";
-                    j = 0;
-                }
-                if (j >= Size.Width/8 && description[i] == ' ')
-                {
-                    this.description.Add(line);
-                    line = "";
-                    j = 0;
-                }
-            }
-            this.description.Add(line);
             background = Textures.UIMessageBoxTexture;
+        }
+
+        public Container(string title, string Description)
+        {
+            button = new Button("Exit", () => Close(), 0);
+            this.title = title;
+            Size = new Rectangle(0, 0, 650, 400);
+            background = Textures.UIMessageBoxTexture;
+            SetScrollableText(Description, 16);
         }
 
         public void Update(Vector2 Position)
@@ -61,39 +49,18 @@ namespace MyGame.UI.Controls
             button.Draw(ref sb);
             NDrawing.Draw(ref sb, background, Size, Color.White, layer);
             sb.DrawString(Settings.font3, title, new Vector2(Size.X + 15, Size.Y + 15), Color.White, 0, new Vector2(0,0), 1, SpriteEffects.None, layer += 0.001f);
-            int newLineOffset = 40;
-            int newLineStep = 20;
-            int i = 0, j = 0;
-            foreach (string line in description)
-            {
-                if (lineNum <= i && j < 16)
-                {
-                    sb.DrawString(Settings.font3, line.Replace("\t", "     "), new Vector2(Size.X + 40, Size.Y + newLineOffset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, layer += 0.005f);
-                    newLineOffset += newLineStep;
-                    j++;
-                }
-                i++;
-            }
-            if(description.Count > 16)
-            {
-                LineDown.Update(new Vector2(Size.X + Size.Width - 80, Size.Y + Size.Width/2 - 15), true, 5);
-                LineDown.Draw(ref sb);
-            }
-            if(lineNum > 0)
-            {
-                LineUp.Update(new Vector2(Size.X + Size.Width - 80, Size.Y + Size.Width / 2 - 35), true, 5);
-                LineUp.Draw(ref sb);
-            }
+            if(ST != null)
+                ST.Draw(ref sb, new Vector2(Size.X + 40, Size.Y), Size.Width - 130, layer);
+        }
+
+        public void SetScrollableText(string text, int displayLines)
+        {
+            ST = new ScrollableText(text, Size.Width, displayLines);
         }
 
         public void Close()
         {
             destroy = true;
-        }
-
-        private static void SwitchLine(int i)
-        {
-            lineNum += i;
         }
     }
 }

@@ -13,9 +13,9 @@ namespace MyGame
 
         public static void LoadChangelog()
         {
-            if (File.Exists("./Changelog.txt"))
+            if (File.Exists("./Welcome.txt"))
             {
-                string[] lines = File.ReadAllLines("./Changelog.txt");
+                string[] lines = File.ReadAllLines("./Welcome.txt");
                 foreach (string line in lines)
                 {
                     changelog += line + "\n";
@@ -23,8 +23,8 @@ namespace MyGame
             }
             else
             {
-                changelog = "Couldn't find changelogs, welcome to the game anyway :D";
-                Console.WriteLine("Couldn't find changelog.txt");
+                changelog = "Couldn't find my custom welcome file, welcome to the game anyway :D";
+                Console.WriteLine("Couldn't find Welcome.txt");
             }
         }
     }

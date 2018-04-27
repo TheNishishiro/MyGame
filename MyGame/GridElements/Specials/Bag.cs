@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MyGame.Items;
 using MyGame.Items.ItemTypes;
 using MyGame.UI;
+using MyGame.UI.Controls;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,12 @@ namespace MyGame.GridElements.Specials
                 MainUI.FL.Add(new UI.Controls.FadingLabel("Picked up item", Position, Color.White, 0));
                 RemoveAdditionFromGrid();
             }
+            else
+            {
+                quitMenu();
+                MainUI.FL.Add(new FadingLabel("Too far.", Position, Color.Red));
+            }
+
         }
     }
 }

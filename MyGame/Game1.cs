@@ -147,6 +147,8 @@ namespace MyGame
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             grid = new Grid(Content, WorldSizeBlocks, WorldSizeBlocks);
+            grid.PlaceScriptedObjects();
+
             sw.Stop();
             Console.WriteLine($"World created in {sw.Elapsed.TotalSeconds} sec");
             _player = new Player(WorldSizePixels/2, WorldSizePixels / 2, Content.Load<Texture2D>("player"));

@@ -17,7 +17,8 @@ namespace MyGame.UI
         {
             Inventory = 0,
             Skills = 1,
-            Stats = 2
+            Stats = 2,
+            Resources = 3
         };
 
         ICreature player;
@@ -42,10 +43,11 @@ namespace MyGame.UI
 
         private static Dictionary<InfoState, Button> SwitchButtons = new Dictionary<InfoState, Button>();
 
-        public Container container = new Container("Welcome!", Changelog.changelog);
+        public Container container = new Container("Welcome!");
 
         public MainUI(ICreature _player)
         {
+            container.SetScrollableText(Changelog.changelog, 16);
             IS = InfoState.Inventory;
             player = _player;
             hp_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight )), Color.Red, Textures.UIBarBorderTexture);
@@ -119,7 +121,7 @@ namespace MyGame.UI
                 offset += offsetStep;
             }
 
-            
+
 
 
 
@@ -129,6 +131,8 @@ namespace MyGame.UI
                 DrawSkills(ref sb);
             else if (IS == InfoState.Stats)
                 DrawStats(ref sb);
+            else if (IS == InfoState.Resources)
+                DrawResources(ref sb);
         }
 
         private void DrawContainer(ref SpriteBatch sb)
@@ -293,6 +297,41 @@ namespace MyGame.UI
             if (StatsPage + 7 < Settings._player.Stats.Count)
             {
                 statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470+19), true, 10);
+                statsPageDown.Draw(ref sb);
+            }
+        }
+
+        private void DrawResources(ref SpriteBatch sb)
+        {
+            Vector2 TextPosition = new Vector2(position.X + 55, position.Y + 375);
+            int offset = 0;
+            int offsetStep = 25;
+            int XLevelOffset = 100;
+            int XPlusOffset = 110;
+            int i = 0, j = 0;
+
+            sb.DrawString(Settings.font3, $"Gold: {Settings._player.Materials[Names.Material_Gold]}", new Vector2(TextPosition.X - 55, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+            offset += offsetStep + offsetStep / 2;
+            foreach (KeyValuePair<string, int> entry in Settings._player.Materials.ToArray())
+            {
+                if (i >= StatsPage && j < 7 && entry.Key != Names.Material_Gold)
+                {
+                    sb.DrawString(Settings.font3, $"{entry.Key}:", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+                    sb.DrawString(Settings.font3, $"{entry.Value}", new Vector2(TextPosition.X + XLevelOffset, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+                    offset += offsetStep;
+                    j++;
+                }
+                i++;
+            }
+
+            if (StatsPage > 0)
+            {
+                statsPageUp.Update(new Vector2(position.X + 243, position.Y + 470), true, 10);
+                statsPageUp.Draw(ref sb);
+            }
+            if (StatsPage + 7 < Settings._player.Materials.Count)
+            {
+                statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470 + 19), true, 10);
                 statsPageDown.Draw(ref sb);
             }
         }

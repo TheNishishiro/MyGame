@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MyGame.UI;
+using MyGame.UI.Controls;
 using NFramework;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,19 @@ namespace MyGame
         protected void SetWalkable(bool walkable)
         {
             Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].Walkable = walkable;
+        }
+
+        protected void AddGold(int Gold)
+        {
+            int gold = Settings.rnd.Next(Gold) + 1;
+            if (Settings.rnd.Next(100) <= Settings._player.Stats[Names.Greed] - 1)
+            {
+                gold *= 2;
+                MainUI.FL.Add(new FadingLabel($"Gold +{gold} [greed]", Position, Color.Yellow));
+            }
+            else
+                MainUI.FL.Add(new FadingLabel($"Gold +{gold}", Position, Color.Yellow));
+            Settings._player.Materials[Names.Material_Gold] += gold;
         }
     }
 }

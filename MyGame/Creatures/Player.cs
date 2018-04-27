@@ -63,6 +63,7 @@ namespace MyGame
             baseStats[Magic_Level_max_points] = 100;
             baseStats[Level] = 1;
             baseStats[Regeneration] = 1;
+            baseStats[ManaRegeneration] = 1;
 
             SetUpSkill(Names.Fist);
             SetUpSkill(Names.Sword);
@@ -76,7 +77,7 @@ namespace MyGame
             Stats.Add(Names.Dexterity, 1); 
             Stats.Add(Names.Vitality, 1);
             Stats.Add(Names.Luck, 1); // Implemented in Die() in baseCreature
-            Stats.Add(Names.Greed, 1); // Effects not implemented
+            Stats.Add(Names.Greed, 1); // Implemented in AddGold() in baseEntity
             Stats.Add(Names.Survivability, 1); // Effects not implemented
             Stats.Add(Names.Faith, 1); // Effects not implemented
             Stats.Add(Names.Resistance, 1); // Implemented in TakeDamage()
@@ -119,6 +120,7 @@ namespace MyGame
             if (baseStats[Exp] >= baseStats[Exp_max])
                 LevelUp();
             RegenerateHP();
+            RegenerateMana();
             UpdateSkills();
         }
 

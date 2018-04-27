@@ -27,10 +27,6 @@ namespace MyGame.GridElements
         {
             if (addition != null)
             {
-                if (addition.Count > 0 && addition[0] is Chest)
-                {
-                    int x = 5;
-                }
                 for (int i = 0; i < addition.Count; i++)
                 {
                     if (i < addition.Count)
@@ -48,6 +44,13 @@ namespace MyGame.GridElements
                 AddAddition(AdditionFactory.CreateAddition(position));
                 Walkable = addition[addition.Count - 1].Walkable;
             }
+        }
+
+        public void SetAddition(ITileAddition addition)
+        {
+            this.addition = new List<ITileAddition>();
+            Walkable = addition.Walkable;
+            this.addition.Add(addition);
         }
 
         public void AddAddition(ITileAddition addition)

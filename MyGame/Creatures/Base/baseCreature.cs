@@ -35,6 +35,7 @@ namespace MyGame.Creatures
             Magic_Level_max_points = "magic_level_max_points",
             AttackSpeed = "attackspeed",
             Regeneration = "regeneration",
+            ManaRegeneration = "manaregeneration",
             Points = "levelpoints";
 
         public Dictionary<string,int> baseStats;
@@ -45,9 +46,11 @@ namespace MyGame.Creatures
         protected bool canMove = true;
         private int decision;
         protected int RegenTimer = 0, RegenTimerReset = 180;
+        protected int MPRegenTimer = 0, MPRegenTimerReset = 240;
         protected List<FadingLabel> FL = new List<FadingLabel>();
         protected List<string> Dialogs = new List<string>();
         protected List<string> Loot = new List<string>();
+        protected int Gold = 0, Gold_Chance = 0;
         protected Dictionary<string, int> damage = null;
         protected Dictionary<string, int> defences = null;
         protected Label nameLabel;
@@ -68,6 +71,7 @@ namespace MyGame.Creatures
             baseStats.Add(Mana_max, 0);
             baseStats.Add(AttackSpeed, 60);
             baseStats.Add(Regeneration, 0);
+            baseStats.Add(ManaRegeneration, 0);
             if(Settings.grid!=null)
                 SetWalkable(false);
         }
@@ -92,7 +96,7 @@ namespace MyGame.Creatures
 
         public ICreature CreateCopy(Vector2 position)
         {
-            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description, damage, defences);
+            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description, damage, defences, Gold, Gold_Chance);
         }
 
         public virtual void Update()
@@ -132,6 +136,10 @@ namespace MyGame.Creatures
             SetWalkable(true);
             bool looted = false;
             player.AddExp(baseStats[Exp]);
+            if(Settings.rnd.Next(Settings.MaxRandomValue) <= Gold_Chance)
+            {
+                AddGold(Gold);
+            }
             if (Settings.rnd.Next(2) == 0)
             {
                 foreach(string l in Loot)
@@ -140,7 +148,7 @@ namespace MyGame.Creatures
                     string itemID = properties[0].Trim();
                     int Chance = int.Parse(properties[1].Trim());
 
-                    if(Settings.rnd.Next(10000) <= Chance + (Settings._player.Stats[Names.Luck]-1)*10)
+                    if(Settings.rnd.Next(Settings.MaxRandomValue) <= Chance + (Settings._player.Stats[Names.Luck]-1)*10)
                     {
                         looted = true;
                         Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].AddAddition(
@@ -169,6 +177,18 @@ namespace MyGame.Creatures
             }
             if (RegenTimer > 0)
                 RegenTimer--;
+        }
+
+        protected void RegenerateMana()
+        {
+
+            if (baseStats[Mana] < baseStats[Mana_max] && MPRegenTimer <= 0)
+            {
+                AddMana(baseStats[ManaRegeneration]);
+                MPRegenTimer = MPRegenTimerReset;
+            }
+            if (MPRegenTimer > 0)
+                MPRegenTimer--;
         }
 
         protected void AlignToGrid()
@@ -237,6 +257,12 @@ namespace MyGame.Creatures
             baseStats[HP] += amount;
             if (baseStats[HP] > baseStats[HP_max])
                 baseStats[HP] = baseStats[HP_max];
+        }
+        public void AddMana(int amount)
+        {
+            baseStats[Mana] += amount;
+            if (baseStats[Mana] > baseStats[Mana_max])
+                baseStats[Mana] = baseStats[Mana_max];
         }
 
         public virtual Dictionary<string, int> DealDamage()

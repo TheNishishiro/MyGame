@@ -24,7 +24,6 @@ namespace MyGame.GridElements
                     return addition;
                 }
             }
-            return null;
         }
 
         public static void SpawnAddition(Vector2 position, string type = "g", string ID = "")
@@ -41,7 +40,7 @@ namespace MyGame.GridElements
                     Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.GeneratorAdditionTemplates[ID].CreateCopy(new Vector2(position.X, position.Y)));
                 }
             }
-            else if(type == "s")
+            else if(type == "sp")
             {
                 if (ID == "")
                 {
@@ -53,11 +52,23 @@ namespace MyGame.GridElements
                     Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.SpawnableAdditionTemplates[ID].CreateCopy(new Vector2(position.X, position.Y)));
                 }
             }
+            else if (type == "sc")
+            {
+                if (ID == "")
+                {
+                    string[] keys = Textures.ScriptedAdditions.Keys.ToArray();
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.ScriptedAdditions[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+                else
+                {
+                    Settings.grid.map[(int)(position.X / Settings.GridSize), (int)(position.Y / Settings.GridSize)].AddAddition(Textures.ScriptedAdditions[ID].CreateCopy(new Vector2(position.X, position.Y)));
+                }
+            }
         }
 
         public static void CreateAdditionTemplate(Dictionary<string, ITileAddition> list, string type)
         {
-            Console.WriteLine("Loading Additions...");
+            Console.WriteLine($"Loading {type} Additions...");
             try
             {
                 string[] AdditionFiles = Directory.GetFiles($".\\Data\\Additions\\{type}\\");
@@ -67,7 +78,9 @@ namespace MyGame.GridElements
                     Texture2D texture = null;
                     string ID = "";
                     int Rarity = 1000;
+                    int Gold = 0;
                     string _type = "";
+                    Vector2 position = new Vector2(0,0);
                     Dictionary<string, int> dropChance = new Dictionary<string, int>();
                     bool walkable = false; bool clickable = false; bool CreatesFloatingText = false; bool IsTimeLimited = false; bool IsOnTop = false;
                     string ButtonRename = null; int? HP = null; int? UseCooldown = null; string resource = null; int? amount = null;
@@ -123,6 +136,12 @@ namespace MyGame.GridElements
                                 case "type":
                                     _type = convertedProperty;
                                     break;
+                                case "position":
+                                    position = new Vector2(float.Parse(convertedProperty.Split(',')[0].Trim()), float.Parse(convertedProperty.Split(',')[1].Trim()));
+                                    break;
+                                case "gold":
+                                    Gold = int.Parse(convertedProperty); 
+                                    break;
                                 case "loot":
                                     dropChance.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                                     break;
@@ -131,9 +150,9 @@ namespace MyGame.GridElements
                     }
 
                     if(_type == "")
-                        list.Add(ID, new AnyAddition(texture, new Vector2(0, 0), Rarity, walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
+                        list.Add(ID, new AnyAddition(texture, position, Rarity, walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
                     else if(_type == "chest")
-                        list.Add(ID, new Chest(new Vector2(0, 0), texture, dropChance, ButtonRename, Rarity));
+                        list.Add(ID, new Chest(position, texture, dropChance, ButtonRename, Rarity, Gold));
 
                     Console.WriteLine("\tLoaded: " + file);
                 }

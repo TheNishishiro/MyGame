@@ -57,6 +57,14 @@ namespace MyGame.GridElements
             }
         }
 
+        public void PlaceScriptedObjects()
+        {
+            foreach(KeyValuePair<string, ITileAddition> addition in Textures.ScriptedAdditions)
+            {
+                map[(int)addition.Value.GetPosition().X, (int)addition.Value.GetPosition().Y].SetAddition(addition.Value.CreateCopy(new Vector2(addition.Value.GetPosition().X * Settings.GridSize, addition.Value.GetPosition().Y * Settings.GridSize)));
+            }
+        }
+
         private void ControlBounds(int x_in, int y_in, out int x, out int y)
         {
 

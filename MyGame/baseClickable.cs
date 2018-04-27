@@ -62,7 +62,5 @@ namespace MyGame
             menuOpened = false;
             DPL = null;
         }
-
-        
     }
 }

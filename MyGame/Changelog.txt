@@ -1,10 +1,27 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
+
+4/27/2018
+ * Moved scrollabe text to be a seperate control
+ * Made scrollable texts scroll buttons Y position relative to number of lines displayed
+ * Added constructor without description text to container
+ * Added method to add scrollable text to container
+ * Made chests and item pick-ups usable from certain distance
+ * Added text displaying if you are too far to open chest/pick up items
+ * Added mana regeneration
+
 4/26/2018
  * Changed da wae inforamtion text is displayed
  * Made notes scrollable
  * Made it possible to hold down a button
  * Added delay before hold scrolling kicks in
+ * Added scripted objects that will be added after map was generated
+ * Added display of resources to UI
+ * Added gold loot from enemies
+ * Made greed stat have a chance to double gold income
+ * Added text about gold income
+ * Fixed scrpted objects not setting tiles "Walkable" property 
+ * Added gold drop to chests (gold will always loot from chest)
 
 4/25/2018
  * Seperated Skills from Stats of a player
@@ -158,5 +175,5 @@ TODO: Make damage increase according to skill level
  * Added fading text labels
  * Added hp regeneration
  * Made enemies spawn only in a location around player and despawn once they leave the location
-  number of enemies is now constante
+ * number of enemies is now constant
 

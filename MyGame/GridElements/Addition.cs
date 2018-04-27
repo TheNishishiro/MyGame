@@ -28,7 +28,6 @@ namespace MyGame.GridElements
         protected int? amount = null;
         protected int? hp = null;
         protected int Rarity = 0;
-        protected float layerDepth = Settings.tileAdditionTopLayer;
         protected Dictionary<string, int> lootChances = null;
 
         public virtual ITileAddition CreateCopy(Vector2 position)
@@ -113,6 +112,9 @@ namespace MyGame.GridElements
         {
             Position = position;
         }
-
+        public Vector2 GetPosition()
+        {
+            return Position;
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace MyGame
             tileAdditionTopLayer = 0.65f,
             tileAdditionBottomLayer = 0.4f;
 
-        
+        public const int MaxRandomValue = 10000;
 
         public const int VirtualHeight = 624;
         public const int VirtualWidth = 1040;
@@ -111,6 +111,7 @@ namespace MyGame
         public static Dictionary<string, IItems> ItemTemplates;
         public static Dictionary<string, ITileAddition> GeneratorAdditionTemplates;
         public static Dictionary<string, ITileAddition> SpawnableAdditionTemplates;
+        public static Dictionary<string, ITileAddition> ScriptedAdditions;
 
         public static Texture2D UITargetTexture;
         public static Texture2D UIAvatarRingTexture;
@@ -136,6 +137,7 @@ namespace MyGame
             ItemTemplates = new Dictionary<string, IItems>();
             GeneratorAdditionTemplates = new Dictionary<string, ITileAddition>();
             SpawnableAdditionTemplates = new Dictionary<string, ITileAddition>();
+            ScriptedAdditions = new Dictionary<string, ITileAddition>();
             EnemyTextures = LoadTexturesFromFile(".\\Data\\EnemyTextures.xml");
             AdditionTextures = LoadTexturesFromFile(".\\Data\\GridAdditionTextures.xml");
             ItemTextures = LoadTexturesFromFile(".\\Data\\ItemTextures.xml");
@@ -165,22 +167,16 @@ namespace MyGame
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIBackpack"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UISkills"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIStats"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIResources"));
 
             ItemBackground = Game1._Content.Load<Texture2D>("UI/item_background");
             ItemBorder = Game1._Content.Load<Texture2D>("UI/item_border");
-
-            Swords = new List<Texture2D>();
-            
-            string[] files = Directory.GetFiles("./Content/Items/");
-            foreach (string file in files)
-            {
-                Swords.Add(Game1._Content.Load<Texture2D>("Items/" + file.Split('/')[3].Split('.')[0]));
-            }
         }
         public static void LoadObjectTemplates()
         {
             AdditionFactory.CreateAdditionTemplate(GeneratorAdditionTemplates, "Generatable");
             AdditionFactory.CreateAdditionTemplate(SpawnableAdditionTemplates, "Spawnable");
+            AdditionFactory.CreateAdditionTemplate(ScriptedAdditions, "Scripted");
             CreatureFactory.LoadCreatureTemplate(EnemyTemplates);
             ItemFactory.CreateItemTemplate(ItemTemplates);
         }

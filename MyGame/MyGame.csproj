@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\Output\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\Output\Debug\</OutputPath>
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,6 +42,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 're|x86'">
+    <OutputPath>..\Output\Debug\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="baseClickable.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="UI\Controls\DropDownList.cs" />
     <Compile Include="UI\Controls\FadingLabel.cs" />
     <Compile Include="UI\Controls\Label.cs" />
+    <Compile Include="UI\Controls\ScrollableText.cs" />
     <Compile Include="UI\MainUI.cs" />
     <Compile Include="UI\Controls\ProgresBar.cs" />
     <Compile Include="UI\Controls\UIinterface.cs" />

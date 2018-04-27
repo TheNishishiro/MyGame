@@ -14,6 +14,7 @@ namespace MyGame.GridElements
         void Draw(ref SpriteBatch sb);
         void DrawAddition(ref SpriteBatch sb);
         void AddAddition(ITileAddition addition);
+        void SetAddition(ITileAddition addition);
         void RemoveAddition(ITileAddition addition);
     }
 
@@ -25,5 +26,6 @@ namespace MyGame.GridElements
         int GetRarity();
         ITileAddition CreateCopy(Vector2 position);
         void SetPosition(Vector2 position);
+        Vector2 GetPosition();
     }
 }
