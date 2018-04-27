@@ -47,6 +47,8 @@ namespace MyGame.Items
                 return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
             else if (Type == Names.Shield)
                 return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
+            else if (Type == Names.Book)
+                return new Book(texture, name, Type, Description);
 
             return null;
         }

@@ -9,6 +9,7 @@ TODO: Make damage increase according to skill level
  * Made chests and item pick-ups usable from certain distance
  * Added text displaying if you are too far to open chest/pick up items
  * Added mana regeneration
+ * Added books
 
 4/26/2018
  * Changed da wae inforamtion text is displayed

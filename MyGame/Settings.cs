@@ -49,7 +49,8 @@ namespace MyGame
             Shield = "Shield",
             Weapon = "Weapon",
             Armor = "Armor",
-            Ring = "Ring";
+            Ring = "Ring",
+            Book = "Book";
     }
 
     class Settings

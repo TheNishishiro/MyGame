@@ -114,13 +114,15 @@ namespace MyGame.Items
             if (type == Names.Weapon)
                 return new Weapon(texture, name, type, durability, upgrade, description, skilltype, damage, Attribiutes);
             else if (type == Names.Necklace)
-                return new Necklace(texture, name, type,upgrade, description, Attribiutes);
+                return new Necklace(texture, name, type, upgrade, description, Attribiutes);
             else if (type == Names.Ring)
                 return new Necklace(texture, name, type, upgrade, description, Attribiutes);
             else if (type == Names.Armor)
-                return new Armor(texture, name,type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
+                return new Armor(texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
             else if (type == Names.Shield)
                 return new Armor(texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
+            else if (type == Names.Book)
+                return new Book(texture, name, type, description);
 
             Console.WriteLine("\tLoaded: " + file);
             return null;
