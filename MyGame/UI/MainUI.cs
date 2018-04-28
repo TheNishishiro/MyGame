@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MyGame.Items;
+using MyGame.Spells;
 using MyGame.UI.Controls;
 using NFramework;
 using System;
@@ -18,7 +20,8 @@ namespace MyGame.UI
             Inventory = 0,
             Skills = 1,
             Stats = 2,
-            Resources = 3
+            Resources = 3,
+            Spells = 4
         };
 
         ICreature player;
@@ -30,6 +33,7 @@ namespace MyGame.UI
         public static int InventoryPage = 0;
         public static int StatsPage = 0;
         public static int SkillsPage = 0;
+        public static int SpellsPage = 0;
         static InfoState IS;
 
         Dictionary<string, Button> levelUpButtons = new Dictionary<string, Button>();
@@ -40,6 +44,8 @@ namespace MyGame.UI
         private static Button statsPageUp = new Button(Textures.UIArrowUp, () => SwitchStatsPage(-1));
         private static Button skillsPageDown = new Button(Textures.UIArrowDown, () => SwitchSkillsPage(1));
         private static Button skillsPageUp = new Button(Textures.UIArrowUp, () => SwitchSkillsPage(-1));
+        private static Button spellPageDown = new Button(Textures.UIArrowDown, () => SwitchSpellPage(1));
+        private static Button spellPageUp = new Button(Textures.UIArrowUp, () => SwitchSpellPage(-1));
 
         private static Dictionary<InfoState, Button> SwitchButtons = new Dictionary<InfoState, Button>();
 
@@ -99,7 +105,10 @@ namespace MyGame.UI
         {
             SkillsPage += i;
         }
-
+        private static void SwitchSpellPage(int i)
+        {
+            SpellsPage += i;
+        }
         private void DrawLevelUpButton(ref SpriteBatch sb, Vector2 TextPosition, string name, int offset, int XPlusOffset)
         {
             if (Settings._player.GetLevelPoints() > 0)
@@ -133,6 +142,8 @@ namespace MyGame.UI
                 DrawStats(ref sb);
             else if (IS == InfoState.Resources)
                 DrawResources(ref sb);
+            else if (IS == InfoState.Spells)
+                DrawSpells(ref sb);
         }
 
         private void DrawContainer(ref SpriteBatch sb)
@@ -345,5 +356,41 @@ namespace MyGame.UI
             NDrawing.Draw(ref sb, Textures.UIEqIcons, new Vector2(position.X + 115, position.Y + 5), Color.White, Settings.MainUILayer + 0.0005f);
         }
 
+        private void DrawSpells(ref SpriteBatch sb)
+        {
+            Vector2 TextPosition = new Vector2(position.X + 55, position.Y + 375);
+            int offset = 0;
+            int offsetStep = 25;
+            int XLevelOffset = 100;
+            int XPlusOffset = 110;
+            int i = 0, j = 0;
+
+            sb.DrawString(Settings.font3, "Equiped spells: ", new Vector2(TextPosition.X - 55, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+            offset += offsetStep + offsetStep / 2;
+            foreach (ISpell entry in Settings._player.Spells)
+            {
+                if (i >= SpellsPage && j < 7)
+                {
+                    if(entry != null)
+                        sb.DrawString(Settings.font3, $"F{i+1}: {entry.GetName()}", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+                    else
+                        sb.DrawString(Settings.font3, $"F{i + 1}: -", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+                    offset += offsetStep;
+                    j++;
+                }
+                i++;
+            }
+
+            if (SpellsPage > 0)
+            {
+                spellPageUp.Update(new Vector2(position.X + 243, position.Y + 470), true, 10);
+                spellPageUp.Draw(ref sb);
+            }
+            if (SpellsPage + 7 < Settings._player.Spells.Length)
+            {
+                spellPageDown.Update(new Vector2(position.X + 243, position.Y + 470 + 19), true, 10);
+                spellPageDown.Draw(ref sb);
+            }
+        }
     }
 }

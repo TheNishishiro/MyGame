@@ -1,6 +1,14 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
 
+4/28/2018
+ * Implemented Spells (took damn while, I'm still not really proud of it)
+ * Made miracles heal player
+ * Made offensive spells damage enemies
+ * Added functionality to Faith stat, it increases healing from miracles
+ * Added UI tab for spells
+ * Added F hotkeys for spells
+
 4/27/2018
  * Moved scrollabe text to be a seperate control
  * Made scrollable texts scroll buttons Y position relative to number of lines displayed

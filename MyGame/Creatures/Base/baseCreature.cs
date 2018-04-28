@@ -5,6 +5,7 @@ using MyGame.GridElements;
 using MyGame.GridElements.Specials;
 using MyGame.Items;
 using MyGame.Items.ItemTypes;
+using MyGame.Spells;
 using MyGame.UI;
 using MyGame.UI.Controls;
 using NFramework;
@@ -105,11 +106,23 @@ namespace MyGame.Creatures
 
             if (Settings.rnd.Next(5000) > 4990 && Dialogs.Count > 0 && fighting)
                 FL.Add(new FadingLabel(Dialogs[Settings.rnd.Next(Dialogs.Count)], Position, Color.White, 0.2f));
-
+            CollisionWithSpells();
             UpdateBounds();
             if(canMove)
                 Move();
             healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
+        }
+
+        public void CollisionWithSpells()
+        {
+            foreach (SpellCell sc in Global.spellCells.ToArray())
+            {
+                if(sc.Position.Intersects(bounds))
+                {
+                    baseStats[HP] -= sc.Damage;
+                    sc.Damage = 0;
+                }
+            }
         }
 
         public virtual void Draw(ref SpriteBatch sb)
@@ -181,7 +194,8 @@ namespace MyGame.Creatures
 
         protected void RegenerateMana()
         {
-
+            if (baseStats[Mana] < 0)
+                baseStats[Mana] = 0;
             if (baseStats[Mana] < baseStats[Mana_max] && MPRegenTimer <= 0)
             {
                 AddMana(baseStats[ManaRegeneration]);
@@ -258,7 +272,7 @@ namespace MyGame.Creatures
             if (baseStats[HP] > baseStats[HP_max])
                 baseStats[HP] = baseStats[HP_max];
         }
-        public void AddMana(int amount)
+        public virtual void AddMana(int amount)
         {
             baseStats[Mana] += amount;
             if (baseStats[Mana] > baseStats[Mana_max])

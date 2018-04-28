@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MyGame.Creatures;
 using MyGame.GridElements;
 using MyGame.Items;
+using MyGame.Spells;
 using MyGame.UI;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,11 @@ namespace MyGame
             Armor = "Armor",
             Ring = "Ring",
             Book = "Book";
+    }
+
+    class Global
+    {
+        public static List<SpellCell> spellCells = new List<SpellCell>();
     }
 
     class Settings
@@ -102,17 +108,17 @@ namespace MyGame
         public static Texture2D ItemBackground;
         public static Texture2D ItemBorder;
 
-        public static List<Texture2D> Swords;
-
         public static Dictionary<string, Texture2D> EnemyTextures;
         public static Dictionary<string, Texture2D> AdditionTextures;
         public static Dictionary<string, Texture2D> ItemTextures;
+        public static Dictionary<string, Texture2D> SpellTextures;
 
         public static Dictionary<string, ICreature> EnemyTemplates;
         public static Dictionary<string, IItems> ItemTemplates;
         public static Dictionary<string, ITileAddition> GeneratorAdditionTemplates;
         public static Dictionary<string, ITileAddition> SpawnableAdditionTemplates;
         public static Dictionary<string, ITileAddition> ScriptedAdditions;
+        public static Dictionary<string, ISpell> SpellTemplates;
 
         public static Texture2D UITargetTexture;
         public static Texture2D UIAvatarRingTexture;
@@ -133,15 +139,19 @@ namespace MyGame
             EnemyTextures = new Dictionary<string, Texture2D>();
             AdditionTextures = new Dictionary<string, Texture2D>();
             ItemTextures = new Dictionary<string, Texture2D>();
+            SpellTextures = new Dictionary<string, Texture2D>();
 
             EnemyTemplates = new Dictionary<string, ICreature>();
             ItemTemplates = new Dictionary<string, IItems>();
             GeneratorAdditionTemplates = new Dictionary<string, ITileAddition>();
             SpawnableAdditionTemplates = new Dictionary<string, ITileAddition>();
             ScriptedAdditions = new Dictionary<string, ITileAddition>();
+            SpellTemplates = new Dictionary<string, ISpell>();
+
             EnemyTextures = LoadTexturesFromFile(".\\Data\\EnemyTextures.xml");
             AdditionTextures = LoadTexturesFromFile(".\\Data\\GridAdditionTextures.xml");
             ItemTextures = LoadTexturesFromFile(".\\Data\\ItemTextures.xml");
+            SpellTextures = LoadTexturesFromFile(".\\Data\\SpellTextures.xml");
             LoadObjectTemplates();
 
 
@@ -169,6 +179,7 @@ namespace MyGame
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UISkills"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIStats"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIResources"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UISpells"));
 
             ItemBackground = Game1._Content.Load<Texture2D>("UI/item_background");
             ItemBorder = Game1._Content.Load<Texture2D>("UI/item_border");
@@ -180,6 +191,7 @@ namespace MyGame
             AdditionFactory.CreateAdditionTemplate(ScriptedAdditions, "Scripted");
             CreatureFactory.LoadCreatureTemplate(EnemyTemplates);
             ItemFactory.CreateItemTemplate(ItemTemplates);
+            SpellFactory.CreateSpellTemplate(SpellTemplates);
         }
 
         public static Dictionary<string, Texture2D> LoadTexturesFromFile(string path)

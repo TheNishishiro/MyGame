@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MyGame.Creatures;
 using MyGame.GridElements;
 using MyGame.Items;
+using MyGame.Spells;
 using MyGame.UI;
 using NFramework;
 using System;
@@ -212,6 +213,8 @@ namespace MyGame
             }
             CreatureFactory.ClearCreaturesOutsideBounds(creatures);
 
+            
+
             _player.Update();
             cursor.Update();
             NCamera.Camera_Bound(_player.GetBounds());
@@ -284,6 +287,12 @@ namespace MyGame
             }
             grid.DrawAdditions(ref spriteBatch, _player.Position, Settings.RenderDistance);
             grid.Draw(ref spriteBatch, _player.Position, Settings.RenderDistance);
+
+            foreach (SpellCell sc in Global.spellCells.ToArray())
+            {
+                sc.Update();
+                sc.Draw(ref spriteBatch);
+            }
 
             cursor.Draw(ref spriteBatch);
 

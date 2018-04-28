@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Windows\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -53,8 +53,14 @@
     <Compile Include="Creatures\baseEnemy.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
     <Compile Include="Creatures\CreatureFactory.cs" />
-    <Compile Include="Cursor.cs" />
-    <Compile Include="FightingManager.cs" />
+    <Compile Include="Spells\baseSpell.cs" />
+    <Compile Include="Spells\ISpell.cs" />
+    <Compile Include="Spells\Miracle.cs" />
+    <Compile Include="Spells\Spell.cs" />
+    <Compile Include="Spells\SpellCell.cs" />
+    <Compile Include="Spells\SpellFactory.cs" />
+    <Compile Include="UI\Cursor.cs" />
+    <Compile Include="Creatures\FightingManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GridElements\Addition.cs" />
     <Compile Include="GridElements\AdditionFactory.cs" />

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MyGame.Creatures;
 using MyGame.Items;
+using MyGame.Spells;
 using MyGame.UI;
 using MyGame.UI.Controls;
 using NFramework;
@@ -22,6 +23,7 @@ namespace MyGame
         public Dictionary<string, int> Stats = new Dictionary<string, int>();
         public Dictionary<string, int> Skills = new Dictionary<string, int>();
         public List<IItems> Inventory = new List<IItems>();
+        public ISpell[] Spells = new ISpell[12];
         public Dictionary<string, int> Materials = new Dictionary<string, int>();
         public Dictionary<string, IItems> Equiped = new Dictionary<string, IItems>();
 
@@ -79,9 +81,17 @@ namespace MyGame
             Stats.Add(Names.Luck, 1); // Implemented in Die() in baseCreature
             Stats.Add(Names.Greed, 1); // Implemented in AddGold() in baseEntity
             Stats.Add(Names.Survivability, 1); // Effects not implemented
-            Stats.Add(Names.Faith, 1); // Effects not implemented
+            Stats.Add(Names.Faith, 1); // Implemented in Cast() in Miracle
             Stats.Add(Names.Resistance, 1); // Implemented in TakeDamage()
             Stats.Add(Names.Endurance, 1);
+
+            for(int i = 0; i < 12; i++)
+            {
+                Spells[i] = null;
+            }
+
+            Spells[0] = Textures.SpellTemplates["1"].CreateCopy();
+            Spells[1] = Textures.SpellTemplates["2"].CreateCopy();
         }
 
         private void SetUpSkill(string name)
@@ -122,6 +132,7 @@ namespace MyGame
             RegenerateHP();
             RegenerateMana();
             UpdateSkills();
+            CheckSpellCast();
         }
 
         private void CalculateStatsBonuses()
@@ -153,6 +164,61 @@ namespace MyGame
                 DPL.AddButton("Add item", () => AddItem());
             }
             DPL.AddButton("Quit", () => quitMenu());
+        }
+
+        public override void AddMana(int amount)
+        {
+            base.AddMana(amount);
+
+            if(amount < 0)
+            {
+                baseStats[Magic_Level_points] -= amount / 2;
+                if(baseStats[Magic_Level_points] >= baseStats[Magic_Level_max_points])
+                {
+                    baseStats[Magic_Level]++;
+                    baseStats[Magic_Level_points] = 0;
+                    baseStats[Magic_Level_max_points] += 50;
+                }
+            }
+        }
+
+        public void CheckSpellCast()
+        {
+            NControls._NewKeyState();
+            if (NControls.GetSingleKeyPress(Keys.F1) && Spells[0] != null)
+                CastSpell(0);
+            else if (NControls.GetSingleKeyPress(Keys.F2) && Spells[1] != null)
+                CastSpell(1);
+            else if (NControls.GetSingleKeyPress(Keys.F3) && Spells[2] != null)
+                CastSpell(2);
+            else if (NControls.GetSingleKeyPress(Keys.F4) && Spells[3] != null)
+                CastSpell(3);
+            else if (NControls.GetSingleKeyPress(Keys.F5) && Spells[4] != null)
+                CastSpell(4);
+            else if (NControls.GetSingleKeyPress(Keys.F6) && Spells[5] != null)
+                CastSpell(5);
+            else if (NControls.GetSingleKeyPress(Keys.F7) && Spells[6] != null)
+                CastSpell(6);
+            else if (NControls.GetSingleKeyPress(Keys.F8) && Spells[7] != null)
+                CastSpell(7);
+            else if (NControls.GetSingleKeyPress(Keys.F9) && Spells[8] != null)
+                CastSpell(8);
+            else if (NControls.GetSingleKeyPress(Keys.F10) && Spells[9] != null)
+                CastSpell(9);
+            else if (NControls.GetSingleKeyPress(Keys.F11) && Spells[10] != null)
+                CastSpell(10);
+            else if (NControls.GetSingleKeyPress(Keys.F11) && Spells[11] != null)
+                CastSpell(11);
+            NControls._OldKeyState();
+        }
+
+        public void CastSpell(int id)
+        {
+            if (Spells[id].GetManaCost() <= baseStats[Mana])
+            {
+                Spells[id].Cast(Position);
+                AddMana(-Spells[id].GetManaCost());
+            }
         }
 
         public void AddItem()
