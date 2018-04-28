@@ -53,6 +53,7 @@
     <Compile Include="Creatures\baseEnemy.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
     <Compile Include="Creatures\CreatureFactory.cs" />
+    <Compile Include="Items\ItemTypes\Scroll.cs" />
     <Compile Include="Spells\baseSpell.cs" />
     <Compile Include="Spells\ISpell.cs" />
     <Compile Include="Spells\Miracle.cs" />

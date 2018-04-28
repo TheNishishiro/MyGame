@@ -23,6 +23,11 @@ namespace MyGame.Items.ItemTypes
 
         }
 
+        public override IItems CreateCopy()
+        {
+            return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
+        }
+
         protected override void SetButtons()
         {
             SetEquipableButtons(Equiped);

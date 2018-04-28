@@ -35,22 +35,9 @@ namespace MyGame.Items
             layerDepth = Settings.MainUILayer;
         }
 
-        public IItems CreateCopy()
+        public virtual IItems CreateCopy()
         {
-            if (Type == Names.Weapon)
-                return new Weapon(texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
-            else if (Type == Names.Necklace)
-                return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
-            else if (Type == Names.Ring)
-                return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
-            else if (Type == Names.Armor)
-                return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
-            else if (Type == Names.Shield)
-                return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
-            else if (Type == Names.Book)
-                return new Book(texture, name, Type, Description);
-
-            return null;
+            throw new NotImplementedException();
         }
 
         public virtual void Update()

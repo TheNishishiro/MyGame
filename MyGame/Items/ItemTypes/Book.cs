@@ -18,6 +18,11 @@ namespace MyGame.Items.ItemTypes
             Type = type;
         }
 
+        public override IItems CreateCopy()
+        {
+            return new Book(texture, name, Type, Description);
+        }
+
         protected override void SetButtons()
         {
             DPL.AddButton("Read", () => ShowInfo());

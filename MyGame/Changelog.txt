@@ -8,6 +8,8 @@ TODO: Make damage increase according to skill level
  * Added functionality to Faith stat, it increases healing from miracles
  * Added UI tab for spells
  * Added F hotkeys for spells
+ * Added scrolls with spells which you can then assign under hotkeys 
+ * Made item copying method virtual and is now being overriden by their classes
 
 4/27/2018
  * Moved scrollabe text to be a seperate control

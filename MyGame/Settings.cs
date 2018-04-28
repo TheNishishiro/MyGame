@@ -51,7 +51,8 @@ namespace MyGame
             Weapon = "Weapon",
             Armor = "Armor",
             Ring = "Ring",
-            Book = "Book";
+            Book = "Book",
+            Scroll = "Scroll";
     }
 
     class Global

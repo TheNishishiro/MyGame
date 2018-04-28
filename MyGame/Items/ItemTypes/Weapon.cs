@@ -28,6 +28,11 @@ namespace MyGame.Items.ItemTypes
 
         }
 
+        public override IItems CreateCopy()
+        {
+            return new Weapon(texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
+        }
+
         protected override void SetButtons()
         {
             SetEquipableButtons(Equiped);

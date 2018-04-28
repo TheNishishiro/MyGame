@@ -64,6 +64,7 @@ namespace MyGame.Items
             Dictionary<string, int> DefenceTypes = new Dictionary<string, int>();
             Dictionary<string, int> Attribiutes = new Dictionary<string, int>();
             string name=""; string type = ""; int durability=0; int upgrade=0; string description="";
+            string spellID = "";
             foreach (string line in lines)
             {
                 if (line != "")
@@ -104,6 +105,9 @@ namespace MyGame.Items
                         case "attribiute":
                             Attribiutes.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                             break;
+                        case "spellid":
+                            spellID = convertedProperty;
+                            break;
                         case "defence":
                             DefenceTypes.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                             break;
@@ -123,6 +127,8 @@ namespace MyGame.Items
                 return new Armor(texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
             else if (type == Names.Book)
                 return new Book(texture, name, type, description);
+            else if (type == Names.Scroll)
+                return new Scroll(texture, spellID, name, type, description);
 
             Console.WriteLine("\tLoaded: " + file);
             return null;
