@@ -100,6 +100,7 @@ namespace MyGame.SaveManagers
 
                     Settings._player.SetWalkable(true);
                     Settings._player.Position = new Vector2((float)(Math.Floor(double.Parse(_line.Split(',')[0])) * Settings.GridSize), (float)(Math.Floor(double.Parse(_line.Split(',')[1])) * Settings.GridSize));
+                    Settings._player.SetWalkable(false);
 
                     while (true)
                     {

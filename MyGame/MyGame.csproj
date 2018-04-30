@@ -78,7 +78,7 @@
     <Compile Include="GridElements\Specials\Bag.cs" />
     <Compile Include="GridElements\Specials\Chest.cs" />
     <Compile Include="GridElements\TileInterfaces.cs" />
-    <Compile Include="GridElements\TileTypes\Grass.cs" />
+    <Compile Include="GridElements\TileTypes\BasicTile.cs" />
     <Compile Include="Creatures\Base\CreatureInterfaces.cs" />
     <Compile Include="Creatures\Player.cs" />
     <Compile Include="Items\baseItems.cs" />

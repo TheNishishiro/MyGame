@@ -37,9 +37,9 @@ namespace MyGame.GridElements
             return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, Walkable, IsClickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
         }
 
-        public virtual void Draw(ref SpriteBatch sb)
+        public virtual void Draw(ref SpriteBatch sb, float layerIncrease)
         {
-            NDrawing.Draw(ref sb, texture, new Vector2(Position.X + (Settings.GridSize - texture.Width), Position.Y + (Settings.GridSize - texture.Height)), color, layerDepth);
+            NDrawing.Draw(ref sb, texture, new Vector2(Position.X + (Settings.GridSize - texture.Width), Position.Y + (Settings.GridSize - texture.Height)), color, layerDepth + layerIncrease);
             if (IsClickable)
                 Update(ref sb, resource, amount);
             if (IsTimeLimited)

@@ -27,12 +27,21 @@ namespace MyGame.GridElements
         {
             if (addition != null)
             {
+                float j = 0;
                 for (int i = 0; i < addition.Count; i++)
                 {
                     if (i < addition.Count)
-                        addition[i].Draw(ref sb);
+                    {
+                        addition[i].Draw(ref sb, j);
+                        j += 0.00001f;
+                    }
                 }
             }
+        }
+
+        public Texture2D GetTexture()
+        {
+            return texture;
         }
 
         public void GenerateAddition()
@@ -62,5 +71,10 @@ namespace MyGame.GridElements
         {
             this.addition.Remove(addition);
         }
+        public void RemoveAdditions()
+        {
+            addition = new List<ITileAddition>();
+        }
+
     }
 }

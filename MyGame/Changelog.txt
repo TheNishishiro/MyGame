@@ -1,5 +1,6 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
+TODO: Look into optimising memory usage of water sides
 
 4/30/2018
  * Added item crafting
@@ -14,6 +15,9 @@ TODO: Make damage increase according to skill level
  * Added folder checks for Data folder, creates structure if missing, unable to fix it just yet tho
  * Added position saving for player
  * Fixed position loading not setting proper walkable tile
+ * Added rivers to generator
+ * Added water smoothing
+ * Fixed objects overlapping on the same layer
 
 4/29/2018
  * Added consumables

@@ -111,6 +111,10 @@ namespace MyGame
         public static Texture2D ItemBackground;
         public static Texture2D ItemBorder;
 
+        public static Texture2D Grass;
+        public static Texture2D Water;
+        public static Texture2D[] WaterSides = new Texture2D[4];
+
         public static Dictionary<string, Texture2D> EnemyTextures;
         public static Dictionary<string, Texture2D> AdditionTextures;
         public static Dictionary<string, Texture2D> ItemTextures;
@@ -139,6 +143,14 @@ namespace MyGame
 
         public static void LoadTextures()
         {
+            Grass = Game1._Content.Load<Texture2D>("grass");
+            Water = Game1._Content.Load<Texture2D>("water");
+
+            WaterSides[0] = Game1._Content.Load<Texture2D>("waterL");
+            WaterSides[1] = Game1._Content.Load<Texture2D>("waterU");
+            WaterSides[2] = Game1._Content.Load<Texture2D>("waterR");
+            WaterSides[3] = Game1._Content.Load<Texture2D>("waterD");
+
             EnemyTextures = new Dictionary<string, Texture2D>();
             AdditionTextures = new Dictionary<string, Texture2D>();
             ItemTextures = new Dictionary<string, Texture2D>();

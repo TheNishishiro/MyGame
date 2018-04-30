@@ -16,16 +16,19 @@ namespace MyGame.GridElements
         void AddAddition(ITileAddition addition);
         void SetAddition(ITileAddition addition);
         void RemoveAddition(ITileAddition addition);
+        void RemoveAdditions();
+        Texture2D GetTexture();
     }
 
     interface ITileAddition
     {
         bool Walkable { get; set; }
-        void Draw(ref SpriteBatch sb);
+        void Draw(ref SpriteBatch sb, float layerIncrease);
         void RemoveAdditionFromGrid();
         int GetRarity();
         ITileAddition CreateCopy(Vector2 position);
         void SetPosition(Vector2 position);
         Vector2 GetPosition();
+        
     }
 }

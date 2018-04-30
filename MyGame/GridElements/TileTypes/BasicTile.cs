@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace MyGame.GridElements.TileTypes
 {
-    class Grass : baseTile
+    class BasicTile : baseTile
     {
-        public Grass(Texture2D texture, int x, int y)
+        public BasicTile(Texture2D texture, int x, int y, bool Walkable = true)
         {
             this.texture = texture;
             position = new Vector2(x * 32, y * 32);
-            Walkable = true;
+            this.Walkable = Walkable;
             GenerateAddition();
         }
     }
