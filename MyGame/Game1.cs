@@ -28,11 +28,12 @@ namespace MyGame
         List<ICreature> creatures;
         List<FightingManager> fights = new List<FightingManager>();
         bool GotFirstGC = false;
-        bool debug = false;
+        static bool debug = false;
+        static bool canExit = false;
         long MemoryUsageAtStart = 0, MemoryUsageDifference = 0, CurrentMemoryUsage = 0;
 
 
-        Thread GCInfo, DebugConsole;
+        static Thread GCInfo, DebugConsole;
 
 
         private void GetGCInfo()
@@ -108,6 +109,27 @@ namespace MyGame
             }
         }
 
+        public static void ToggleFullScreen()
+        {
+            graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
+        }
+        public static void ToggleGCINFO()
+        {
+            debug = !debug;
+            if (GCInfo != null)
+            {
+                if (GCInfo.ThreadState == ThreadState.Suspended)
+                    GCInfo.Resume();
+                else
+                    GCInfo.Suspend();
+            }
+        }
+        public static void _Exit()
+        {
+            canExit = true;
+        }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -162,7 +184,7 @@ namespace MyGame
 
             graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth * 1.3);
             graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight * 1.3);
-            graphics.HardwareModeSwitch = false; 
+            graphics.HardwareModeSwitch = true; 
 
             
             graphics.ApplyChanges();
@@ -226,36 +248,10 @@ namespace MyGame
                 GCInfo = new Thread(GetGCInfo);
                 GCInfo.Start();
             }
-            
-            NControls._NewKeyState();
-                KeyboardShortcuts();
-            NControls._OldKeyState();
 
-            base.Update(gameTime);
-        }
-
-        protected void KeyboardShortcuts()
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
+            if (canExit)
                 Exit();
-            }
-            if (NControls.GetSingleKeyPress(Keys.L))
-            {
-                debug = !debug;
-                if (GCInfo != null)
-                {
-                    if (GCInfo.ThreadState == ThreadState.Suspended)
-                        GCInfo.Resume();
-                    else
-                        GCInfo.Suspend();
-                }
-            }
-            if (NControls.GetSingleKeyPress(Keys.P))
-            {
-                graphics.ToggleFullScreen();
-                graphics.ApplyChanges();
-            }
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

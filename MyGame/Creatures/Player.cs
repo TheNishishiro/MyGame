@@ -123,18 +123,32 @@ namespace MyGame
             Move();
             UpdateBounds();
             CalculateStatsBonuses();
-            healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
-            if (baseStats[HP] < 0)
-                baseStats[HP] = 0;
+            KeepStatsInBounds();
 
-            if (baseStats[Exp] >= baseStats[Exp_max])
-                LevelUp();
+            healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
+            
+
+            
             RegenerateHP();
             RegenerateMana();
             UpdateSkills();
             CheckSpellCast();
         }
-
+        private void KeepStatsInBounds()
+        {
+            if (baseStats[HP] > baseStats[HP_max])
+                baseStats[HP] = baseStats[HP_max];
+            if (baseStats[Mana] > baseStats[Mana_max])
+                baseStats[Mana] = baseStats[Mana_max];
+            if (baseStats[Exp] >= baseStats[Exp_max])
+                LevelUp();
+            if (baseStats[HP] < 0)
+                baseStats[HP] = 0;
+            if (baseStats[Mana] < 0)
+                baseStats[Mana] = 0;
+            if (baseStats[Exp] < 0)
+                baseStats[Exp] = 0;
+        }
         private void CalculateStatsBonuses()
         {
 

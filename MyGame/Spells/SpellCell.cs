@@ -15,16 +15,14 @@ namespace MyGame.Spells
         Texture2D texture;
         int LifeTime;
 
-        public int Damage;
+        public Dictionary<string, int> Damage;
         
-        public SpellCell(Rectangle Position, Texture2D texture, int Damage, int LifeTime)
+        public SpellCell(Rectangle Position, Texture2D texture, Dictionary<string, int> Damage, int LifeTime)
         {
             this.texture = texture;
             this.Position = Position;
             this.LifeTime = LifeTime;
             this.Damage = Damage;
-            if (this.Damage < 0)
-                this.Damage = 0;
         }
 
         public void Update()

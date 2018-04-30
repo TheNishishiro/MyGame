@@ -21,7 +21,9 @@ namespace MyGame.UI
             Skills = 1,
             Stats = 2,
             Resources = 3,
-            Spells = 4
+            Spells = 4,
+            Crafting = 5,
+            Menu = 6
         };
 
         ICreature player;
@@ -35,6 +37,8 @@ namespace MyGame.UI
         public static int SkillsPage = 0;
         public static int SpellsPage = 0;
         static InfoState IS;
+
+        private static Button CraftButton = new Button("Craft", () => Crafting.CraftItem(), 0);
 
         Dictionary<string, Button> levelUpButtons = new Dictionary<string, Button>();
 
@@ -144,6 +148,10 @@ namespace MyGame.UI
                 DrawResources(ref sb);
             else if (IS == InfoState.Spells)
                 DrawSpells(ref sb);
+            else if (IS == InfoState.Crafting)
+                DrawCrafting(ref sb);
+            else if (IS == InfoState.Menu)
+                DrawMenu(ref sb);
         }
 
         private void DrawContainer(ref SpriteBatch sb)
@@ -391,6 +399,56 @@ namespace MyGame.UI
                 spellPageDown.Update(new Vector2(position.X + 243, position.Y + 470 + 19), true, 10);
                 spellPageDown.Draw(ref sb);
             }
+        }
+
+        private void DrawCrafting(ref SpriteBatch sb)
+        {
+            // Slot 1
+            NDrawing.Draw(ref sb, Textures.ItemBackground, new Vector2(position.X + 130, position.Y + 400), Color.White, Settings.MainUILayer + 0.0009f);
+            if(Crafting.Slot1!=null)
+                Crafting.Slot1.Draw(ref sb, new Vector2(position.X + 130, position.Y + 400));
+            NDrawing.Draw(ref sb, Textures.ItemBorder, new Vector2(position.X + 130, position.Y + 400), Color.White, Settings.MainUILayer + 0.0011f);
+
+            // Slot 2
+            NDrawing.Draw(ref sb, Textures.ItemBackground, new Vector2(position.X + 50, position.Y + 540), Color.White, Settings.MainUILayer + 0.0009f);
+            if (Crafting.Slot2 != null)
+                Crafting.Slot2.Draw(ref sb, new Vector2(position.X + 50, position.Y + 540));
+            NDrawing.Draw(ref sb, Textures.ItemBorder, new Vector2(position.X + 50, position.Y + 540), Color.White, Settings.MainUILayer + 0.0011f);
+
+            // Slot 3
+            NDrawing.Draw(ref sb, Textures.ItemBackground, new Vector2(position.X + 200, position.Y + 540), Color.White, Settings.MainUILayer + 0.0009f);
+            if (Crafting.Slot3 != null)
+                Crafting.Slot3.Draw(ref sb, new Vector2(position.X + 200, position.Y + 540));
+            NDrawing.Draw(ref sb, Textures.ItemBorder, new Vector2(position.X + 200, position.Y + 540), Color.White, Settings.MainUILayer + 0.0011f);
+
+            // Result
+            NDrawing.Draw(ref sb, Textures.ItemBackground, new Vector2(position.X + 130, position.Y + 480), Color.White, Settings.MainUILayer + 0.0009f);
+            if (Crafting.Result != null)
+                Crafting.Result.Draw(ref sb, new Vector2(position.X + 130, position.Y + 480));
+            NDrawing.Draw(ref sb, Textures.ItemBorder, new Vector2(position.X + 130, position.Y + 480), Color.White, Settings.MainUILayer + 0.0011f);
+
+            CraftButton.Update(new Vector2(position.X + 85, position.Y + 560), 50);
+            CraftButton.Draw(ref sb);
+        }
+
+        Button FullScreen = new Button("Toggle fullscreen", () => Game1.ToggleFullScreen(), 0);
+        Button DebugInfo = new Button("Toggle GC informations", () => Game1.ToggleGCINFO(), 0);
+        Button ExitGame = new Button("Exit game", () => Game1._Exit(), 0);
+        private void DrawMenu(ref SpriteBatch sb)
+        {
+            
+            Vector2 buttonsStart = new Vector2(position.X + 10, position.Y + 380);
+            int offset = 0, offsetStep = 30; ;
+
+            FullScreen.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
+            FullScreen.Draw(ref sb);
+            offset += offsetStep;
+            DebugInfo.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
+            DebugInfo.Draw(ref sb);
+            offset += offsetStep;
+            ExitGame.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
+            ExitGame.Draw(ref sb);
+            offset += offsetStep;
         }
     }
 }

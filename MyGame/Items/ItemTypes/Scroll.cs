@@ -11,9 +11,10 @@ namespace MyGame.Items.ItemTypes
     {
         string spellID;
 
-        public Scroll(Texture2D texture, string spellID, string name, string type, string description)
+        public Scroll(string ID, Texture2D texture, string spellID, string name, string type, string description)
         {
             Init();
+            this.ID = ID;
             this.texture = texture;
             this.name = name;
             Description = description;
@@ -24,26 +25,34 @@ namespace MyGame.Items.ItemTypes
 
         public override IItems CreateCopy()
         {
-            return new Scroll(texture, SkillType, name, Type, Description);
+            return new Scroll(ID, texture, SkillType, name, Type, Description);
         }
 
         protected override void SetButtons()
         {
+            if (!InCrafting && !IsCraftingResult)
+            {
+                DPL.AddButton("Drop", () => Drop());
+                DPL.AddButton("Assign to hotkey 1", () => AssignHotkey(0));
+                DPL.AddButton("Assign to hotkey 2", () => AssignHotkey(1));
+                DPL.AddButton("Assign to hotkey 3", () => AssignHotkey(2));
+                DPL.AddButton("Assign to hotkey 4", () => AssignHotkey(3));
+                DPL.AddButton("Assign to hotkey 5", () => AssignHotkey(4));
+                DPL.AddButton("Assign to hotkey 6", () => AssignHotkey(5));
+                DPL.AddButton("Assign to hotkey 7", () => AssignHotkey(6));
+                DPL.AddButton("Assign to hotkey 8", () => AssignHotkey(7));
+                DPL.AddButton("Assign to hotkey 9", () => AssignHotkey(8));
+                DPL.AddButton("Assign to hotkey 10", () => AssignHotkey(9));
+                DPL.AddButton("Assign to hotkey 11", () => AssignHotkey(10));
+                DPL.AddButton("Assign to hotkey 12", () => AssignHotkey(11));
+            }
+            else if (InCrafting)
+                DPL.AddButton("Take out", () => TakeFromCrafting());
+            else if (IsCraftingResult)
+                DPL.AddButton("Take out", () => TakeFromCraftingResult());
+
+
             DPL.AddButton("Information", () => ShowInfo());
-
-            DPL.AddButton("Assign to hotkey 1", () => AssignHotkey(0));
-            DPL.AddButton("Assign to hotkey 2", () => AssignHotkey(1));
-            DPL.AddButton("Assign to hotkey 3", () => AssignHotkey(2));
-            DPL.AddButton("Assign to hotkey 4", () => AssignHotkey(3));
-            DPL.AddButton("Assign to hotkey 5", () => AssignHotkey(4));
-            DPL.AddButton("Assign to hotkey 6", () => AssignHotkey(5));
-            DPL.AddButton("Assign to hotkey 7", () => AssignHotkey(6));
-            DPL.AddButton("Assign to hotkey 8", () => AssignHotkey(7));
-            DPL.AddButton("Assign to hotkey 9", () => AssignHotkey(8));
-            DPL.AddButton("Assign to hotkey 10", () => AssignHotkey(9));
-            DPL.AddButton("Assign to hotkey 11", () => AssignHotkey(10));
-            DPL.AddButton("Assign to hotkey 12", () => AssignHotkey(11));
-
             DPL.AddButton("Exit", () => quitMenu());
         }
 

@@ -1,6 +1,19 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
 
+4/30/2018
+ * Added item crafting
+ * Added harvesting objects
+ * Added elemental damage to spells
+ * Added menu button to MainUI
+	- Added button to toggle fullscreen
+	- Added button to toggle garbage collector info
+	- Added exit game button
+
+4/29/2018
+ * Added consumables
+ * Added misc items
+
 4/28/2018
  * Implemented Spells (took damn while, I'm still not really proud of it)
  * Made miracles heal player
@@ -10,6 +23,7 @@ TODO: Make damage increase according to skill level
  * Added F hotkeys for spells
  * Added scrolls with spells which you can then assign under hotkeys 
  * Made item copying method virtual and is now being overriden by their classes
+ * Added fix item button
 
 4/27/2018
  * Moved scrollabe text to be a seperate control

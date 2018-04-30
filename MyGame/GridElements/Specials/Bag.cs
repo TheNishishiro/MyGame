@@ -29,6 +29,20 @@ namespace MyGame.GridElements.Specials
             action = () => PickUpItem();
         }
 
+        protected override void SetButtons()
+        {
+            base.SetButtons();
+            if (ButtonRename != null)
+            {
+                DPL.RenameElement(0, ButtonRename);
+            }
+            if (action != null)
+            {
+                DPL.EditButtonAction(0, action);
+            }
+
+        }
+
         public override ITileAddition CreateCopy(Vector2 position)
         {
             bounds = new Rectangle((int)position.X, (int)position.Y, 32, 32);

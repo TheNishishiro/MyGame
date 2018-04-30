@@ -46,6 +46,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 're|x86'">
     <OutputPath>..\Output\Debug\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Output|x86'">
+    <OutputPath>..\Output\Debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="baseClickable.cs" />
     <Compile Include="baseEntity.cs" />
@@ -53,6 +56,9 @@
     <Compile Include="Creatures\baseEnemy.cs" />
     <Compile Include="Creatures\Base\baseCreature.cs" />
     <Compile Include="Creatures\CreatureFactory.cs" />
+    <Compile Include="Items\Crafting.cs" />
+    <Compile Include="Items\ItemTypes\Consumable.cs" />
+    <Compile Include="Items\ItemTypes\Misc.cs" />
     <Compile Include="Items\ItemTypes\Scroll.cs" />
     <Compile Include="Spells\baseSpell.cs" />
     <Compile Include="Spells\ISpell.cs" />

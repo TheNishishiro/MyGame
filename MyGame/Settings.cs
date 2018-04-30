@@ -52,7 +52,9 @@ namespace MyGame
             Armor = "Armor",
             Ring = "Ring",
             Book = "Book",
-            Scroll = "Scroll";
+            Scroll = "Scroll",
+            Consumable = "Consumable",
+            Misc = "Misc";
     }
 
     class Global
@@ -181,6 +183,8 @@ namespace MyGame
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIStats"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIResources"));
             UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UISpells"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UICraft"));
+            UIButtons.Add(Game1._Content.Load<Texture2D>("UI/UIMenu"));
 
             ItemBackground = Game1._Content.Load<Texture2D>("UI/item_background");
             ItemBorder = Game1._Content.Load<Texture2D>("UI/item_border");

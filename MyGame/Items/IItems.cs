@@ -18,6 +18,8 @@ namespace MyGame.Items
         void Use();
         void DecreaseDurability();
         void Break();
+        void SetAsCraftingResult();
+        string GetID();
         string GetName();
         string GetSkill();
         float GetDefence(string type);

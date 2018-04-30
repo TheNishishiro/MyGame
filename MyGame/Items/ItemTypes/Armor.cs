@@ -9,9 +9,12 @@ namespace MyGame.Items.ItemTypes
 {
     class Armor : baseItems
     {
-        public Armor(Texture2D texture, string name, string type, int durability, int upgrade, string description, string SkillType, Dictionary<string, int> Defences, Dictionary<string, int> Attribiutes)
+        
+
+        public Armor(string ID, Texture2D texture, string name, string type, int durability, int upgrade, string description, string SkillType, Dictionary<string, int> Defences, Dictionary<string, int> Attribiutes)
         {
             Init();
+            this.ID = ID;
             this.Attribiutes = Attribiutes;
             _durability = durability;
             _upgrade = upgrade;
@@ -34,11 +37,12 @@ namespace MyGame.Items.ItemTypes
 
         public override IItems CreateCopy()
         {
-            return new Armor(texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
+            return new Armor(ID, texture, name, Type, _durability, _upgrade, Description, SkillType, defences, Attribiutes);
         }
 
         protected override void SetButtons()
         {
+
             SetEquipableButtons(Equiped);
         }
 

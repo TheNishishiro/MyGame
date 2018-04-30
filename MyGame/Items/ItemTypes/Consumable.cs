@@ -7,38 +7,48 @@ using System.Threading.Tasks;
 
 namespace MyGame.Items.ItemTypes
 {
-    class Book : baseItems
+    class Consumable : baseItems
     {
-        public Book(string ID, Texture2D texture, string name, string type, string description)
+        public Consumable(string ID, Texture2D texture, string name, string type, string description, Dictionary<string, int> Attribiutes)
         {
             Init();
             this.ID = ID;
             this.texture = texture;
             this.name = name;
             Description = description;
+            this.Attribiutes = Attribiutes;
             Type = type;
+
         }
 
         public override IItems CreateCopy()
         {
-            return new Book(ID, texture, name, Type, Description);
+            return new Consumable(ID, texture, name, Type, Description, Attribiutes);
         }
 
         protected override void SetButtons()
         {
             if (!InCrafting && !IsCraftingResult)
             {
-                DPL.AddButton("Read", () => ShowInfo());
-                DPL.AddButton("Add to crafting", () => PutInCrafting());
+                DPL.AddButton("Consume", () => Use());
                 DPL.AddButton("Drop", () => Drop());
+                DPL.AddButton("Information", () => ShowInfo());
             }
-            else if(InCrafting)
+            else if (InCrafting)
                 DPL.AddButton("Take out", () => TakeFromCrafting());
             else if (IsCraftingResult)
                 DPL.AddButton("Take out", () => TakeFromCraftingResult());
 
-            DPL.AddButton("Quit", () => quitMenu());
+            DPL.AddButton("Exit", () => quitMenu());
         }
 
+        public override void Use()
+        {
+            foreach(KeyValuePair<string,int> entry in Attribiutes)
+                if(Settings._player.baseStats.ContainsKey(entry.Key))
+                    Settings._player.baseStats[entry.Key] += entry.Value;
+
+            Settings._player.Inventory.Remove(this);
+        }
     }
 }

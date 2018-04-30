@@ -24,6 +24,7 @@ namespace MyGame.GridElements
         protected List<FadingLabel> FL;
         protected string resource = null;
         protected string ButtonRename;
+        protected string harvestID = "";
         protected Action action;
         protected int? amount = null;
         protected int? hp = null;
@@ -33,22 +34,7 @@ namespace MyGame.GridElements
         public virtual ITileAddition CreateCopy(Vector2 position)
         {
             bounds = new Rectangle((int)position.X, (int)position.Y, 32, 32);
-            return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, Walkable, IsClickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
-        }
-
-
-        protected override void SetButtons()
-        {
-            base.SetButtons();
-            if (ButtonRename != null)
-            {
-                DPL.RenameElement(0, ButtonRename);
-            }
-            if (action != null)
-            {
-                DPL.EditButtonAction(0, action);
-            }
-
+            return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, Walkable, IsClickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
         }
 
         public virtual void Draw(ref SpriteBatch sb)

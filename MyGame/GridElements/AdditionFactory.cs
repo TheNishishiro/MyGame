@@ -79,7 +79,7 @@ namespace MyGame.GridElements
                     string ID = "";
                     int Rarity = 1000;
                     int Gold = 0;
-                    string _type = "";
+                    string _type = "", harvestID = null;
                     Vector2 position = new Vector2(0,0);
                     Dictionary<string, int> dropChance = new Dictionary<string, int>();
                     bool walkable = false; bool clickable = false; bool CreatesFloatingText = false; bool IsTimeLimited = false; bool IsOnTop = false;
@@ -142,6 +142,9 @@ namespace MyGame.GridElements
                                 case "gold":
                                     Gold = int.Parse(convertedProperty); 
                                     break;
+                                case "harvest":
+                                    harvestID = convertedProperty;
+                                    break;
                                 case "loot":
                                     dropChance.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                                     break;
@@ -150,7 +153,7 @@ namespace MyGame.GridElements
                     }
 
                     if(_type == "")
-                        list.Add(ID, new AnyAddition(texture, position, Rarity, walkable, clickable, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
+                        list.Add(ID, new AnyAddition(texture, position, Rarity, walkable, clickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
                     else if(_type == "chest")
                         list.Add(ID, new Chest(position, texture, dropChance, ButtonRename, Rarity, Gold));
 

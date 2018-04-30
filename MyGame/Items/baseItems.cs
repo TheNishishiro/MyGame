@@ -17,8 +17,9 @@ namespace MyGame.Items
             Durability = "durability",
             Upgrade = "upgrade";
 
-        protected int _durability, _upgrade;
-        protected bool Equiped = false;
+        protected string ID = "";
+        protected int _durability = 0, _upgrade;
+        protected bool Equiped = false, InCrafting = false, IsCraftingResult = false;
         protected string Type;
         protected string Description;
         protected string SkillType;
@@ -85,16 +86,57 @@ namespace MyGame.Items
 
         protected void SetEquipableButtons(bool Equiped)
         {
-            if (!Equiped && Settings._player.Equiped[Type] == null)
+            if(_durability > stats[Durability])
+            {
+                DPL.AddButton("Fix", () => FixItem());
+            }
+            if (!Equiped && Settings._player.Equiped[Type] == null && !InCrafting && !IsCraftingResult)
             {
                 DPL.AddButton("Equip", () => Use());
+                DPL.AddButton("Add to crafting", () => PutInCrafting());
                 DPL.AddButton("Drop", () => Drop());
             }
+            else if (InCrafting)
+                DPL.AddButton("Take out", () => TakeFromCrafting());
+            else if(IsCraftingResult)
+                DPL.AddButton("Take out", () => TakeFromCraftingResult());
             else if (Equiped)
                 DPL.AddButton("Unequip", () => Use());
 
+
             DPL.AddButton("Information", () => ShowInfo());
             DPL.AddButton("Quit", () => quitMenu());
+        }
+
+        protected void PutInCrafting()
+        {
+            InCrafting = true;
+            Settings._player.Inventory.Remove(this);
+            Crafting.AddToSlot(this);
+            quitMenu();
+        }
+        protected void TakeFromCrafting()
+        {
+            InCrafting = false;
+            Settings._player.Inventory.Add(this);
+            Crafting.RemoveFromSlot(this);
+            quitMenu();
+        }
+        protected void TakeFromCraftingResult()
+        {
+            IsCraftingResult = false;
+            Settings._player.Inventory.Add(Crafting.Result);
+            Crafting.Result = null;
+            Crafting.Slot1 = null;
+            Crafting.Slot2 = null;
+            Crafting.Slot3 = null;
+            quitMenu();
+        }
+
+        protected virtual void FixItem()
+        {
+            stats[Durability] = _durability;
+            quitMenu();
         }
 
         public void ShowInfo()
@@ -169,6 +211,16 @@ namespace MyGame.Items
         public Dictionary<string, int> GetAttribiutes()
         {
             return Attribiutes;
+        }
+
+        public string GetID()
+        {
+            return ID;
+        }
+
+        public void SetAsCraftingResult()
+        {
+            IsCraftingResult = true;
         }
     }
 }

@@ -9,9 +9,10 @@ namespace MyGame.Items.ItemTypes
 {
     class Necklace : baseItems
     {
-        public Necklace(Texture2D texture, string name, string type, int upgrade, string description, Dictionary<string, int> Attribiutes)
+        public Necklace(string ID, Texture2D texture, string name, string type, int upgrade, string description, Dictionary<string, int> Attribiutes)
         {
             Init();
+            this.ID = ID;
             this.Attribiutes = Attribiutes;
             _upgrade = upgrade;
             this.texture = texture;
@@ -25,7 +26,7 @@ namespace MyGame.Items.ItemTypes
 
         public override IItems CreateCopy()
         {
-            return new Necklace(texture, name, Type, _upgrade, Description, Attribiutes);
+            return new Necklace(ID, texture, name, Type, _upgrade, Description, Attribiutes);
         }
 
         protected override void SetButtons()

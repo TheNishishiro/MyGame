@@ -10,7 +10,7 @@ namespace MyGame.Spells
 {
     class Spell : baseSpell
     {
-        public Spell(string name, Texture2D texture, int Damage, int LifeTime, Point middlePoint, int[,] array, int cost)
+        public Spell(string name, Texture2D texture, Dictionary<string, int> Damage, int LifeTime, Point middlePoint, int[,] array, int cost)
         {
             this.name = name;
             this.middlePoint = middlePoint;

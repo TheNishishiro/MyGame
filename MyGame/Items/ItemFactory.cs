@@ -116,19 +116,23 @@ namespace MyGame.Items
             }
 
             if (type == Names.Weapon)
-                return new Weapon(texture, name, type, durability, upgrade, description, skilltype, damage, Attribiutes);
+                return new Weapon(ID, texture, name, type, durability, upgrade, description, skilltype, damage, Attribiutes);
             else if (type == Names.Necklace)
-                return new Necklace(texture, name, type, upgrade, description, Attribiutes);
+                return new Necklace(ID, texture, name, type, upgrade, description, Attribiutes);
             else if (type == Names.Ring)
-                return new Necklace(texture, name, type, upgrade, description, Attribiutes);
+                return new Necklace(ID, texture, name, type, upgrade, description, Attribiutes);
             else if (type == Names.Armor)
-                return new Armor(texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
+                return new Armor(ID, texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
             else if (type == Names.Shield)
-                return new Armor(texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
+                return new Armor(ID, texture, name, type, durability, upgrade, description, skilltype, DefenceTypes, Attribiutes);
             else if (type == Names.Book)
-                return new Book(texture, name, type, description);
+                return new Book(ID, texture, name, type, description);
             else if (type == Names.Scroll)
-                return new Scroll(texture, spellID, name, type, description);
+                return new Scroll(ID, texture, spellID, name, type, description);
+            else if (type == Names.Consumable)
+                return new Consumable(ID, texture, name, type, description, Attribiutes);
+            else if (type == Names.Misc)
+                return new Misc(ID, texture, name, type, description);
 
             Console.WriteLine("\tLoaded: " + file);
             return null;

@@ -9,11 +9,10 @@ namespace MyGame.Items.ItemTypes
 {
     class Weapon : baseItems
     {
-        
-
-        public Weapon(Texture2D texture, string name, string type, int durability, int upgrade, string description, string SkillType, Dictionary<string, int> damage, Dictionary<string, int> Attribiutes)
+        public Weapon(string ID, Texture2D texture, string name, string type, int durability, int upgrade, string description, string SkillType, Dictionary<string, int> damage, Dictionary<string, int> Attribiutes)
         {
             Init();
+            this.ID = ID;
             this.damage = damage;
             _durability = durability;
             _upgrade = upgrade;
@@ -30,7 +29,7 @@ namespace MyGame.Items.ItemTypes
 
         public override IItems CreateCopy()
         {
-            return new Weapon(texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
+            return new Weapon(ID, texture, name, Type, _durability, _upgrade, Description, SkillType, damage, Attribiutes);
         }
 
         protected override void SetButtons()

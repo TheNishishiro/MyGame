@@ -12,11 +12,12 @@ namespace MyGame.GridElements.Specials
     class AnyAddition : Addition
     {
         public AnyAddition(Texture2D texture, Vector2 Position, int Rarity = 1000,
-            bool walkable = false, bool clickable = false, bool CreatesFloatingText = false, bool IsTimeLimited = false, bool IsOnTop = false,
+            bool walkable = false, bool clickable = false, string harvestID = null, bool CreatesFloatingText = false, bool IsTimeLimited = false, bool IsOnTop = false,
             string ButtonRename = null, int? HP = null, int? UseCooldown = null, string resource = null, int? amount = null, Action action = null)
         {
             this.texture = texture;
             this.Rarity = Rarity;
+            this.harvestID = harvestID;
             this.Position = new Vector2(Position.X, Position.Y);
             bounds = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
             Walkable = walkable;
@@ -50,6 +51,23 @@ namespace MyGame.GridElements.Specials
             {
                 Console.WriteLine("Couldn't load addition texture");
             }
+        }
+
+        protected override void SetButtons()
+        {
+            if(harvestID != null)
+                DPL.AddButton("Harvest", () => harvest());
+            if (ButtonRename != null)
+                DPL.AddButton(ButtonRename, () => FightToggle());
+            DPL.AddButton("Quit", () => quitMenu());
+        }
+
+        private void harvest()
+        {
+            if(Textures.ItemTemplates.ContainsKey(harvestID))
+                Settings._player.Inventory.Add(Textures.ItemTemplates[harvestID]);
+            harvestID = null;
+            quitMenu();
         }
     }
 }

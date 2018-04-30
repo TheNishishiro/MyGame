@@ -16,7 +16,7 @@ namespace MyGame.Spells
         protected int LifeTime;
         protected int[,] array;
         protected int cost;
-        protected int Damage = -1;
+        protected Dictionary<string, int> Damage = null;
         protected int Heal = -1;
 
         public ISpell CreateCopy()

@@ -119,8 +119,9 @@ namespace MyGame.Creatures
             {
                 if(sc.Position.Intersects(bounds))
                 {
-                    baseStats[HP] -= sc.Damage;
-                    sc.Damage = 0;
+                    if(sc.Damage != null)
+                        TakeDamage(sc.Damage);
+                    sc.Damage = null;
                 }
             }
         }

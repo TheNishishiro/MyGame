@@ -20,7 +20,8 @@ namespace MyGame.Spells
                 String[] lines = File.ReadAllLines(spell);
                 Texture2D texture = null;
                 string id = "", name = "";
-                int damage = -1, lifetime = 0, cost = 0;
+                Dictionary<string, int> damage = new Dictionary<string, int>();
+                int lifetime = 0, cost = 0;
                 int heal = -1;
                 Point size = new Point(0,0);
                 int[,] array = new int[0,0];
@@ -38,7 +39,7 @@ namespace MyGame.Spells
                     else if (_property == "name")
                         name = convertedProperty;
                     else if (_property == "damage")
-                        damage = int.Parse(convertedProperty);
+                        damage.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                     else if (_property == "heal")
                         heal = int.Parse(convertedProperty);
                     else if (_property == "cost")
@@ -60,7 +61,7 @@ namespace MyGame.Spells
                     }
                 }
 
-                if(damage != -1)
+                if(damage.Count != 0)
                     spellTemplate.Add(id, new Spell(name, texture, damage, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
                 else if(heal != -1)
                     spellTemplate.Add(id, new Miracle(name, texture, heal, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
