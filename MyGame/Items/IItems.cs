@@ -19,6 +19,7 @@ namespace MyGame.Items
         void DecreaseDurability();
         void Break();
         void SetAsCraftingResult();
+        void SetEquiped();
         string GetID();
         string GetName();
         string GetSkill();

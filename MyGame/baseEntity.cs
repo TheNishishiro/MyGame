@@ -30,7 +30,7 @@ namespace MyGame
             return Settings.grid.map[(int)(x / Settings.GridSize), (int)(y / Settings.GridSize)].Walkable;
         }
 
-        protected void SetWalkable(bool walkable)
+        public void SetWalkable(bool walkable)
         {
             Settings.grid.map[(int)(Position.X / Settings.GridSize), (int)(Position.Y / Settings.GridSize)].Walkable = walkable;
         }

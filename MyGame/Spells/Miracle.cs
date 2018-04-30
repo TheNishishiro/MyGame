@@ -10,8 +10,9 @@ namespace MyGame.Spells
 {
     class Miracle : baseSpell
     {
-        public Miracle(string name, Texture2D texture, int Heal, int LifeTime, Point middlePoint, int[,] array, int cost)
+        public Miracle(string id, string name, Texture2D texture, int Heal, int LifeTime, Point middlePoint, int[,] array, int cost)
         {
+            this.id = id;
             this.name = name;
             this.middlePoint = middlePoint;
             this.texture = texture;

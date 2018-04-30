@@ -151,6 +151,8 @@ namespace MyGame
             ScriptedAdditions = new Dictionary<string, ITileAddition>();
             SpellTemplates = new Dictionary<string, ISpell>();
 
+            CheckDataFolder();
+
             EnemyTextures = LoadTexturesFromFile(".\\Data\\EnemyTextures.xml");
             AdditionTextures = LoadTexturesFromFile(".\\Data\\GridAdditionTextures.xml");
             ItemTextures = LoadTexturesFromFile(".\\Data\\ItemTextures.xml");
@@ -245,5 +247,33 @@ namespace MyGame
         }
 
         
+        public static void CheckDataFolder()
+        {
+            if (Directory.Exists(".\\Data"))
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("Couldn't find Data folder... Attemtping to repair");
+                Directory.CreateDirectory(".\\Data");
+                Directory.CreateDirectory(".\\Data\\Additions");
+                Directory.CreateDirectory(".\\Data\\Additions\\Generatable");
+                Directory.CreateDirectory(".\\Data\\Additions\\Scripted");
+                Directory.CreateDirectory(".\\Data\\Additions\\Spawnable");
+                Directory.CreateDirectory(".\\Data\\Enemies");
+                Directory.CreateDirectory(".\\Data\\EnemyTextures");
+                Directory.CreateDirectory(".\\Data\\GridAdditionTextures");
+                Directory.CreateDirectory(".\\Data\\Items");
+                Directory.CreateDirectory(".\\Data\\ItemTextures");
+                Directory.CreateDirectory(".\\Data\\Spells");
+                Directory.CreateDirectory(".\\Data\\SpellTextures");
+                File.Create(".\\Data\\Crafting.xml");
+                File.Create(".\\Data\\EnemyTextures.xml");
+                File.Create(".\\Data\\GridAdditionTextures.xml");
+                File.Create(".\\Data\\ItemTextures.xml");
+                File.Create(".\\Data\\SpellTextures.xml");
+            }
+        }
     }
 }

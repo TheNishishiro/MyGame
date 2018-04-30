@@ -20,11 +20,11 @@ namespace MyGame
     class Player : baseCreature
     {
         public MainUI _UI;
-        public Dictionary<string, int> Stats = new Dictionary<string, int>();
-        public Dictionary<string, int> Skills = new Dictionary<string, int>();
+        public Dictionary<string, int> Stats = new Dictionary<string, int>(); //
+        public Dictionary<string, int> Skills = new Dictionary<string, int>(); //
         public List<IItems> Inventory = new List<IItems>();
-        public ISpell[] Spells = new ISpell[12];
-        public Dictionary<string, int> Materials = new Dictionary<string, int>();
+        public ISpell[] Spells = new ISpell[12]; //
+        public Dictionary<string, int> Materials = new Dictionary<string, int>(); //
         public Dictionary<string, IItems> Equiped = new Dictionary<string, IItems>();
 
         public bool ShowCheatMenu = false;

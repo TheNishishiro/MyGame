@@ -140,14 +140,7 @@ namespace MyGame
 
         protected override void Initialize()
         {
-            if (Directory.Exists(".\\Data"))
                 base.Initialize();
-            else
-            {
-                Console.WriteLine("Data folder could not be found!");
-                Console.ReadLine();
-            }
-
         }
 
         protected override void LoadContent()
@@ -235,8 +228,6 @@ namespace MyGame
             }
             CreatureFactory.ClearCreaturesOutsideBounds(creatures);
 
-            
-
             _player.Update();
             cursor.Update();
             NCamera.Camera_Bound(_player.GetBounds());
@@ -251,6 +242,7 @@ namespace MyGame
 
             if (canExit)
                 Exit();
+
             base.Update(gameTime);
         }
 

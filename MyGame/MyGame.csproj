@@ -60,6 +60,7 @@
     <Compile Include="Items\ItemTypes\Consumable.cs" />
     <Compile Include="Items\ItemTypes\Misc.cs" />
     <Compile Include="Items\ItemTypes\Scroll.cs" />
+    <Compile Include="SaveManagers\SaveManager.cs" />
     <Compile Include="Spells\baseSpell.cs" />
     <Compile Include="Spells\ISpell.cs" />
     <Compile Include="Spells\Miracle.cs" />

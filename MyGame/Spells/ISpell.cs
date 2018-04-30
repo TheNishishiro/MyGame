@@ -13,5 +13,6 @@ namespace MyGame.Spells
         void Cast(Vector2 position);
         int GetManaCost();
         string GetName();
+        string GetID();
     }
 }

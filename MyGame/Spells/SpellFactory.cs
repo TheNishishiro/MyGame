@@ -62,9 +62,9 @@ namespace MyGame.Spells
                 }
 
                 if(damage.Count != 0)
-                    spellTemplate.Add(id, new Spell(name, texture, damage, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
+                    spellTemplate.Add(id, new Spell(id, name, texture, damage, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
                 else if(heal != -1)
-                    spellTemplate.Add(id, new Miracle(name, texture, heal, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
+                    spellTemplate.Add(id, new Miracle(id, name, texture, heal, lifetime, new Point((int)Math.Floor((double)size.X / 2), (int)Math.Floor((double)size.Y / 2)), array, cost));
                 Console.WriteLine("\tLoaded: " + spell);
             }
         }

@@ -433,6 +433,8 @@ namespace MyGame.UI
 
         Button FullScreen = new Button("Toggle fullscreen", () => Game1.ToggleFullScreen(), 0);
         Button DebugInfo = new Button("Toggle GC informations", () => Game1.ToggleGCINFO(), 0);
+        Button SaveGameButton = new Button("Save game", () => SaveManagers.SaveManager.SaveGame(), 0);
+        Button LoadGameButton = new Button("Load game", () => SaveManagers.SaveManager.LoadGame(), 0);
         Button ExitGame = new Button("Exit game", () => Game1._Exit(), 0);
         private void DrawMenu(ref SpriteBatch sb)
         {
@@ -440,6 +442,12 @@ namespace MyGame.UI
             Vector2 buttonsStart = new Vector2(position.X + 10, position.Y + 380);
             int offset = 0, offsetStep = 30; ;
 
+            SaveGameButton.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
+            SaveGameButton.Draw(ref sb);
+            offset += offsetStep;
+            LoadGameButton.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
+            LoadGameButton.Draw(ref sb);
+            offset += offsetStep;
             FullScreen.Update(new Vector2(buttonsStart.X, buttonsStart.Y + offset), 200);
             FullScreen.Draw(ref sb);
             offset += offsetStep;

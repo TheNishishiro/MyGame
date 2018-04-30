@@ -9,6 +9,11 @@ TODO: Make damage increase according to skill level
 	- Added button to toggle fullscreen
 	- Added button to toggle garbage collector info
 	- Added exit game button
+ * Implemented saving and loading character
+ * Added some checks for loading and saving
+ * Added folder checks for Data folder, creates structure if missing, unable to fix it just yet tho
+ * Added position saving for player
+ * Fixed position loading not setting proper walkable tile
 
 4/29/2018
  * Added consumables

@@ -133,6 +133,11 @@ namespace MyGame.Items
             quitMenu();
         }
 
+        public void SetEquiped()
+        {
+            Equiped = true;
+        }
+
         protected virtual void FixItem()
         {
             stats[Durability] = _durability;

@@ -17,6 +17,11 @@ namespace MyGame.GridElements
             while (true)
             {
                 string[] keys = Textures.GeneratorAdditionTemplates.Keys.ToArray();
+                if (keys.Length == 0)
+                {
+                    Console.WriteLine("Couldn't find any files in GeneratorAdditionTemplates");
+                    return null;
+                }
                 ITileAddition addition =Textures.GeneratorAdditionTemplates[keys[Settings.rnd.Next(keys.Length)]].CreateCopy(position);
                 if (addition.GetRarity() >= Settings.rnd.Next(1000))
                 {

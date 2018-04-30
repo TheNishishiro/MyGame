@@ -10,6 +10,7 @@ namespace MyGame.Spells
 {
     class baseSpell : ISpell
     {
+        protected string id;
         protected string name;
         protected Point middlePoint;
         protected Texture2D texture;
@@ -22,9 +23,9 @@ namespace MyGame.Spells
         public ISpell CreateCopy()
         {
             if(Heal == -1)
-                return new Spell(name, texture, Damage, LifeTime, middlePoint, array, cost);
+                return new Spell(id, name, texture, Damage, LifeTime, middlePoint, array, cost);
             else
-                return new Miracle(name, texture, Heal, LifeTime, middlePoint, array, cost);
+                return new Miracle(id, name, texture, Heal, LifeTime, middlePoint, array, cost);
         }
 
         public int GetManaCost()
@@ -35,6 +36,11 @@ namespace MyGame.Spells
         public virtual void Cast(Vector2 position)
         {
             throw new NotImplementedException();
+        }
+
+        public string GetID()
+        {
+            return id;
         }
 
         public string GetName()

@@ -18,7 +18,7 @@ namespace MyGame.Items.ItemTypes
             this.texture = texture;
             this.name = name;
             SkillType = type;
-            stats[Upgrade] = Settings.rnd.Next(upgrade / 2, (int)(upgrade * 1.5));
+            stats[Upgrade] = upgrade;
             Description = description;
             Type = type;
 
