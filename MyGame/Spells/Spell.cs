@@ -22,7 +22,7 @@ namespace MyGame.Spells
             this.Damage = Damage;
         }
 
-        public override void Cast(Vector2 position)
+        public override void Cast(Vector2 position, ICreature creature)
         { 
             position = new Vector2(position.X - (32 * middlePoint.X), position.Y - (32 * middlePoint.Y));
 
@@ -32,7 +32,13 @@ namespace MyGame.Spells
                 {
                     if (array[i, j] != 0)
                     {
-                        Global.spellCells.Add(new SpellCell(new Rectangle((int)position.X + (32 * i - middlePoint.X), (int)position.Y + (32 * j - middlePoint.X), 32, 32), texture, Damage, LifeTime));
+                        bool castByPlayer;
+                        if (creature is Player)
+                            castByPlayer = true;
+                        else
+                            castByPlayer = false;
+
+                        Global.spellCells.Add(new SpellCell(new Rectangle((int)position.X + (32 * i - middlePoint.X), (int)position.Y + (32 * j - middlePoint.X), 32, 32), texture, Damage, LifeTime, castByPlayer));
                     }
                 }
             } 

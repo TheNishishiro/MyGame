@@ -64,6 +64,8 @@ namespace MyGame.GridElements
 
         public void AddAddition(ITileAddition addition)
         {
+            if (this.addition == null)
+                this.addition = new List<ITileAddition>();
             this.addition.Add(addition);
         }
 

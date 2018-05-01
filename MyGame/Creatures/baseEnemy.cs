@@ -12,9 +12,12 @@ namespace MyGame.Creatures
     class baseEnemy : baseCreature
     {
         public baseEnemy(Texture2D texture, Vector2 Position, string name,
-            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot, string Desc, Dictionary<string, int> damage, Dictionary<string, int> defences, int Gold, int Gold_Chance)
+            Dictionary<string, int> baseStats, List<string> Dialogs, List<string> Loot, string Desc,
+            Dictionary<string, int> damage, Dictionary<string, int> defences, int Gold, int Gold_Chance,
+            Dictionary<string, int> Spells)
         {
             layerDepth = Settings.entityLayer;
+            this.Spells = Spells;
             this.name = name;
             this.texture = texture;
             this.Position = new Vector2(Position.X, Position.Y);

@@ -83,6 +83,7 @@ namespace MyGame.Creatures
                     Dictionary<string, int> stats = new Dictionary<string, int>();
                     Dictionary<string, int> damage = new Dictionary<string, int>();
                     Dictionary<string, int> defence = new Dictionary<string, int>();
+                    Dictionary<string, int> spells = new Dictionary<string, int>();
                     List<string> dialogs = new List<string>();
                     List<string> loot = new List<string>();
                     int gold = 0, gold_chance = 0;
@@ -106,6 +107,8 @@ namespace MyGame.Creatures
                             defence.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                         else if (_property == "damage")
                             damage.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
+                        else if (_property == "spell")
+                            spells.Add(convertedProperty, int.Parse(convertedProperty.Split(',')[1].Trim()));
                         else if (_property == "loot")
                             loot.Add(convertedProperty);
                         else if (_property == "gold")
@@ -123,7 +126,7 @@ namespace MyGame.Creatures
                     }
                     if (!list.ContainsKey(ID))
                     {
-                        list.Add(ID, new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot, Desc, damage, defence, gold, gold_chance));
+                        list.Add(ID, new baseEnemy(texture, new Vector2(0, 0), name, stats, dialogs, loot, Desc, damage, defence, gold, gold_chance, spells));
                         Console.WriteLine("\tLoaded: " + file);
                     }
                     else

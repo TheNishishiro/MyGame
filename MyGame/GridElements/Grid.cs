@@ -15,9 +15,10 @@ namespace MyGame.GridElements
     {
         public ITile[,] map;
         int gridSizeX, gridSizeY;
+        int biomChance = 160;
         public Grid(ContentManager content, int gridSizeX, int gridSizeY)
         {
-            Console.WriteLine("Generating terrain...");
+            Console.WriteLine("Generating grid...");
             map = new ITile[gridSizeY, gridSizeX];
             this.gridSizeX = gridSizeX;
             this.gridSizeY = gridSizeY;
@@ -28,7 +29,129 @@ namespace MyGame.GridElements
                     map[x, y] = new BasicTile(Textures.Grass, x, y);
                 }
             }
+            GenerateBioms();
             GenerateRivers();
+            GenerateObjects();
+        }
+
+        class BiomGenerator
+        {
+            public int x, initx, reey,length,hight;
+            bool walkable = true;
+            Texture2D biomTex;
+
+            int MiddlePoint, currentHightYp, currentHightYm;
+
+            public BiomGenerator(int x, int y, int length, int hight, int biom)
+            {
+                this.x = x;
+                initx = x;
+                reey = y;
+                this.length = length;
+                this.hight = hight;
+                MiddlePoint = length / 2;
+
+                if (biom == 0)
+                    biomTex = Textures.Grass;
+                if (biom == 1)
+                    biomTex = Textures.Sand;
+                if (biom == 2)
+                    biomTex = Textures.Swamp;
+                if (biom == 3)
+                {
+                    biomTex = Textures.Water;
+                    walkable = false;
+                }
+
+                currentHightYp = 0;
+                currentHightYm = 0;
+            }
+
+            public void update(ref ITile[,] map)
+            {
+                for (int yp = 0; yp < currentHightYp; yp++)
+                { 
+                    int _y = reey + yp;
+                    if (_y < Settings.WorldSizeBlocks)
+                    {
+                        
+                        map[x, _y] = new BasicTile(biomTex, x, _y, walkable);
+                    }
+                }
+                for (int yp = 0; yp < currentHightYm; yp++)
+                {
+                    int _y = reey - yp;
+                    if (_y >= 0)
+                    {
+
+                        map[x, _y] = new BasicTile(biomTex, x, _y, walkable);
+                    }
+                }
+
+                if (x < initx + MiddlePoint)
+                {
+                    currentHightYp += Settings.rnd.Next(0, 4);
+                    currentHightYm += Settings.rnd.Next(0, 4);
+                }
+                else
+                {
+                    currentHightYp += Settings.rnd.Next(-3, 0);
+                    currentHightYm += Settings.rnd.Next(-3, 0);
+                }
+
+                if (currentHightYp < 0)
+                    currentHightYp = 0;
+                if (currentHightYm < 0)
+                    currentHightYm = 0;
+
+                if (x + 1 < Settings.WorldSizeBlocks)
+                    x++;
+                length--;
+            }
+        }
+
+        private void GenerateBioms()
+        {
+            Console.WriteLine("Generating bioms...");
+            List<BiomGenerator> BG = new List<BiomGenerator>();
+            for (int x = 0; x < gridSizeX; x++)
+            {
+                for (int y = 0; y < gridSizeY; y++)
+                {
+                    if (Settings.rnd.Next(160) == 160/2)
+                    {
+                        BG.Add(new BiomGenerator(x, y, Settings.rnd.Next(10, 20), Settings.rnd.Next(10, 20), Settings.rnd.Next(4)));
+                    }
+                }
+            }
+
+            
+            while (BG.Count > 0)
+            {
+                for (int i = 0; i < BG.Count; i++)
+                {
+                    BG[i].update(ref map);
+
+                    if (BG[i].length <= 0)
+                    {
+                        BG.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+        }
+
+        private void GenerateObjects()
+        {
+            Console.WriteLine("Generating objects...");
+            for (int x = 0; x < gridSizeX; x++)
+            {
+                for (int y = 0; y < gridSizeY; y++)
+                {
+                    if(map[x, y].Walkable)
+                        map[x, y].GenerateAddition();
+                }
+            }
         }
 
         class RiverGenerators
@@ -63,7 +186,6 @@ namespace MyGame.GridElements
                 lifetime--;
             }
         }
-
         private void GenerateRivers()
         {
             Console.WriteLine("Generating rivers...");
@@ -72,7 +194,7 @@ namespace MyGame.GridElements
             {
                 for (int y = 0; y < gridSizeY; y++)
                 {
-                    if(Settings.rnd.Next(60) == 8)
+                    if(Settings.rnd.Next(200) == 37)
                     {
                         rGenetors.Add(new RiverGenerators(x, y, Settings.rnd.Next(20)));
                     }
@@ -82,8 +204,6 @@ namespace MyGame.GridElements
             {
                 for(int i = 1; i < rGenetors.Count; i++)
                 {
-                    map[rGenetors[i].x, rGenetors[i].y] = new BasicTile(Textures.Water, rGenetors[i].x, rGenetors[i].y, false);
-                    map[rGenetors[i].x, rGenetors[i].y].RemoveAdditions();
                     rGenetors[i].update();
                     if (rGenetors[i].lifetime <= 0)
                     {
@@ -94,7 +214,7 @@ namespace MyGame.GridElements
             }
 
 
-            ITileAddition[] waterBorders = new ITileAddition[4];
+            ITileAddition[] waterBorders = new ITileAddition[12];
 
             Console.WriteLine("Smoothing water...");
             for (int x = 0; x < gridSizeX; x++)
@@ -108,14 +228,52 @@ namespace MyGame.GridElements
                         waterBorders[2] = new AnyAddition(Textures.WaterSides[2], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
                         waterBorders[3] = new AnyAddition(Textures.WaterSides[3], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
 
+                        waterBorders[4] = new AnyAddition(Textures.WaterSides[4], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[5] = new AnyAddition(Textures.WaterSides[5], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[6] = new AnyAddition(Textures.WaterSides[6], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[7] = new AnyAddition(Textures.WaterSides[7], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+
+                        waterBorders[8] = new AnyAddition(Textures.WaterSides[8], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[9] = new AnyAddition(Textures.WaterSides[9], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[10] = new AnyAddition(Textures.WaterSides[10], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        waterBorders[11] = new AnyAddition(Textures.WaterSides[11], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+
                         if (x > 0 && map[x - 1, y].GetTexture() != Textures.Water)
-                            map[x, y].AddAddition(waterBorders[0]);
+                        {
+                            if(x > 0 && map[x - 1, y].GetTexture() == Textures.Grass)
+                                map[x, y].AddAddition(waterBorders[0]);
+                            if (x > 0 && map[x - 1, y].GetTexture() == Textures.Swamp)
+                                map[x, y].AddAddition(waterBorders[4]);
+                            if (x > 0 && map[x - 1, y].GetTexture() == Textures.Sand)
+                                map[x, y].AddAddition(waterBorders[8]);
+                        }
                         if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() != Textures.Water)
-                            map[x, y].AddAddition(waterBorders[2]);
+                        {
+                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Grass)
+                                map[x, y].AddAddition(waterBorders[2]);
+                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Swamp)
+                                map[x, y].AddAddition(waterBorders[6]);
+                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Sand)
+                                map[x, y].AddAddition(waterBorders[10]);
+                        }
                         if (y > 0 && map[x, y - 1].GetTexture() != Textures.Water)
-                            map[x, y].AddAddition(waterBorders[1]);
+                        {
+                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Grass)
+                                map[x, y].AddAddition(waterBorders[1]);
+                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Swamp)
+                                map[x, y].AddAddition(waterBorders[5]);
+                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Sand)
+                                map[x, y].AddAddition(waterBorders[9]);
+                        }
                         if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() != Textures.Water)
-                            map[x, y].AddAddition(waterBorders[3]);
+                        {
+                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Grass)
+                                map[x, y].AddAddition(waterBorders[3]);
+                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Swamp)
+                                map[x, y].AddAddition(waterBorders[7]);
+                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Sand)
+                                map[x, y].AddAddition(waterBorders[11]);
+                        }
                     }
                 }
             }

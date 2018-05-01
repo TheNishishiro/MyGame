@@ -2,6 +2,11 @@
 TODO: Make damage increase according to skill level
 TODO: Look into optimising memory usage of water sides
 
+5/1/2018
+ * Made enemies able to cast spells
+ * Added biom tiles
+ * Changed generator to create objects last so they are not being created in oceans
+
 4/30/2018
  * Added item crafting
  * Added harvesting objects

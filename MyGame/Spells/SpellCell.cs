@@ -16,9 +16,11 @@ namespace MyGame.Spells
         int LifeTime;
 
         public Dictionary<string, int> Damage;
+        public bool createdByPlayer;
         
-        public SpellCell(Rectangle Position, Texture2D texture, Dictionary<string, int> Damage, int LifeTime)
+        public SpellCell(Rectangle Position, Texture2D texture, Dictionary<string, int> Damage, int LifeTime, bool createdByPlayer = true)
         {
+            this.createdByPlayer = createdByPlayer;
             this.texture = texture;
             this.Position = Position;
             this.LifeTime = LifeTime;

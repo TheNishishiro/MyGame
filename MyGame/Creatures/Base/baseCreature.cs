@@ -56,6 +56,8 @@ namespace MyGame.Creatures
         protected Dictionary<string, int> defences = null;
         protected Label nameLabel;
         protected string Description;
+        protected Dictionary<string, int> Spells = null;
+
 
         public virtual void Init()
         {
@@ -97,13 +99,14 @@ namespace MyGame.Creatures
 
         public ICreature CreateCopy(Vector2 position)
         {
-            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description, damage, defences, Gold, Gold_Chance);
+            return new baseEnemy(texture, position, name, baseStats, Dialogs, Loot, Description, damage, defences, Gold, Gold_Chance, Spells);
         }
 
         public virtual void Update()
         {
             RegenerateHP();
-
+            if(Spells.Count > 0)
+                CastSpell();
             if (Settings.rnd.Next(5000) > 4990 && Dialogs.Count > 0 && fighting)
                 FL.Add(new FadingLabel(Dialogs[Settings.rnd.Next(Dialogs.Count)], Position, Color.White, 0.2f));
             CollisionWithSpells();
@@ -113,11 +116,26 @@ namespace MyGame.Creatures
             healthBar.Update(baseStats[HP], baseStats[HP_max], new Vector2(Position.X, Position.Y - 16));
         }
 
-        public void CollisionWithSpells()
+        private void CastSpell()
+        {
+            foreach(KeyValuePair<string, int> entry in Spells.ToArray())
+            {
+                if (entry.Value <= 0)
+                {
+                    string[] _e = entry.Key.Split(',');
+                    Textures.SpellTemplates[_e[0].Trim()].CreateCopy().Cast(Position, this);
+                    Spells[entry.Key] = int.Parse(_e[1].Trim());
+                }
+                else
+                    Spells[entry.Key]--;
+            }
+        }
+
+        public virtual void CollisionWithSpells()
         {
             foreach (SpellCell sc in Global.spellCells.ToArray())
             {
-                if(sc.Position.Intersects(bounds))
+                if(sc.Position.Intersects(bounds) && sc.createdByPlayer)
                 {
                     if(sc.Damage != null)
                         TakeDamage(sc.Damage);

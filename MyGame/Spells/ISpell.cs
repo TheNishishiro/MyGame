@@ -10,7 +10,7 @@ namespace MyGame.Spells
     interface ISpell
     {
         ISpell CreateCopy();
-        void Cast(Vector2 position);
+        void Cast(Vector2 position, ICreature creature);
         int GetManaCost();
         string GetName();
         string GetID();

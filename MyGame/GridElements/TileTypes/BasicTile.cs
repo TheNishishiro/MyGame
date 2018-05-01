@@ -15,7 +15,6 @@ namespace MyGame.GridElements.TileTypes
             this.texture = texture;
             position = new Vector2(x * 32, y * 32);
             this.Walkable = Walkable;
-            GenerateAddition();
         }
     }
 }

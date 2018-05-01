@@ -45,7 +45,6 @@ namespace MyGame
                 Thread.Sleep(2000);
             }
         }
-
         private void Debug()
         {
             while (true)
@@ -108,7 +107,6 @@ namespace MyGame
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
             }
         }
-
         public static void ToggleFullScreen()
         {
             graphics.ToggleFullScreen();
@@ -159,7 +157,7 @@ namespace MyGame
             font3 = Content.Load<SpriteFont>("font3");
 
             font = font2 = font3;
-            Console.WriteLine("Generating world...");
+            Console.WriteLine("Generating world:");
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             grid = new Grid(Content, WorldSizeBlocks, WorldSizeBlocks);
@@ -167,7 +165,14 @@ namespace MyGame
 
             sw.Stop();
             Console.WriteLine($"World created in {sw.Elapsed.TotalSeconds} sec");
+
+
             _player = new Player(WorldSizePixels/2, WorldSizePixels / 2, Content.Load<Texture2D>("player"));
+            while(!grid.map[(int)(_player.Position.X / GridSize), (int)(_player.Position.Y / GridSize)].Walkable)
+            {
+                _player.Position.X += GridSize;
+            }
+
             _player._UI = new MainUI(_player);
             creatures = new List<ICreature>();
             for (int i = 0; i < CreatureLimit; i++)

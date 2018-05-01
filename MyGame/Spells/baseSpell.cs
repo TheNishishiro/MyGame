@@ -33,7 +33,7 @@ namespace MyGame.Spells
             return cost;
         }
 
-        public virtual void Cast(Vector2 position)
+        public virtual void Cast(Vector2 position, ICreature creature)
         {
             throw new NotImplementedException();
         }

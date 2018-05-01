@@ -18,6 +18,7 @@ namespace MyGame.GridElements
         void RemoveAddition(ITileAddition addition);
         void RemoveAdditions();
         Texture2D GetTexture();
+        void GenerateAddition();
     }
 
     interface ITileAddition

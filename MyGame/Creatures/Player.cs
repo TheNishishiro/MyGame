@@ -122,6 +122,8 @@ namespace MyGame
             
             Move();
             UpdateBounds();
+            CollisionWithSpells();
+
             CalculateStatsBonuses();
             KeepStatsInBounds();
 
@@ -133,6 +135,18 @@ namespace MyGame
             RegenerateMana();
             UpdateSkills();
             CheckSpellCast();
+        }
+        public override void CollisionWithSpells()
+        {
+            foreach (SpellCell sc in Global.spellCells.ToArray())
+            {
+                if (sc.Position.Intersects(bounds) && !sc.createdByPlayer)
+                {
+                    if (sc.Damage != null)
+                        TakeDamage(sc.Damage);
+                    sc.Damage = null;
+                }
+            }
         }
         private void KeepStatsInBounds()
         {
@@ -230,7 +244,7 @@ namespace MyGame
         {
             if (Spells[id].GetManaCost() <= baseStats[Mana])
             {
-                Spells[id].Cast(Position);
+                Spells[id].Cast(Position, this);
                 AddMana(-Spells[id].GetManaCost());
             }
         }

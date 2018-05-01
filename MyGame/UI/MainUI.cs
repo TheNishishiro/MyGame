@@ -60,7 +60,7 @@ namespace MyGame.UI
             container.SetScrollableText(Changelog.changelog, 16);
             IS = InfoState.Inventory;
             player = _player;
-            hp_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight )), Color.Red, Textures.UIBarBorderTexture);
+            hp_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.Red, Textures.UIBarBorderTexture);
             mana_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.Blue, Textures.UIBarBorderTexture);
             exp_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.Yellow, Textures.UIBarBorderTexture);
             magicLevel_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.CornflowerBlue, Textures.UIBarBorderTexture);
@@ -68,7 +68,7 @@ namespace MyGame.UI
             swordSkill_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.Red, Textures.UIBarBorderTexture);
             fistSkill_bar = new ProgresBar(Textures.UIBarBackgroundTexture, Textures.UIBarTexture, new Rectangle(0, 0, (int)(healthBarWidth), (int)(healthBarHeight)), Color.Red, Textures.UIBarBorderTexture);
 
-            foreach(KeyValuePair<string, int> entry in Settings._player.Stats)
+            foreach (KeyValuePair<string, int> entry in Settings._player.Stats)
             {
                 levelUpButtons.Add(entry.Key, new Button(Textures.UIPlusIcon, () => Settings._player.IncreaseStat(entry.Key)));
             }
@@ -127,7 +127,7 @@ namespace MyGame.UI
             int start = -25;
             int offset = 0;
             int offsetStep = 35;
-            foreach(KeyValuePair<InfoState, Button> entry in SwitchButtons)
+            foreach (KeyValuePair<InfoState, Button> entry in SwitchButtons)
             {
                 entry.Value.Update(new Vector2(position.X + start + offset, position.Y + 325));
                 entry.Value.Draw(ref sb);
@@ -220,7 +220,7 @@ namespace MyGame.UI
         private void DrawInventory(ref SpriteBatch sb)
         {
             Vector2 EqPosition = new Vector2(position.X + 13, position.Y + 372);
-            sb.DrawString(Settings.font3, $"Page: {InventoryPage + 1}", new Vector2(EqPosition.X, EqPosition.Y - 13), Color.White,0, new Vector2(0,0), 1, SpriteEffects.None, Settings.MainUILayer + 0.01f);
+            sb.DrawString(Settings.font3, $"Page: {InventoryPage + 1}", new Vector2(EqPosition.X, EqPosition.Y - 13), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.01f);
             for (int j = 1 + (56 * InventoryPage); j <= 56 + (56 * InventoryPage); j++)
             {
                 NDrawing.Draw(ref sb, Textures.ItemBackground, EqPosition, Color.White, Settings.MainUILayer + 0.0009f);
@@ -249,7 +249,7 @@ namespace MyGame.UI
                 inventoryPageUp.Draw(ref sb);
             }
         }
-        
+
         private void DrawSkills(ref SpriteBatch sb)
         {
             int offset = -15;
@@ -258,16 +258,16 @@ namespace MyGame.UI
             Vector2 skillBeginingPosition = new Vector2(position.X + 15, position.Y + 375);
             int i = 0, j = 0;
 
-            foreach(KeyValuePair<string, int> entry in Settings._player.Skills)
+            foreach (KeyValuePair<string, int> entry in Settings._player.Skills)
             {
-                if (!entry.Key.Contains(Names.SkillLevelPoints) 
+                if (!entry.Key.Contains(Names.SkillLevelPoints)
                     && !entry.Key.Contains(Names.SkillLevelPointsNeeded)
                     && i >= SkillsPage && j < 8)
                 {
                     sb.DrawString(Settings.font3, $"{entry.Key.Replace(Names.SkillLevel, "")}: {Settings._player.Skills[entry.Key]}", new Vector2(skillBeginingPosition.X, skillBeginingPosition.Y + healthBarHeight + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
-                        swordSkill_bar.Update(Settings._player.Skills[entry.Key.Replace(Names.SkillLevel, "") + Names.SkillLevelPoints], Settings._player.Skills[entry.Key.Replace(Names.SkillLevel, "") + Names.SkillLevelPointsNeeded], new Vector2(skillBeginingPosition.X + 5, skillBeginingPosition.Y + healthBarHeight + offset + barOffset));
-                        swordSkill_bar.Draw(ref sb, Settings.MainUILayer + 0.0038f);
-                        offset += offsetStep;
+                    swordSkill_bar.Update(Settings._player.Skills[entry.Key.Replace(Names.SkillLevel, "") + Names.SkillLevelPoints], Settings._player.Skills[entry.Key.Replace(Names.SkillLevel, "") + Names.SkillLevelPointsNeeded], new Vector2(skillBeginingPosition.X + 5, skillBeginingPosition.Y + healthBarHeight + offset + barOffset));
+                    swordSkill_bar.Draw(ref sb, Settings.MainUILayer + 0.0038f);
+                    offset += offsetStep;
                     j++;
                 }
                 i++;
@@ -277,7 +277,7 @@ namespace MyGame.UI
                 skillsPageUp.Update(new Vector2(position.X + 243, position.Y + 450), true, 10);
                 skillsPageUp.Draw(ref sb);
             }
-            if (SkillsPage + 8 < Settings._player.Skills.Count/3)
+            if (SkillsPage + 8 < Settings._player.Skills.Count / 3)
             {
                 skillsPageDown.Update(new Vector2(position.X + 243, position.Y + 450 + 19), true, 10);
                 skillsPageDown.Draw(ref sb);
@@ -294,7 +294,7 @@ namespace MyGame.UI
             int i = 0, j = 0;
 
             sb.DrawString(Settings.font3, $"Points to spend: {player.GetLevelPoints()}", new Vector2(TextPosition.X - 55, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
-            offset += offsetStep + offsetStep/2;
+            offset += offsetStep + offsetStep / 2;
             foreach (KeyValuePair<string, int> entry in Settings._player.Stats.ToArray())
             {
                 if (i >= StatsPage && j < 7)
@@ -315,7 +315,7 @@ namespace MyGame.UI
             }
             if (StatsPage + 7 < Settings._player.Stats.Count)
             {
-                statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470+19), true, 10);
+                statsPageDown.Update(new Vector2(position.X + 243, position.Y + 470 + 19), true, 10);
                 statsPageDown.Draw(ref sb);
             }
         }
@@ -379,8 +379,8 @@ namespace MyGame.UI
             {
                 if (i >= SpellsPage && j < 7)
                 {
-                    if(entry != null)
-                        sb.DrawString(Settings.font3, $"F{i+1}: {entry.GetName()}", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
+                    if (entry != null)
+                        sb.DrawString(Settings.font3, $"F{i + 1}: {entry.GetName()}", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
                     else
                         sb.DrawString(Settings.font3, $"F{i + 1}: -", new Vector2(TextPosition.X, TextPosition.Y + offset), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, Settings.MainUILayer + 0.0038f);
                     offset += offsetStep;
@@ -405,7 +405,7 @@ namespace MyGame.UI
         {
             // Slot 1
             NDrawing.Draw(ref sb, Textures.ItemBackground, new Vector2(position.X + 130, position.Y + 400), Color.White, Settings.MainUILayer + 0.0009f);
-            if(Crafting.Slot1!=null)
+            if (Crafting.Slot1 != null)
                 Crafting.Slot1.Draw(ref sb, new Vector2(position.X + 130, position.Y + 400));
             NDrawing.Draw(ref sb, Textures.ItemBorder, new Vector2(position.X + 130, position.Y + 400), Color.White, Settings.MainUILayer + 0.0011f);
 
@@ -438,7 +438,7 @@ namespace MyGame.UI
         Button ExitGame = new Button("Exit game", () => Game1._Exit(), 0);
         private void DrawMenu(ref SpriteBatch sb)
         {
-            
+
             Vector2 buttonsStart = new Vector2(position.X + 10, position.Y + 380);
             int offset = 0, offsetStep = 30; ;
 
@@ -458,5 +458,6 @@ namespace MyGame.UI
             ExitGame.Draw(ref sb);
             offset += offsetStep;
         }
+
     }
 }
