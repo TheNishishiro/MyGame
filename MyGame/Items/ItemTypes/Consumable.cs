@@ -32,6 +32,7 @@ namespace MyGame.Items.ItemTypes
             {
                 DPL.AddButton("Consume", () => Use());
                 DPL.AddButton("Drop", () => Drop());
+                DPL.AddButton("Discard", () => Discard());
                 DPL.AddButton("Information", () => ShowInfo());
             }
             else if (InCrafting)

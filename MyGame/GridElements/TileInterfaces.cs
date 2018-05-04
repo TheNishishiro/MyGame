@@ -18,7 +18,7 @@ namespace MyGame.GridElements
         void RemoveAddition(ITileAddition addition);
         void RemoveAdditions();
         Texture2D GetTexture();
-        void GenerateAddition();
+        void GenerateAddition(string biom);
     }
 
     interface ITileAddition
@@ -30,6 +30,6 @@ namespace MyGame.GridElements
         ITileAddition CreateCopy(Vector2 position);
         void SetPosition(Vector2 position);
         Vector2 GetPosition();
-        
+        string GetBiom();
     }
 }

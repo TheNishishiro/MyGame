@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MyGame.GridElements.Specials;
 using MyGame.Items.ItemTypes;
 using MyGame.UI;
 using NFramework;
@@ -95,6 +96,7 @@ namespace MyGame.Items
                 DPL.AddButton("Equip", () => Use());
                 DPL.AddButton("Add to crafting", () => PutInCrafting());
                 DPL.AddButton("Drop", () => Drop());
+                DPL.AddButton("Discard", () => Discard());
             }
             else if (InCrafting)
                 DPL.AddButton("Take out", () => TakeFromCrafting());
@@ -170,9 +172,20 @@ namespace MyGame.Items
             quitMenu();
         }
 
-        public virtual void Drop()
+        public virtual void Discard()
         {
             Settings._player.Inventory.Remove(this);
+        }
+
+        public virtual void Drop()
+        {
+            if(texture!=null)
+                Settings.grid.map[(int)(Settings._player.Position.X / Settings.GridSize), (int)(Settings._player.Position.Y / Settings.GridSize)].AddAddition(
+                            new Bag(
+                            Textures.ItemTemplates[ID].CreateCopy()
+                            , new Vector2(Settings._player.Position.X, Settings._player.Position.Y)
+                            ));
+            Discard();
         }
 
         public virtual string GetName()

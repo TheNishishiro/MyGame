@@ -55,6 +55,11 @@ namespace MyGame
             Scroll = "Scroll",
             Consumable = "Consumable",
             Misc = "Misc";
+
+        public const string
+            BiomGrass = "Grass",
+            BiomSand = "Sand",
+            BiomSwamp = "Swamp";
     }
 
     class Global
@@ -129,6 +134,8 @@ namespace MyGame
         public static Dictionary<string, ITileAddition> ScriptedAdditions;
         public static Dictionary<string, ISpell> SpellTemplates;
 
+        public static List<Biom> bioms = new List<Biom>();
+
         public static Texture2D UITargetTexture;
         public static Texture2D UIAvatarRingTexture;
         public static Texture2D UIBarBackgroundTexture;
@@ -162,6 +169,11 @@ namespace MyGame
             WaterSides[9] = Game1._Content.Load<Texture2D>("waterSandU");
             WaterSides[10] = Game1._Content.Load<Texture2D>("waterSandR");
             WaterSides[11] = Game1._Content.Load<Texture2D>("waterSandD");
+
+            
+            bioms.Add(new Biom(Names.BiomGrass, Textures.Grass, Textures.WaterSides[0], Textures.WaterSides[1], Textures.WaterSides[2], Textures.WaterSides[3]));
+            bioms.Add(new Biom(Names.BiomSwamp, Textures.Swamp, Textures.WaterSides[4], Textures.WaterSides[5], Textures.WaterSides[6], Textures.WaterSides[7]));
+            bioms.Add(new Biom(Names.BiomSand, Textures.Sand, Textures.WaterSides[8], Textures.WaterSides[9], Textures.WaterSides[10], Textures.WaterSides[11]));
 
             EnemyTextures = new Dictionary<string, Texture2D>();
             AdditionTextures = new Dictionary<string, Texture2D>();

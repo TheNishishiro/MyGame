@@ -30,6 +30,29 @@ namespace MyGame.GridElements
                 }
             }
         }
+        public static ITileAddition CreateAddition(Vector2 position, string biom)
+        {
+            List< ITileAddition > additionBiom = new List<ITileAddition>();
+            foreach(KeyValuePair<string, ITileAddition> addition in Textures.GeneratorAdditionTemplates)
+            {
+                if (addition.Value.GetBiom() == biom)
+                    additionBiom.Add(addition.Value);
+            }
+
+            while (true)
+            {
+                if (additionBiom.Count == 0)
+                {
+                    return null;
+                }
+                ITileAddition addition = additionBiom[Settings.rnd.Next(additionBiom.Count)].CreateCopy(position);
+                if (addition.GetRarity() >= Settings.rnd.Next(1000))
+                {
+                    addition.SetPosition(position);
+                    return addition;
+                }
+            }
+        }
 
         public static void SpawnAddition(Vector2 position, string type = "g", string ID = "")
         {
@@ -84,7 +107,7 @@ namespace MyGame.GridElements
                     string ID = "";
                     int Rarity = 1000;
                     int Gold = 0;
-                    string _type = "", harvestID = null;
+                    string _type = "", harvestID = null, biom = "";
                     Vector2 position = new Vector2(0,0);
                     Dictionary<string, int> dropChance = new Dictionary<string, int>();
                     bool walkable = false; bool clickable = false; bool CreatesFloatingText = false; bool IsTimeLimited = false; bool IsOnTop = false;
@@ -153,12 +176,15 @@ namespace MyGame.GridElements
                                 case "loot":
                                     dropChance.Add(convertedProperty.Split(',')[0].Trim(), int.Parse(convertedProperty.Split(',')[1].Trim()));
                                     break;
+                                case "biom":
+                                    biom = convertedProperty;
+                                    break;
                             }
                         }
                     }
 
                     if(_type == "")
-                        list.Add(ID, new AnyAddition(texture, position, Rarity, walkable, clickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
+                        list.Add(ID, new AnyAddition(texture, position, Rarity, biom, walkable, clickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, HP, UseCooldown, resource, amount));
                     else if(_type == "chest")
                         list.Add(ID, new Chest(position, texture, dropChance, ButtonRename, Rarity, Gold));
 

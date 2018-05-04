@@ -44,14 +44,28 @@ namespace MyGame.GridElements
             return texture;
         }
 
-        public void GenerateAddition()
+        public void GenerateAddition(string biom)
         {
             if (addition == null)
                 addition = new List<ITileAddition>();
             if (Settings.rnd.Next(10) == 3)
             {
-                AddAddition(AdditionFactory.CreateAddition(position));
-                Walkable = addition[addition.Count - 1].Walkable;
+                if (biom == "")
+                {
+                    AddAddition(AdditionFactory.CreateAddition(position));
+                    if (addition[addition.Count - 1] != null)
+                        Walkable = addition[addition.Count - 1].Walkable;
+                    else
+                        addition.RemoveAt(addition.Count - 1);
+                }
+                else
+                {
+                    AddAddition(AdditionFactory.CreateAddition(position, biom));
+                    if (addition[addition.Count - 1] != null)
+                        Walkable = addition[addition.Count - 1].Walkable;
+                    else
+                        addition.RemoveAt(addition.Count - 1);
+                }
             }
         }
 

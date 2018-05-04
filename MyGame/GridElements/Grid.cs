@@ -31,6 +31,7 @@ namespace MyGame.GridElements
             }
             GenerateBioms();
             GenerateRivers();
+            WaterSmoothing();
             GenerateObjects();
         }
 
@@ -141,19 +142,6 @@ namespace MyGame.GridElements
             }
         }
 
-        private void GenerateObjects()
-        {
-            Console.WriteLine("Generating objects...");
-            for (int x = 0; x < gridSizeX; x++)
-            {
-                for (int y = 0; y < gridSizeY; y++)
-                {
-                    if(map[x, y].Walkable)
-                        map[x, y].GenerateAddition();
-                }
-            }
-        }
-
         class RiverGenerators
         {
             public int x,y, lifetime;
@@ -213,67 +201,58 @@ namespace MyGame.GridElements
                 }
             }
 
+        }
 
-            ITileAddition[] waterBorders = new ITileAddition[12];
-
+        private void WaterSmoothing()
+        {
             Console.WriteLine("Smoothing water...");
             for (int x = 0; x < gridSizeX; x++)
             {
                 for (int y = 0; y < gridSizeY; y++)
                 {
-                    if(map[x, y].GetTexture() == Textures.Water)
+                    if (map[x, y].GetTexture() == Textures.Water)
                     {
-                        waterBorders[0] = new AnyAddition(Textures.WaterSides[0], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[1] = new AnyAddition(Textures.WaterSides[1], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[2] = new AnyAddition(Textures.WaterSides[2], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[3] = new AnyAddition(Textures.WaterSides[3], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
 
-                        waterBorders[4] = new AnyAddition(Textures.WaterSides[4], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[5] = new AnyAddition(Textures.WaterSides[5], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[6] = new AnyAddition(Textures.WaterSides[6], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[7] = new AnyAddition(Textures.WaterSides[7], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-
-                        waterBorders[8] = new AnyAddition(Textures.WaterSides[8], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[9] = new AnyAddition(Textures.WaterSides[9], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[10] = new AnyAddition(Textures.WaterSides[10], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
-                        waterBorders[11] = new AnyAddition(Textures.WaterSides[11], new Vector2(x * Settings.GridSize, y * Settings.GridSize), 0);
+                        for(int i = 0; i < Textures.bioms.Count; i++)
+                            Textures.bioms[i].UpdateXY(x, y);
 
                         if (x > 0 && map[x - 1, y].GetTexture() != Textures.Water)
-                        {
-                            if(x > 0 && map[x - 1, y].GetTexture() == Textures.Grass)
-                                map[x, y].AddAddition(waterBorders[0]);
-                            if (x > 0 && map[x - 1, y].GetTexture() == Textures.Swamp)
-                                map[x, y].AddAddition(waterBorders[4]);
-                            if (x > 0 && map[x - 1, y].GetTexture() == Textures.Sand)
-                                map[x, y].AddAddition(waterBorders[8]);
-                        }
+                            foreach(Biom biom in Textures.bioms)
+                                if (x > 0 && map[x - 1, y].GetTexture() == biom.tile)
+                                    map[x, y].AddAddition(biom.waterBorders[0]);
                         if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() != Textures.Water)
-                        {
-                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Grass)
-                                map[x, y].AddAddition(waterBorders[2]);
-                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Swamp)
-                                map[x, y].AddAddition(waterBorders[6]);
-                            if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == Textures.Sand)
-                                map[x, y].AddAddition(waterBorders[10]);
-                        }
+                            foreach (Biom biom in Textures.bioms)
+                                if (x < Settings.WorldSizeBlocks - 1 && map[x + 1, y].GetTexture() == biom.tile)
+                                    map[x, y].AddAddition(biom.waterBorders[2]);
                         if (y > 0 && map[x, y - 1].GetTexture() != Textures.Water)
-                        {
-                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Grass)
-                                map[x, y].AddAddition(waterBorders[1]);
-                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Swamp)
-                                map[x, y].AddAddition(waterBorders[5]);
-                            if (y > 0 && map[x, y - 1].GetTexture() == Textures.Sand)
-                                map[x, y].AddAddition(waterBorders[9]);
-                        }
+                            foreach (Biom biom in Textures.bioms)
+                                if (y > 0 && map[x, y - 1].GetTexture() == biom.tile)
+                                    map[x, y].AddAddition(biom.waterBorders[1]);
                         if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() != Textures.Water)
-                        {
-                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Grass)
-                                map[x, y].AddAddition(waterBorders[3]);
-                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Swamp)
-                                map[x, y].AddAddition(waterBorders[7]);
-                            if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == Textures.Sand)
-                                map[x, y].AddAddition(waterBorders[11]);
-                        }
+                            foreach (Biom biom in Textures.bioms)
+                                if (y < Settings.WorldSizeBlocks - 1 && map[x, y + 1].GetTexture() == biom.tile)
+                                    map[x, y].AddAddition(biom.waterBorders[3]);
+                    }
+                }
+            }
+        }
+
+        private void GenerateObjects()
+        {
+            Console.WriteLine("Generating objects...");
+            for (int x = 0; x < gridSizeX; x++)
+            {
+                for (int y = 0; y < gridSizeY; y++)
+                {
+                    if (map[x, y].Walkable)
+                    {
+                        string biom = "";
+
+                        foreach (Biom _biom in Textures.bioms)
+                            if (map[x, y].GetTexture() == _biom.tile)
+                                biom = _biom.BiomName;
+
+                        map[x, y].GenerateAddition(biom);
                     }
                 }
             }
@@ -311,7 +290,10 @@ namespace MyGame.GridElements
             Console.WriteLine("Placing predefined objects...");
             foreach (KeyValuePair<string, ITileAddition> addition in Textures.ScriptedAdditions)
             {
-                map[(int)addition.Value.GetPosition().X, (int)addition.Value.GetPosition().Y].SetAddition(addition.Value.CreateCopy(new Vector2(addition.Value.GetPosition().X * Settings.GridSize, addition.Value.GetPosition().Y * Settings.GridSize)));
+                int xOffset = 0;
+                while(!map[(int)addition.Value.GetPosition().X + xOffset, (int)addition.Value.GetPosition().Y].Walkable)
+                    xOffset++;
+                map[(int)addition.Value.GetPosition().X, (int)addition.Value.GetPosition().Y].SetAddition(addition.Value.CreateCopy(new Vector2((addition.Value.GetPosition().X+ xOffset) * Settings.GridSize, addition.Value.GetPosition().Y * Settings.GridSize)));
             }
         }
 

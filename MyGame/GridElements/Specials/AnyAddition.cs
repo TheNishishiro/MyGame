@@ -11,10 +11,11 @@ namespace MyGame.GridElements.Specials
 {
     class AnyAddition : Addition
     {
-        public AnyAddition(Texture2D texture, Vector2 Position, int Rarity = 1000,
+        public AnyAddition(Texture2D texture, Vector2 Position, int Rarity = 1000, string biom = Names.BiomGrass,
             bool walkable = false, bool clickable = false, string harvestID = null, bool CreatesFloatingText = false, bool IsTimeLimited = false, bool IsOnTop = false,
             string ButtonRename = null, int? HP = null, int? UseCooldown = null, string resource = null, int? amount = null, Action action = null)
         {
+            this.biom = biom;
             this.texture = texture;
             this.Rarity = Rarity;
             this.harvestID = harvestID;

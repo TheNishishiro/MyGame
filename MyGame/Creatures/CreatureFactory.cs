@@ -34,12 +34,22 @@ namespace MyGame.Creatures
                     posY = 0;
                 else if (posY > WorldSizePixels)
                     posY = WorldSizePixels;
-            
+
+
+                List<ICreature> _creatures = new List<ICreature>();
+                foreach(KeyValuePair<string, ICreature> entry in Textures.EnemyTemplates)
+                {
+                    if (Textures.EnemyTemplates[entry.Key].GetLevel() <= Math.Abs((posX / GridSize) - (WorldSizeBlocks/2)) || 
+                        Textures.EnemyTemplates[entry.Key].GetLevel() <= Math.Abs((posY / GridSize) - (WorldSizeBlocks / 2)))
+                    {
+                        _creatures.Add(entry.Value);
+                    }
+                }
+
                 if (!TestRenderBounds(new Vector2(posX, posY), _player.GetPosition(), RenderDistance)
                     && grid.map[(int)(posX/GridSize), (int)(posY/GridSize)].Walkable)
                 {
-                    string[] keys = Textures.EnemyTemplates.Keys.ToArray();
-                    creatures.Add(Textures.EnemyTemplates[keys[rnd.Next(keys.Length)]].CreateCopy(new Vector2(posX, posY)));
+                    creatures.Add(_creatures[rnd.Next(_creatures.Count)].CreateCopy(new Vector2(posX, posY)));
                 }
             }
             else

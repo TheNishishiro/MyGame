@@ -33,6 +33,7 @@ namespace MyGame.Items.ItemTypes
             if (!InCrafting && !IsCraftingResult)
             {
                 DPL.AddButton("Drop", () => Drop());
+                DPL.AddButton("Discard", () => Discard());
                 DPL.AddButton("Assign to hotkey 1", () => AssignHotkey(0));
                 DPL.AddButton("Assign to hotkey 2", () => AssignHotkey(1));
                 DPL.AddButton("Assign to hotkey 3", () => AssignHotkey(2));

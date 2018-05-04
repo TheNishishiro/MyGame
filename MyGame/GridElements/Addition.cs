@@ -29,12 +29,13 @@ namespace MyGame.GridElements
         protected int? amount = null;
         protected int? hp = null;
         protected int Rarity = 0;
+        protected string biom = "";
         protected Dictionary<string, int> lootChances = null;
 
         public virtual ITileAddition CreateCopy(Vector2 position)
         {
             bounds = new Rectangle((int)position.X, (int)position.Y, 32, 32);
-            return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, Walkable, IsClickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
+            return new AnyAddition(texture, new Vector2(position.X, position.Y), Rarity, biom, Walkable, IsClickable, harvestID, CreatesFloatingText, IsTimeLimited, IsOnTop, ButtonRename, hp, cooldown, resource, amount, action);
         }
 
         public virtual void Draw(ref SpriteBatch sb, float layerIncrease)
@@ -101,6 +102,10 @@ namespace MyGame.GridElements
         public Vector2 GetPosition()
         {
             return Position;
+        }
+        public string GetBiom()
+        {
+            return biom;
         }
     }
 }
