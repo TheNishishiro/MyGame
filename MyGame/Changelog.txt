@@ -1,7 +1,7 @@
 ﻿TODO: look into thread being unable to abort after suspension (Game1.cs)
 TODO: Make damage increase according to skill level
 TODO: Look into optimising memory usage of water sides
-
+:(
 5/4/2018
  * Changed drop option into discard option
  * Added drop option for items
