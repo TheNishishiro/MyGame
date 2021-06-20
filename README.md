@@ -1,6 +1,6 @@
 # About it
 It's a simple rpg tibia-styled game made in C# using MonoGame framework as my school project for object oriented programming class.
-Code is quite a mess, I never forced myself to actually finish it after getting my grade but it still ahve some coll stuff in there
+Code is quite a mess, I never forced myself to actually finish it after getting my grade but it still have some cool stuff in there
 
 # Features
 * Randomly generated world
